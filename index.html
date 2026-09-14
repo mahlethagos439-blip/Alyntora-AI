@@ -322,5 +322,281 @@
         }
     });
 </script>
+I want to upgrade my existing AI website called "Global AI Mahlet".
 
+VERY IMPORTANT:
+I currently have NO MONEY to pay for hosting upgrades, AI APIs, search APIs, databases, or other paid services.
+
+Therefore, build this entire Stage 1 using ONLY services and technologies that can work on FREE plans with $0 payment.
+
+DO NOT require me to upgrade Cloudflare.
+DO NOT require me to buy a domain.
+DO NOT require me to buy an API.
+DO NOT add a paid service without asking me first.
+
+My current website is already deployed on Cloudflare Pages.
+
+DO NOT DELETE OR BREAK ANY EXISTING FEATURES.
+
+KEEP ALL CURRENT FEATURES:
+1. Modern dark-mode UI
+2. 100-language selector
+3. AI chat/prompt interface
+4. File attachment interface for images, PDFs and text files
+5. Voice input / speech-to-text
+6. Voice output / text-to-speech
+7. Persistent chat memory using localStorage
+
+NOW IMPLEMENT STAGE 1 ONLY: FEATURES 8–18.
+
+FEATURE 8 — WEB RESEARCH
+Create a Web Research feature using only a genuinely free method that does not require a paid API.
+
+If a reliable real-time search service cannot be used for $0, DO NOT FAKE web search.
+
+Instead:
+- clearly mark Web Research as "requires free search-service configuration" if necessary
+- provide the exact service/configuration I would need
+- keep the rest of the website working without it
+
+Never show fake sources or fake citations.
+
+FEATURE 9 — ANSWER VERIFICATION
+Add a "Verify Answer" button.
+
+It should verify factual claims using an actually available free source/search method.
+
+Possible results:
+- Supported
+- Partially supported
+- Not supported
+- Unable to verify
+
+If real verification is not available because no free search source is configured, clearly say "Verification requires web-search configuration" instead of pretending verification happened.
+
+FEATURE 10 — AI AGENT MODE
+Add an Agent Mode that works without paid external automation services.
+
+The user can give a goal.
+
+The AI should:
+1. Understand the goal
+2. Break it into steps
+3. Create a plan
+4. Use only safe tools actually available
+5. Show progress
+6. Produce the result
+
+Do NOT allow the agent to perform dangerous or irreversible external actions.
+
+Do NOT connect paid automation services.
+
+If a task requires an external service that is not available for free, explain that limitation.
+
+FEATURE 11 — STUDY / TUTOR MODE
+Add a completely free Study Mode.
+
+It should:
+- Explain concepts step-by-step
+- Give hints
+- Generate practice questions
+- Generate quizzes
+- Check answers
+- Explain mistakes
+- Adjust difficulty
+- Create study plans
+- Help identify weak topics
+
+Do not remove the normal AI chat.
+
+FEATURE 12 — ADVANCED DOCUMENT MODE
+Improve the existing attachment feature.
+
+For supported files, allow:
+- Summarization
+- Explanation
+- Question answering
+- Important-point extraction
+- Notes
+- Quiz generation
+- Information extraction
+- Comparison of multiple documents when technically possible
+
+Use browser-side processing or free Cloudflare capabilities where practical.
+
+Do NOT send files to a paid service.
+
+If a specific file type cannot be processed on the free architecture, clearly tell the user instead of pretending it worked.
+
+FEATURE 13 — IMAGE UNDERSTANDING
+Add image analysis using a genuinely free model/service if available.
+
+If Cloudflare Workers AI provides an appropriate model within its free allocation, use that.
+
+Do NOT use a paid OpenAI/Gemini/Anthropic API unless I explicitly authorize it later.
+
+If the free AI model cannot support the requested image task, show a clear limitation message.
+
+FEATURE 14 — CONTROLLED PERSONAL MEMORY
+Create a "Memory Center".
+
+Users can:
+- See saved memories
+- Add a memory
+- Delete one memory
+- Clear all memories
+- Say "remember this"
+- Say "forget this"
+- Start a temporary/private conversation
+
+Do not secretly store sensitive information.
+
+Use free browser storage or free Cloudflare storage where appropriate.
+
+FEATURE 15 — PERSONAL WORKSPACE
+Create "My Workspace".
+
+It should organize:
+- Chats
+- Documents
+- Saved answers
+- Projects
+- Plans
+- Memories
+- Favorites
+
+Use free browser storage initially if persistent cloud storage would require a paid service.
+
+FEATURE 16 — DO-IT-FOR-ME WORKFLOWS
+Add workflows that create useful finished outputs.
+
+Examples:
+- Business plan
+- Research report
+- Study plan
+- Email
+- Project plan
+- Structured notes
+- Other useful documents
+
+Use the AI capability already available to the project.
+
+Do not connect paid automation services.
+
+FEATURE 17 — AI TOOLBOX
+Create a Tools section containing:
+
+- Web Research
+- PDF Analyzer
+- Summarizer
+- Translator
+- Writing Assistant
+- Study Assistant
+- Coding Assistant
+- Data Analyzer
+- Calculator
+- Email Writer
+- CV/Resume Builder
+- Business Planner
+- Image Analyzer
+
+IMPORTANT:
+Do not create fake buttons.
+
+Every tool must either:
+1. Actually work using free/local/browser functionality, OR
+2. Clearly say that an additional free service/API configuration is required.
+
+FEATURE 18 — PRIVACY MODE
+Add a clearly visible Privacy Mode.
+
+When enabled:
+- Do not save the conversation to persistent history
+- Do not save new memories
+- Treat uploaded files as temporary
+- Explain to the user what Privacy Mode does
+
+Do not claim information is permanently deleted unless it actually is.
+
+SECURITY:
+- Never put secret API keys in frontend JavaScript.
+- Never expose tokens in index.html.
+- Use Cloudflare environment variables/secrets for any required secret.
+- Never hard-code paid API keys.
+- Do not collect unnecessary personal information.
+
+COST REQUIREMENT:
+The project must remain usable on $0.
+
+Use:
+- Cloudflare Pages Free
+- Cloudflare Workers Free where necessary
+- Cloudflare's available free AI allocation where appropriate
+- Browser APIs
+- LocalStorage/IndexedDB when appropriate
+- Open-source/free technologies where appropriate
+
+Do not require:
+- Cloudflare Paid
+- Replit paid
+- Vercel paid
+- Render paid
+- Railway paid
+- Fly.io paid
+- paid AI APIs
+- paid search APIs
+- paid database services
+- paid automation services
+- paid domain
+
+IMPORTANT LIMITATION:
+Do NOT promise that any free service will remain free forever.
+Respect the actual current free limits.
+
+PRESERVE MY EXISTING UI AND FEATURES.
+
+Do not replace my entire project with a completely different application.
+
+Build the new functionality modularly.
+
+Make the website mobile-friendly.
+
+Add proper loading indicators and error messages.
+
+Before making major changes, create a safe backup/version if possible.
+
+AFTER IMPLEMENTATION, give me a report with:
+
+1. Existing features preserved
+2. Features 8–18 actually working for $0
+3. Features that need additional configuration
+4. Any features that cannot be implemented for free
+5. Every file you created or changed
+6. Every Cloudflare setting I need to configure
+7. Any API keys required
+8. Whether those APIs are genuinely free or have limits
+9. Current free-tier limitations
+10. Confirm that no paid upgrade is required to deploy the current version
+
+DO NOT IMPLEMENT FEATURES 19–24 YET.
+
+Features 19–24 will be added later:
+19. User accounts
+20. Usage dashboard
+21. Free/Premium system
+22. Automatic language detection
+23. Smart AI model routing
+24. Guided task suggestions
+
+MOST IMPORTANT:
+Do not fake functionality.
+Do not fake web searches.
+Do not fake citations.
+Do not fake AI model calls.
+Do not fake document analysis.
+Do not fake image analysis.
+If something cannot work for $0, tell me honestly and leave it as an optional future feature.
+
+My priority is:
+$0 cost → working website → preserve existing features → add useful new features → publish successfully.
   
