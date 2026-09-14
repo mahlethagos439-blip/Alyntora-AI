@@ -508,6 +508,51 @@
     }
   }
 </script>
+<script>
+  async function getRealAIResponse(userPrompt) {
+    const apiKey = 'YOUR_API_KEY'; 
+    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+
+    // Friendly system instruction to make the AI warm and helpful
+    const friendlySystemPrompt = "You are Global AI Mahlet, a friendly, warm, kind, and supportive AI companion. Always respond to users with encouragement and helpfulness.";
+    const fullPrompt = `${friendlySystemPrompt}\n\nUser: ${userPrompt}`;
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: fullPrompt }] }]
+        })
+      });
+
+      const data = await response.json();
+      const aiText = data.candidates[0].content.parts[0].text;
+      
+      // Display response in your AI response box
+      document.querySelector('.AI-response-box').innerText = aiText;
+    } catch (error) {
+      console.error('Error connecting to AI brain:', error);
+      document.querySelector('.AI-response-box').innerText = 'Error loading response. Please check your API key.';
+    }
+  }
+
+  // Hook up the send button to the AI function
+  document.addEventListener('DOMContentLoaded', () => {
+    const sendBtn = document.querySelector('button'); // Adjust selector if you have an ID like #sendBtn
+    const promptInput = document.querySelector('input[type="text"]'); // Adjust selector for your input bar
+
+    if (sendBtn && promptInput) {
+      sendBtn.addEventListener('click', () => {
+        const text = promptInput.value.trim();
+        if (text) {
+          document.querySelector('.AI-response-box').innerText = "Thinking...";
+          getRealAIResponse(text);
+        }
+      });
+    }
+  });
+</script>
 
   
 
