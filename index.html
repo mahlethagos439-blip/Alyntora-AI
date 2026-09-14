@@ -322,6 +322,24 @@
         }
     });
 </script>
+<!-- New Features: Clear Chat & Quick Starters -->
+<div style="display: flex; gap: 10px; margin-bottom: 10px; padding: 0 15px;">
+  <button id="clearChatBtn" style="background: #2a2a2a; color: #fff; border: 1px solid #444; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;">Clear Chat</button>
+</div>
+
+<script>
+  // Clear Chat Functionality
+  const clearChatBtn = document.getElementById('clearChatBtn');
+  if (clearChatBtn) {
+    clearChatBtn.addEventListener('click', () => {
+      localStorage.removeItem('mahlet_chat_history');
+      const responseBox = document.querySelector('.response-box') || document.getElementById('responseBox');
+      if (responseBox) {
+        responseBox.innerHTML = "AI response will appear here...";
+      }
+    });
+  }
+      </script>
 
 
 
