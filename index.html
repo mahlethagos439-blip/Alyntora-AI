@@ -486,7 +486,7 @@
 </script>
 <script>
   async function getRealAIResponse(userPrompt) {
-    const apiKey = 'YOUR_API_KEY'; 
+    const apiKey = '';
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
     try {
@@ -508,21 +508,8 @@
     }
   }
 </script>
-<script>
-  async function getRealAIResponse(userPrompt) {
-    const apiKey = 'YOUR_API_KEY'; 
-    const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
-    // Friendly system instruction to make the AI warm and helpful
-    const friendlySystemPrompt = "You are Global AI Mahlet, a friendly, warm, kind, and supportive AI companion. Always respond to users with encouragement and helpfulness.";
-    const fullPrompt = `${friendlySystemPrompt}\n\nUser: ${userPrompt}`;
-
-    try {
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: fullPrompt }] }]
+  
         
 
 
