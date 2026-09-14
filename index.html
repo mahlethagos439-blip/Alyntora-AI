@@ -1,16 +1,227 @@
-<h1>Global AI Mahlet</h1>
-<div style="margin-top: 20px;">
-  <input type="text" id="chatInput" placeholder="Type your message here..." style="padding: 10px; width: 70%; max-width: 400px;" />
-  <button style="padding: 10px 20px;">Send</button>
-</div>
-<div style="margin-top: 15px;">
-  <input type="file" id="fileInput" accept="image/*,.pdf,.txt" style="padding: 10px;" />
-</div>
-<div style="margin-top: 15px;">
-  <button style="padding: 10px 20px; background-color: #f0f0f0; border: 1px solid #ccc; cursor: pointer;">🎤 Record Voice</button>
-</div>
-<div style="margin-top: 20px; padding: 15px; border: 1px solid #ddd; min-height: 100px; max-width: 500px; background-color: #f9f9f9;">
-  <p style="color: #666; margin: 0;">AI response will appear here...</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global AI Mahlet</title>
+    <style>
+        body {
+            background-color: #131314;
+            color: #e3e3e3;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .header-container {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            font-size: 1.8rem;
+            margin: 0;
+            font-weight: 500;
+        }
+        select {
+            background-color: #2b2c2f;
+            color: #e3e3e3;
+            border: 1px solid #333537;
+            border-radius: 12px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            outline: none;
+            cursor: pointer;
+        }
+        .chat-container {
+            width: 100%;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .response-box {
+            background-color: #1e1f20;
+            border: 1px solid #333537;
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 120px;
+            color: #c4c7c5;
+        }
+        .input-area {
+            background-color: #1e1f20;
+            border: 1px solid #333537;
+            border-radius: 24px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        input[type="text"] {
+            background: transparent;
+            border: none;
+            color: #e3e3e3;
+            font-size: 1rem;
+            flex-grow: 1;
+            outline: none;
+        }
+        input[type="text"]::placeholder {
+            color: #8e918f;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        button, label.file-btn {
+            background-color: #2b2c2f;
+            color: #e3e3e3;
+            border: none;
+            border-radius: 18px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-container">
+        <h1>Global AI Mahlet</h1>
+        <select id="languageSelect">
+            <option value="en">English</option>
+            <option value="es">Spanish (Español)</option>
+            <option value="fr">French (Français)</option>
+            <option value="de">German (Deutsch)</option>
+            <option value="zh">Mandarin (中文)</option>
+            <option value="ja">Japanese (日本語)</option>
+            <option value="ko">Korean (한국어)</option>
+            <option value="ar">Arabic (العربية)</option>
+            <option value="hi">Hindi (हिन्दी)</option>
+            <option value="am">Amharic (አማርኛ)</option>
+            <option value="om">Oromo (Afaan Oromoo)</option>
+            <option value="ti">Tigrinya (ትግርኛ)</option>
+            <option value="so">Somali (Soomaali)</option>
+            <option value="pt">Portuguese (Português)</option>
+            <option value="ru">Russian (Русский)</option>
+            <option value="it">Italian (Italiano)</option>
+            <option value="tr">Turkish (Türkçe)</option>
+            <option value="vi">Vietnamese (Tiếng Việt)</option>
+            <option value="tl">Tagalog</option>
+            <option value="sw">Swahili (Kiswahili)</option>
+            <option value="bn">Bengali (বাংলা)</option>
+            <option value="ur">Urdu (اردو)</option>
+            <option value="id">Indonesian (Bahasa Indonesia)</option>
+            <option value="ms">Malay (Bahasa Melayu)</option>
+            <option value="th">Thai (ไทย)</option>
+            <option value="ta">Tamil (தமிழ்)</option>
+            <option value="te">Telugu (తెలుగు)</option>
+            <option value="mr">Marathi (मराठी)</option>
+            <option value="gu">Gujarati (ગુજરાતી)</option>
+            <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
+            <option value="fa">Persian (فارسی)</option>
+            <option value="el">Greek (Ελληνικά)</option>
+            <option value="pl">Polish (Polski)</option>
+            <option value="uk">Ukrainian (Українська)</option>
+            <option value="nl">Dutch (Nederlands)</option>
+            <option value="ro">Romanian (Română)</option>
+            <option value="cs">Czech (Čeština)</option>
+            <option value="hu">Hungarian (Magyar)</option>
+            <option value="sv">Swedish (Svenska)</option>
+            <option value="da">Danish (Dansk)</option>
+            <option value="fi">Finnish (Suomi)</option>
+            <option value="no">Norwegian (Norsk)</option>
+            <option value="he">Hebrew (עברית)</option>
+            <option value="ml">Malayalam (മലയാളം)</option>
+            <option value="kn">Kannada (ಕನ್ನಡ)</option>
+            <option value="my">Burmese (မြန်မာ)</option>
+            <option value="km">Khmer (ខ្មែរ)</option>
+            <option value="lo">Lao (ລາວ)</option>
+            <option value="si">Sinhala (සිංහල)</option>
+            <option value="ne">Nepali (नेपाली)</option>
+            <option value="ps">Pashto (پښتو)</option>
+            <option value="ku">Kurmanji (Kurdî)</option>
+            <option value="af">Afrikaans</option>
+            <option value="zu">Zulu (isiZulu)</option>
+            <option value="xh">Xhosa (isiXhosa)</option>
+            <option value="yo">Yoruba (Yorùbá)</option>
+            <option value="ig">Igbo</option>
+            <option value="ha">Hausa (Hausa)</option>
+            <option value="ak">Akan (Twi)</option>
+            <option value="mg">Malagasy</option>
+            <option value="qu">Quechua</option>
+            <option value="gn">Guarani</option>
+            <option value="ca">Catalan</option>
+            <option value="eu">Basque (Euskara)</option>
+            <option value="gl">Galician (Galego)</option>
+            <option value="sk">Slovak (Slovenčina)</option>
+            <option value="bg">Bulgarian (Български)</option>
+            <option value="sr">Serbian (Српски)</option>
+            <option value="hr">Croatian (Hrvatski)</option>
+            <option value="bs">Bosnian (Bosanski)</option>
+            <option value="sl">Slovenian (Slovenščina)</option>
+            <option value="sq">Albanian (Shqip)</option>
+            <option value="mk">Macedonian (Македонски)</option>
+            <option value="et">Estonian (Eesti)</option>
+            <option value="lv">Latvian (Latviešu)</option>
+            <option value="lt">Lithuanian (Lietuvių)</option>
+            <option value="mt">Maltese (Malti)</option>
+            <option value="is">Icelandic (Íslenska)</option>
+            <option value="ga">Irish (Gaeilge)</option>
+            <option value="cy">Welsh (Cymraeg)</option>
+            <option value="gd">Scots Gaelic</option>
+            <option value="lb">Luxembourgish (Lëtzebuergesch)</option>
+            <option value="hy">Armenian (Հայերեն)</option>
+            <option value="ka">Georgian (ქართული)</option>
+            <option value="az">Azerbaijani (Azərbaycan)</option>
+            <option value="kk">Kazakh (Қазақша)</option>
+            <option value="uz">Uzbek (Oʻzbekcha)</option>
+            <option value="tk">Turkmen (Türkmençe)</option>
+            <option value="ky">Kyrgyz (Кыргызча)</option>
+            <option value="tg">Tajik (Тоҷикӣ)</option>
+            <option value="mn">Mongolian (Монгол)</option>
+            <option value="sd">Sindhi (سنڌي)</option>
+            <option value="as">Assamese (অসমীয়া)</option>
+            <option value="or">Odia (ଓଡ଼ିଆ)</option>
+            <option value="sa">Sanskrit (संस्कृतम्)</option>
+            <option value="la">Latin (Latina)</option>
+            <option value="eo">Esperanto</option>
+            <option value="asl">Sign Language (ASL)</option>
+        </select>
+    </div>
+
+    <div class="chat-container">
+        <!-- AI Response Box -->
+        <div class="response-box">
+            <p style="margin: 0;">AI response will appear here...</p>
+        </div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <input type="text" id="chatInput" placeholder="Enter a prompt here...">
+            
+            <div class="actions">
+                <label class="file-btn" for="fileInput">📎</label>
+                <input type="file" id="fileInput" accept="image/*,.pdf,.txt">
+
+                <button title="Voice Input">🎤</button>
+                <button style="background-color: #8ab4f8; color: #202124; font-weight: 500;">Send</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+              </html>
+
 
   
