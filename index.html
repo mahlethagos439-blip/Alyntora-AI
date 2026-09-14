@@ -340,6 +340,28 @@
     });
   }
       </script>
+<!-- New Feature: Loading Indicator -->
+<div id="loadingIndicator" style="display: none; padding: 10px 15px; color: #888; font-style: italic; font-size: 13px;">AI is thinking...</div>
+
+<script>
+  // Loading Indicator Integration for Chat Send
+  const sendButton = document.getElementById('sendButton') || document.querySelector('button[type="submit"]') || document.querySelector('.send-btn');
+  const chatInput = document.getElementById('chatInput') || document.querySelector('input[type="text"]') || document.querySelector('textarea');
+  const responseBox = document.querySelector('.response-box') || document.getElementById('responseBox');
+  const loadingIndicator = document.getElementById('loadingIndicator');
+
+  if (sendButton && chatInput && responseBox && loadingIndicator) {
+    sendButton.addEventListener('click', () => {
+      const text = chatInput.value.trim();
+      if (text) {
+        loadingIndicator.style.display = 'block';
+        setTimeout(() => {
+          loadingIndicator.style.display = 'none';
+        }, 1500); // Simulated delay for AI response processing
+      }
+    });
+  }
+</script>
 
 
 
