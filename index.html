@@ -523,19 +523,8 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{ parts: [{ text: fullPrompt }] }]
-        })
-      });
+        
 
-      const data = await response.json();
-      const aiText = data.candidates[0].content.parts[0].text;
-      
-      // Display response in your AI response box
-      document.querySelector('.AI-response-box').innerText = aiText;
-    } catch (error) {
-      console.error('Error connecting to AI brain:', error);
-      document.querySelector('.AI-response-box').innerText = 'Error loading response. Please check your API key.';
-    }
-  }
 
   
 
