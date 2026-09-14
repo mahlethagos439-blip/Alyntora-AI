@@ -223,5 +223,53 @@
 </body>
               </html>
 
+<script>
+    const chatInput = document.getElementById('chatInput');
+    const responseBox = document.querySelector('.response-box p');
+    const sendButton = document.querySelector('.actions button:last-child');
+    const voiceButton = document.querySelector('.actions button:nth-last-child(2)');
+
+    // 1. Send text and display response
+    sendButton.addEventListener('click', () => {
+        const text = chatInput.value.trim();
+        if (text) {
+            responseBox.textContent = "Global AI Mahlet is thinking about: " + text;
+            chatInput.value = '';
+        }
+    });
+
+    // 2. Voice Listening (Speech to Text)
+    voiceButton.addEventListener('click', () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.lang = document.getElementById('languageSelect').value;
+            recognition.start();
+            
+            responseBox.textContent = "Listening... Speak now.";
+
+            recognition.onresult = (event) => {
+                const speechText = event.results[0][0].transcript;
+                chatInput.value = speechText;
+                responseBox.textContent = "Captured voice: " + speechText;
+            };
+
+            recognition.onerror = () => {
+                responseBox.textContent = "Voice recognition error. Please try again.";
+            };
+        } else {
+            alert("Speech recognition is not supported in this browser.");
+        }
+    });
+
+    // 3. Voice Response (Text to Speech)
+    function speakResponse(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = document.getElementById('languageSelect').value;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+</script>
 
   
