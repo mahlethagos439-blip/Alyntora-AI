@@ -383,6 +383,21 @@
     });
   }
 </script>
+<!-- New Feature: Character Counter -->
+<div id="charCounter" style="padding: 0 15px 10px 15px; color: #666; font-size: 11px; text-align: right;">0 characters</div>
+
+<script>
+  // Character Counter Functionality
+  const monitoredInput = document.getElementById('chatInput') || document.querySelector('input[type="text"]') || document.querySelector('textarea');
+  const counterDisplay = document.getElementById('charCounter');
+
+  if (monitoredInput && counterDisplay) {
+    monitoredInput.addEventListener('input', () => {
+      const len = monitoredInput.value.length;
+      counterDisplay.textContent = `${len} character${len === 1 ? '' : 's'}`;
+    });
+  }
+</script>
 
 
 
