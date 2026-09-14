@@ -271,5 +271,56 @@
         }
     }
 </script>
+<script>
+    const chatInput = document.getElementById('chatInput');
+    const responseBox = document.querySelector('.response-box p');
+    const sendButton = document.querySelector('.actions button:last-child');
+    const voiceButton = document.querySelector('.actions button:nth-last-child(2)');
+
+    // Load past chat history from browser storage on startup
+    window.addEventListener('DOMContentLoaded', () => {
+        const savedHistory = localStorage.getItem('mahlet_chat_history');
+        if (savedHistory) {
+            responseBox.innerHTML = savedHistory;
+        }
+    });
+
+    // Save and display chat interaction
+    sendButton.addEventListener('click', () => {
+        const text = chatInput.value.trim();
+        if (text) {
+            const newMsg = `<br><strong>You:</strong> ${text}<br><strong>AI:</strong> Global AI Mahlet remembers: ${text}`;
+            responseBox.innerHTML += newMsg;
+            
+            // Save to browser memory
+            localStorage.setItem('mahlet_chat_history', responseBox.innerHTML);
+            chatInput.value = '';
+        }
+    });
+
+    // Voice Listening (Speech to Text)
+    voiceButton.addEventListener('click', () => {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (SpeechRecognition) {
+            const recognition = new SpeechRecognition();
+            recognition.lang = document.getElementById('languageSelect').value;
+            recognition.start();
+            
+            responseBox.innerHTML += `<br><em>Listening...</em>`;
+
+            recognition.onresult = (event) => {
+                const speechText = event.results[0][0].transcript;
+                chatInput.value = speechText;
+                localStorage.setItem('mahlet_chat_history', responseBox.innerHTML);
+            };
+
+            recognition.onerror = () => {
+                responseBox.innerHTML += `<br><em>Voice recognition error.</em>`;
+            };
+        } else {
+            alert("Speech recognition is not supported in this browser.");
+        }
+    });
+</script>
 
   
