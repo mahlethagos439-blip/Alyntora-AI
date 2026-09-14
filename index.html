@@ -440,6 +440,50 @@
     });
   });
 </script>
+<!-- Welcome Registration Modal -->
+<div id="welcomeModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+  <div style="background: #1a1a1a; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid #333; color: #fff;">
+    <h2 style="margin-top: 0; font-size: 20px; margin-bottom: 15px; text-align: center;">Welcome to Global AI Mahlet</h2>
+    <form id="userRegForm" style="display: flex; flex-direction: column; gap: 12px;">
+      <input type="text" id="regName" placeholder="Full Name" required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px;">
+      <input type="email" id="regEmail" placeholder="Email Address" required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px;">
+      <input type="number" id="regAge" placeholder="Age" required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px;">
+      <select id="regGender" required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px;">
+        <option value="" disabled selected>Select Gender</option>
+        <option value="Female">Female</option>
+        <option value="Male">Male</option>
+        <option value="Other">Other</option>
+        <option value="Prefer not to say">Prefer not to say</option>
+      </select>
+      <input type="text" id="regCountry" placeholder="Country" required style="padding: 10px; background: #2a2a2a; border: 1px solid #444; color: #fff; border-radius: 6px;">
+      <button type="submit" style="padding: 10px; background: #3b82f6; color: #fff; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 5px;">Get Started</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Check if user is already registered
+  const userProfile = localStorage.getItem('mahlet_user_profile');
+  const modal = document.getElementById('welcomeModal');
+  
+  if (userProfile) {
+    modal.style.display = 'none';
+  }
+
+  // Handle registration submission
+  document.getElementById('userRegForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const profile = {
+      name: document.getElementById('regName').value,
+      email: document.getElementById('regEmail').value,
+      age: document.getElementById('regAge').value,
+      gender: document.getElementById('regGender').value,
+      country: document.getElementById('regCountry').value
+    };
+    localStorage.setItem('mahlet_user_profile', JSON.stringify(profile));
+    modal.style.display = 'none';
+  });
+</script>
 
 
 
