@@ -599,4 +599,310 @@ If something cannot work for $0, tell me honestly and leave it as an optional fu
 
 My priority is:
 $0 cost → working website → preserve existing features → add useful new features → publish successfully.
-  
+FEATURES 19–24 — IMPLEMENT THESE TOO
+
+FEATURE 19 — USER ACCOUNTS
+
+Create a real user account system for Global AI Mahlet.
+
+Users should be able to:
+
+- Create an account
+- Log in
+- Log out
+- View their profile
+- Edit their profile
+- Delete their account where safely possible
+
+During registration, collect only necessary information:
+
+- Username / display name
+- Email
+- Password
+- Country
+- Age or age range
+- Gender/sex — OPTIONAL
+- "Prefer not to say" option
+
+Do not collect unnecessary sensitive information.
+
+Passwords must never be stored as plain text.
+
+Use secure authentication and sessions.
+
+Users must only be able to access their own:
+
+- Chats
+- Memories
+- Documents
+- Workspace
+- Projects
+- Saved answers
+- Study plans
+- Favorites
+
+Do not create fake authentication.
+
+If a required authentication feature cannot be implemented for $0, report it honestly.
+
+FEATURE 20 — USAGE DASHBOARD
+
+Create a personal Usage Dashboard.
+
+The user should be able to see useful information such as:
+
+- Number of conversations
+- Number of messages
+- Documents processed
+- Images analyzed
+- AI tools used
+- Study sessions
+- Saved items
+- Account creation date
+- Current free usage limits where applicable
+
+Do not display fake statistics.
+
+Only show statistics based on real stored data.
+
+Make the dashboard mobile-friendly.
+
+FEATURE 21 — FREE / PREMIUM SYSTEM
+
+Create the architecture for Free and Premium plans.
+
+FREE PLAN:
+
+The free plan should remain usable without payment.
+
+Show:
+
+- Free features
+- Current usage
+- Free-tier limits
+- Features available to the user
+
+PREMIUM PLAN:
+
+Create the interface/architecture for future premium features.
+
+However:
+
+DO NOT require me to pay for a payment provider right now.
+
+DO NOT activate real payments unless a genuine payment system is configured.
+
+DO NOT fake subscriptions or payments.
+
+DO NOT tell users they paid when they did not.
+
+For now, the Premium system can be prepared as a future-ready architecture while the website remains usable for $0.
+
+Clearly separate:
+
+- Free
+- Premium / Future
+
+FEATURE 22 — AUTOMATIC LANGUAGE DETECTION
+
+Add automatic language detection.
+
+When a user sends a message, detect the language where technically possible.
+
+Then:
+
+- Detect the user's language
+- Use it to improve the response language
+- Keep the user's selected language option available
+- Allow the user to manually override automatic detection
+
+Do not remove the existing 100-language dropdown.
+
+If automatic detection is uncertain, allow the selected language to take priority.
+
+Do not claim perfect language detection.
+
+FEATURE 23 — SMART AI MODEL ROUTING
+
+Create a smart model-routing architecture.
+
+The system should determine which available AI capability/model is appropriate for a task.
+
+Examples:
+
+Simple question
+→ efficient model
+
+Complex reasoning
+→ stronger available model
+
+Image request
+→ vision-capable model
+
+Document task
+→ document-capable processing
+
+Coding task
+→ coding/reasoning capability
+
+Translation
+→ language-focused capability
+
+The router must only use models that are actually available.
+
+Do not fake model switching.
+
+Do not claim to use a model if it was not actually called.
+
+Prefer genuinely available free Cloudflare AI resources where appropriate.
+
+Respect all current free-tier limits.
+
+If multiple models are not available for free, create the routing architecture without pretending that unavailable models exist.
+
+FEATURE 24 — GUIDED TASK SUGGESTIONS
+
+Create an intelligent "I don't know what to ask" mode.
+
+When the user opens Global AI Mahlet, provide useful suggestions based on available tools.
+
+Examples:
+
+STUDY:
+- "Teach me this topic"
+- "Create a quiz"
+- "Explain this difficult concept"
+- "Make me a study plan"
+
+RESEARCH:
+- "Research this topic"
+- "Compare these two things"
+- "Find evidence"
+- "Summarize information"
+
+BUSINESS:
+- "Create a business plan"
+- "Find business ideas"
+- "Analyze this business idea"
+- "Create a marketing plan"
+
+WRITING:
+- "Write an email"
+- "Improve my writing"
+- "Create a report"
+- "Summarize this document"
+
+CODING:
+- "Help me fix my code"
+- "Explain this code"
+- "Build a feature"
+- "Find a bug"
+
+PERSONAL PRODUCTIVITY:
+- "Create a plan"
+- "Organize my tasks"
+- "Create a checklist"
+- "Help me make a decision"
+
+The suggestions should open the appropriate AI tool or place a useful starting prompt into the input box.
+
+Do not generate fake results.
+
+Do not claim an action was completed when it was not.
+
+DESIGN REQUIREMENTS FOR FEATURES 19–24:
+
+Preserve the existing Global AI Mahlet design.
+
+Keep the dark modern interface.
+
+Keep the 100-language dropdown.
+
+Keep voice input.
+
+Keep voice output.
+
+Keep attachments.
+
+Keep chat memory.
+
+Keep Privacy Mode.
+
+Keep Features 8–18.
+
+Do not replace the entire application.
+
+Build Features 19–24 modularly.
+
+Make everything mobile-friendly.
+
+Add loading indicators and useful error messages.
+
+SECURITY:
+
+Never expose API keys in frontend JavaScript.
+
+Never store passwords in localStorage.
+
+Never expose one user's private information to another user.
+
+Use secure server-side functionality where required.
+
+Do not collect unnecessary personal information.
+
+COST REQUIREMENT:
+
+I currently have $0.
+
+Do not require:
+
+- Cloudflare Paid
+- Replit Paid
+- Vercel Paid
+- Render Paid
+- Railway Paid
+- Fly.io Paid
+- Paid AI APIs
+- Paid search APIs
+- Paid database services
+- Paid automation services
+- Paid domain
+
+Use free-tier resources where genuinely available.
+
+Do not promise that free services will remain free forever.
+
+Do not fake functionality to make a feature appear complete.
+
+AFTER IMPLEMENTATION:
+
+Give me a report showing:
+
+1. Features 19–24 that actually work
+2. Features that require configuration
+3. Every file created
+4. Every file modified
+5. Database tables created
+6. Cloudflare settings required
+7. Environment variables/secrets required
+8. Current free-tier limitations
+9. Any feature that cannot genuinely work for $0
+10. Exact steps I need to take to deploy it
+
+MOST IMPORTANT:
+
+Do not fake functionality.
+
+Do not fake user accounts.
+
+Do not fake usage statistics.
+
+Do not fake premium payments.
+
+Do not fake language detection.
+
+Do not fake model routing.
+
+Do not fake AI results.
+
+If something cannot genuinely work for $0, tell me honestly and leave it as a future-ready feature instead.  
