@@ -240,12 +240,25 @@
     const sendButton = document.querySelector('.actions button:last-child');
     const voiceButton = document.querySelector('.actions button:nth-last-child(2)');
 
-    // 1. Send text and display response
-    sendButton.addEventListener('click', () => {
-        const text = chatInput.value.trim();
-        if (text) {
-            responseBox.textContent = "Global AI Mahlet is thinking about: " + text;
-            chatInput.value = '';
+sendButton.addEventListener('click', async () => {
+  const text = chatInput.value.trim();
+    
+  if (!text) return;
+  responseBox.textContent = "Thinking...";
+  chatInput.value = "";
+  try {
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ prompt: text })
+    });
+    const data = await res.json();
+    responseBox.textContent = data.response || "No response received.";
+  } catch (err) {
+    responseBox.textContent = "Error connecting to AI service.";
+  }
+});
+    
         }
     });
 
