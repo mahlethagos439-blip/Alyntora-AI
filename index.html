@@ -94,7 +94,7 @@
             <div class="control-row">
                 <label for="mode-select">AI Role:</label>
                 <select id="mode-select">
-                    <option value="coach">❤️ Personal Coach & Stress Motivator</option>
+                    <option value="coach">❤️ Best Friend & Supportive Companion</option>
                     <option value="mentor">📚 Academic & Technical Mentor</option>
                     <option value="business">💼 Business Strategist (B2B & B2C)</option>
                 </select>
@@ -114,7 +114,7 @@
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Ready to chat!</div>
+        <div id="chat-box">Hey bestie! I'm Mahlet. Ready to talk about anything?</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -133,7 +133,6 @@
     </div>
 
     <script>
-        // Optional: If you get a key from an adult later, put it here. Otherwise, leave it as is and the app will use smart built-in replies.
         const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
 
         let selectedFileBase64 = null;
@@ -214,7 +213,7 @@
 
         function startNewChat() {
             chatHistory = [];
-            document.getElementById('chat-box').innerHTML = "New chat started! Ask Mahlet anything.";
+            document.getElementById('chat-box').innerHTML = "New chat started! What's on your mind today?";
             lastAiText = "";
             stopAllSpeech();
         }
@@ -271,7 +270,6 @@
         async function processMessage(shouldSpeak) {
             const inputField = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
-            const modeSelect = document.getElementById('mode-select');
             const prompt = inputField.value.trim();
             
             if (!prompt) return;
@@ -281,14 +279,17 @@
             chatBox.innerHTML += `\n\nAI: Thinking...`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // If no valid key is provided, use this smart fallback so your app never fails or blocks you!
+            // Best Friend Mode & Smart Grammar Assistant Fallback
             if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY) {
                 setTimeout(() => {
-                    let roleName = "Coach";
-                    if (modeSelect.value === 'mentor') roleName = "Mentor";
-                    if (modeSelect.value === 'business') roleName = "Strategist";
+                    let correctedSentence = prompt
+                        .replace(/\bhii\b/gi, "Hi")
+                        .replace(/\bstresed\b/gi, "stressed")
+                        .replace(/\bbecayse\b/gi, "because")
+                        .replace(/\blot if\b/gi, "lot of");
 
-                    let aiReply = `Hello! As your ${roleName}, I hear you. Regarding "${prompt}": Stay strong and keep moving forward step by step. You've got this!`;
+                    let aiReply = `💡 **Quick Writing Tip:** You wrote: "${prompt}". Here is how to spell it properly: "${correctedSentence}".\n\n` +
+                                  `Hey bestie! I totally get it, and I'm right here with you through whatever you're dealing with today. Take a deep breath, you've got this, and we will figure it out together! 💙`;
                     
                     chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
                     lastAiText = aiReply;
@@ -298,22 +299,22 @@
                 return;
             }
 
-            // Real API call logic if a key is eventually added
+            // Real API logic if a key is present
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: prompt }] }] })
+                    body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `Act as a supportive, caring best friend. Also, gently correct any spelling or grammar mistakes in the user's text politely. User input: ${prompt}` }] }] })
                 });
 
                 const data = await response.json();
-                const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't understand that.";
+                const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, bestie, I missed that!";
 
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
                 lastAiText = aiReply;
                 if (shouldSpeak) speakText(aiReply);
             } catch (err) {
-                chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: Network error occurred.`);
+                chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: Network error bestie, check connection.`);
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -324,7 +325,7 @@
             isAiSpeaking = true;
             if (recognition) { try { recognition.stop(); } catch (e) {} }
 
-            const utterance = new SpeechSynthesisUtterance(text);
+            const utterance = new SpeechSynthesisUtterance(text.replace(/[*_#]/g, ''));
             utterance.onend = () => { isAiSpeaking = false; if (isVoiceMode) setTimeout(startListening, 400); };
             utterance.onerror = () => { isAiSpeaking = false; if (isVoiceMode) setTimeout(startListening, 400); };
             window.speechSynthesis.speak(utterance);
