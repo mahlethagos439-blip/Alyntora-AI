@@ -5,7 +5,7 @@ export async function onRequestPost(context) {
       return new Response(JSON.stringify({ error: "Prompt is required" }), { status: 400 });
     }
 
-    const aiResponse = await context.env.AI.run('@cf/meta/llama-3.1-8b-instruct', {
+    const aiResponse = await context.env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
       messages: [{ role: 'user', content: prompt }]
     });
 
@@ -16,5 +16,6 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
+
 
 
