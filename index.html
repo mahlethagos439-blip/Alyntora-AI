@@ -74,7 +74,7 @@
                     <option value="Tamil (தமிழ்)">Tamil (தமிழ்)</option>
                     <option value="Gujarati (ગુજરાતી)">Gujarati (ગુજરાતી)</option>
                     <option value="Kannada (ಕನ್ನಡ)">Kannada (ಕನ್ನಡ)</option>
-                    <option value="Malayalam (മലയാളം)">Malayalam (മലയാളം)</option>
+                    <option value="Malayalam (മലയാളം)">Malayalam (Malayalam)</option>
                     <option value="Thai (ไทย)">Thai (ไทย)</option>
                     <option value="Indonesian (Bahasa Indonesia)">Indonesian</option>
                     <option value="Malay (Bahasa Melayu)">Malay</option>
@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Tap mic once for continuous voice mode!</div>
+        <div id="chat-box">AI response will appear here... Type for text-only, or tap mic for voice mode!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -109,11 +109,11 @@
                 <label class="action-btn" for="file-input" title="Camera or File">📷</label>
                 <input type="file" id="file-input" accept="image/*,.pdf,.txt" capture="environment" onchange="handleFileSelect()" />
                 
-                <button class="action-btn" id="mic-btn" onclick="toggleContinuousListening()" title="Continuous Voice Mode">🎤</button>
+                <button class="action-btn" id="mic-btn" onclick="toggleContinuousListening()" title="Voice Mode">🎤</button>
                 <button class="action-btn" onclick="speakLastResponse()" title="Read Aloud">🔊</button>
                 
-                <input type="text" id="user-input" placeholder="Type a message or use mic..." />
-                <button class="send-btn" onclick="sendMessage()">Send</button>
+                <input type="text" id="user-input" placeholder="Type a message..." />
+                <button class="send-btn" onclick="sendTextMessage()">Send</button>
             </div>
         </div>
     </div>
@@ -122,7 +122,7 @@
         let selectedFileBase64 = null;
         let chatHistory = [];
         let lastAiText = "";
-        let isContinuousMode = false;
+        let isVoiceMode = false;
         let recognition = null;
 
         function handleFileSelect() {
@@ -142,7 +142,7 @@
             }
         }
 
-        // Toggle Continuous Hands-Free Mode
+        // Toggle Voice Mode on/off
         function toggleContinuousListening() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -152,23 +152,22 @@
 
             const micBtn = document.getElementById('mic-btn');
 
-            if (isContinuousMode) {
-                // Turn off continuous mode
-                isContinuousMode = false;
+            if (isVoiceMode) {
+                isVoiceMode = false;
                 if (recognition) recognition.stop();
                 micBtn.classList.remove('listening');
-                alert("Continuous voice mode turned off.");
+                alert("Voice mode turned off. Back to text-only replies.");
                 return;
             }
 
-            // Turn on continuous mode
-            isContinuousMode = true;
+            isVoiceMode = true;
             micBtn.classList.add('listening');
+            alert("Voice mode turned on! Speak freely, and Mahlet will reply with voice and text.");
             startListening();
         }
 
         function startListening() {
-            if (!isContinuousMode) return;
+            if (!isVoiceMode) return;
 
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             recognition = new SpeechRecognition();
@@ -178,57 +177,31 @@
             recognition.onresult = (event) => {
                 const speechToText = event.results[0][0].transcript;
                 document.getElementById('user-input').value = speechToText;
-                sendMessage(); // Automatically sends message and triggers AI reply
+                sendVoiceMessage(); // Automatically sends and speaks back
             };
 
             recognition.onerror = () => {
-                // Restart listening if it errors out briefly
-                if (isContinuousMode) {
-                    setTimeout(startListening, 1000);
-                }
+                if (isVoiceMode) setTimeout(startListening, 1000);
             };
 
             recognition.onend = () => {
-                // Keep listening automatically if continuous mode is still active and AI isn't currently speaking
-                if (isContinuousMode) {
-                    setTimeout(startListening, 500);
-                }
+                if (isVoiceMode) setTimeout(startListening, 500);
             };
 
-            try {
-                recognition.start();
-            } catch (e) {
-                // Ignore if already started
-            }
+            try { recognition.start(); } catch (e) {}
         }
 
-        // Voice Output: Speaks text out loud and restarts mic after she finishes
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            
-            const utterance = new SpeechSynthesisUtterance(text);
-            
-            // Temporarily pause continuous listening while Mahlet is talking so she doesn't hear herself
-            if (isContinuousMode && recognition) {
-                recognition.abort();
-            }
-
-            utterance.onend = () => {
-                // Resume listening automatically after Mahlet finishes talking!
-                if (isContinuousMode) {
-                    setTimeout(startListening, 800);
-                }
-            };
-
-            window.speechSynthesis.speak(utterance);
+        // Text-only send (No voice output)
+        async function sendTextMessage() {
+            await processMessage(false);
         }
 
-        function speakLastResponse() {
-            if (lastAiText) speakText(lastAiText);
+        // Voice send (Triggers voice output too)
+        async function sendVoiceMessage() {
+            await processMessage(true);
         }
 
-        async function sendMessage() {
+        async function processMessage(shouldSpeak) {
             const inputField = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
             const modeSelect = document.getElementById('mode-select');
@@ -262,18 +235,43 @@
                 chatHistory.push({ role: 'assistant', content: aiReply });
                 lastAiText = aiReply;
 
-                // Speak reply and automatically turn mic back on when she finishes
-                speakText(aiReply);
+                // Only speak out loud if it came from voice mode!
+                if (shouldSpeak) {
+                    speakText(aiReply);
+                }
 
                 document.getElementById('file-input').value = '';
                 document.getElementById('file-indicator').innerText = "No file attached";
                 selectedFileBase64 = null;
             } catch (err) {
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: Error connecting to server.`);
-                if (isContinuousMode) setTimeout(startListening, 1000);
+                if (isVoiceMode) setTimeout(startListening, 1000);
             }
             
             chatBox.scrollTop = chatBox.scrollHeight;
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            
+            if (isVoiceMode && recognition) {
+                recognition.abort();
+            }
+
+            utterance.onend = () => {
+                if (isVoiceMode) {
+                    setTimeout(startListening, 800);
+                }
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function speakLastResponse() {
+            if (lastAiText) speakText(lastAiText);
         }
     </script>
 </body>
