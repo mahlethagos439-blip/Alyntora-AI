@@ -29,6 +29,9 @@
         .sidebar-item { background: #222; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #ddd; text-align: left; border: none; width: 100%; }
         .sidebar-item:hover { background: #333; }
         .recents-header { font-size: 12px; color: #888; margin-top: 5px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Settings Section inside Sidebar */
+        .sidebar-settings-section { background: #222; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 12px; color: #ccc; line-height: 1.4; border: 1px solid #333; }
         .sidebar-footer { padding-top: 10px; border-top: 1px solid #333; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #ccc; }
 
         /* Main Chat Container */
@@ -60,19 +63,15 @@
         .send-btn { padding: 10px 14px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .send-btn:hover { background: #0056b3; }
         #file-indicator { font-size: 11px; color: #aaa; }
-
-        /* Settings Modal Overlay */
-        #settings-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #222; padding: 20px; border-radius: 8px; width: 300px; display: flex; flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Account Registration Modal (Includes Email & instant instant response) -->
+    <!-- Account Registration Modal (Includes Email & Fast Entry) -->
     <div id="auth-modal">
         <div class="auth-card">
             <h3>Welcome to Global AI Mahlet</h3>
-            <p style="font-size: 12px; color: #aaa; margin: 0;">Create your account instantly.</p>
+            <p style="font-size: 12px; color: #aaa; margin: 0;">Create your profile to start instantly.</p>
             <input type="text" id="reg-name" class="auth-input" placeholder="Your Name">
             <input type="email" id="reg-email" class="auth-input" placeholder="Your Email Address">
             <input type="number" id="reg-age" class="auth-input" placeholder="Your Age">
@@ -86,13 +85,19 @@
         </div>
     </div>
 
-    <!-- Slide-out Sidebar (3 Lines Menu) -->
+    <!-- Slide-out Sidebar (3 Lines Menu + Settings Section) -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <span class="sidebar-title" id="sidebar-username">Global AI</span>
             <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
         </div>
         
+        <!-- Settings Section built directly inside the menu -->
+        <div class="sidebar-settings-section">
+            <div style="font-weight: bold; margin-bottom: 4px; color: #fff;">⚙️ Account Settings</div>
+            <div id="sidebar-profile-info">Loading profile...</div>
+        </div>
+
         <!-- Search Box for Recent Chats -->
         <input type="text" id="search-recents" class="search-box" placeholder="Search recent chats..." oninput="filterRecents()">
 
@@ -105,17 +110,7 @@
         </div>
         
         <div class="sidebar-footer">
-            <div onclick="openSettings()" style="cursor: pointer;">⚙️ Settings</div>
             <div onclick="deleteAccount()" style="cursor: pointer; color: #dc3545;">🗑️ Delete Account & Reset</div>
-        </div>
-    </div>
-
-    <!-- Settings Modal (Inside 3 Lines Menu) -->
-    <div id="settings-modal">
-        <div class="modal-content">
-            <h3>Account Settings</h3>
-            <p id="user-profile-info" style="font-size: 13px; color: #ccc; line-height: 1.5;"></p>
-            <button class="top-btn" onclick="closeSettings()" style="margin-top: 10px;">Close Settings</button>
         </div>
     </div>
 
@@ -208,7 +203,7 @@
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... All features loaded fast!</div>
+        <div id="chat-box">AI response will appear here... All features loaded!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -240,20 +235,20 @@
         let audioChunks = [];
         let isRecording = false;
 
-        // Instant account check on startup
+        // Instant account check on load
         window.onload = function() {
             const userProfile = localStorage.getItem('mahlet_user_profile');
             if (userProfile) {
                 const profile = JSON.parse(userProfile);
                 document.getElementById('auth-modal').style.display = 'none';
                 document.getElementById('sidebar-username').innerText = profile.name;
-                document.getElementById('user-profile-info').innerHTML = `<strong>Name:</strong> ${profile.name}<br><strong>Email:</strong> ${profile.email}<br><strong>Age:</strong> ${profile.age}<br><strong>Sex:</strong> ${profile.sex}`;
+                document.getElementById('sidebar-profile-info').innerHTML = `Name: ${profile.name}<br>Email: ${profile.email}<br>Age: ${profile.age} | Sex: ${profile.sex}`;
             } else {
                 document.getElementById('auth-modal').style.display = 'flex';
             }
         };
 
-        // Instant Registration Function
+        // Instant Registration Function (No lagging)
         function registerUser() {
             const name = document.getElementById('reg-name').value.trim();
             const email = document.getElementById('reg-email').value.trim();
@@ -261,21 +256,21 @@
             const sex = document.getElementById('reg-sex').value;
 
             if (!name || !email || !age || !sex) {
-                alert("Please fill in all details (Name, Email, Age, Sex) to proceed.");
+                alert("Please fill in all fields (Name, Email, Age, Sex).");
                 return;
             }
 
             const profile = { name, email, age, sex };
             localStorage.setItem('mahlet_user_profile', JSON.stringify(profile));
             
-            // Instantly hide modal without any delay
+            // Instantly hide modal and populate sidebar settings
             document.getElementById('auth-modal').style.display = 'none';
             document.getElementById('sidebar-username').innerText = name;
-            document.getElementById('user-profile-info').innerHTML = `<strong>Name:</strong> ${name}<br><strong>Email:</strong> ${email}<br><strong>Age:</strong> ${age}<br><strong>Sex:</strong> ${sex}`;
+            document.getElementById('sidebar-profile-info').innerHTML = `Name: ${name}<br>Email: ${email}<br>Age: ${age} | Sex: ${sex}`;
         }
 
         function deleteAccount() {
-            if (confirm("Are you sure you want to delete your account? All settings and saved recents will be cleared.")) {
+            if (confirm("Are you sure you want to delete your account? All settings and saved chats will be cleared.")) {
                 localStorage.removeItem('mahlet_user_profile');
                 location.reload();
             }
@@ -283,14 +278,6 @@
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
-        }
-
-        function openSettings() {
-            document.getElementById('settings-modal').style.display = 'flex';
-        }
-
-        function closeSettings() {
-            document.getElementById('settings-modal').style.display = 'none';
         }
 
         function filterRecents() {
@@ -336,4 +323,18 @@
                         if (width > height) {
                             if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
                         } else {
-           
+                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        selectedFileBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        indicator.innerText = `Attached: ${file.name} (Ready)`;
+                    };
+                };
+                reader.readAsDataURL(file);
+            } else {
+                indicator.innerText = "N
