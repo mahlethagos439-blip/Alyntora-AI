@@ -6,45 +6,149 @@
     <title>Global AI Mahlet 🌍</title>
     <style>
         body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 85vh; }
-        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 14px; }
-        select { background: #333; color: #fff; border: 1px solid #444; padding: 6px; border-radius: 5px; }
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; }
-        .input-area { display: flex; gap: 10px; }
-        input { flex: 1; padding: 12px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
+        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 90vh; }
+        .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; font-size: 13px; background: #252525; padding: 10px; border-radius: 6px; }
+        .control-row { display: flex; justify-content: space-between; align-items: center; }
+        select, input[type="text"]#lang-search { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; width: 60%; }
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; font-size: 14px; }
+        .input-area { display: flex; flex-direction: column; gap: 8px; }
+        .input-row { display: flex; gap: 10px; }
+        input[type="text"]#user-input { flex: 1; padding: 12px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
+        .file-label { background: #444; padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
+        .file-label:hover { background: #555; }
+        input[type="file"] { display: none; }
         button { padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         button:hover { background: #0056b3; }
+        #file-indicator { font-size: 12px; color: #aaa; }
     </style>
 </head>
 <body>
 
     <div class="chat-container">
         <h2>Global AI Mahlet 🌍</h2>
+        
+        <!-- Controls for Role and Extended Language Selection -->
         <div class="controls">
-            <label for="mode-select">Select AI Role/Mode:</label>
-            <select id="mode-select">
-                <option value="coach">❤️ Personal Coach & Stress Motivator</option>
-                <option value="mentor">📚 Academic & Technical Mentor</option>
-                <option value="business">💼 Business Strategist (B2B & B2C)</option>
-            </select>
+            <div class="control-row">
+                <label for="mode-select">AI Role:</label>
+                <select id="mode-select">
+                    <option value="coach">❤️ Personal Coach & Stress Motivator</option>
+                    <option value="mentor">📚 Academic & Technical Mentor</option>
+                    <option value="business">💼 Business Strategist (B2B & B2C)</option>
+                </select>
+            </div>
+            <div class="control-row">
+                <label for="lang-search">Language:</label>
+                <input list="languages-list" id="lang-search" value="English" placeholder="Type or select language..." />
+                <datalist id="languages-list">
+                    <option value="English">
+                    <option value="Amharic (አማርኛ)">
+                    <option value="Afaan Oromoo">
+                    <option value="Tigrinya (ትግርኛ)">
+                    <option value="Somali (Soomaaliga)">
+                    <option value="Spanish (Español)">
+                    <option value="French (Français)">
+                    <option value="Arabic (العربية)">
+                    <option value="Mandarin Chinese (中文)">
+                    <option value="Hindi (हिन्दी)">
+                    <option value="Swahili (Kiswahili)">
+                    <option value="German (Deutsch)">
+                    <option value="Portuguese (Português)">
+                    <option value="Japanese (日本語)">
+                    <option value="Russian (Русский)">
+                    <option value="Italian (Italiano)">
+                    <option value="Turkish (Türkçe)">
+                    <option value="Korean (한국어)">
+                    <option value="Vietnamese (Tiếng Việt)">
+                    <option value="Polish (Polski)">
+                    <option value="Dutch (Nederlands)">
+                    <option value="Greek (Ελληνικά)">
+                    <option value="Hebrew (עברית)">
+                    <option value="Persian (فارسی)">
+                    <option value="Urdu (اردو)">
+                    <option value="Bengali (বাংলা)">
+                    <option value="Punjabi (ਪੰਜਾਬੀ)">
+                    <option value="Marathi (मराठी)">
+                    <option value="Telugu (తెలుగు)">
+                    <option value="Tamil (தமிழ்)">
+                    <option value="Gujarati (ગુજરાતી)">
+                    <option value="Kannada (ಕನ್ನಡ)">
+                    <option value="Malayalam (മലയാളം)">
+                    <option value="Thai (ไทย)">
+                    <option value="Indonesian (Bahasa Indonesia)">
+                    <option value="Malay (Bahasa Melayu)">
+                    <option value="Filipino (Tagalog)">
+                    <option value="Ukrainian (Українська)">
+                    <option value="Romanian (Română)">
+                    <option value="Czech (Čeština)">
+                    <option value="Hungarian (Magyar)">
+                    <option value="Swedish (Svenska)">
+                    <option value="Danish (Dansk)">
+                    <option value="Finnish (Suomi)">
+                    <option value="Norwegian (Norsk)">
+                    <option value="Czech (Čeština)">
+                    <option value="Afrikaans">
+                    <option value="Zulu (isiZulu)">
+                    <option value="Xhosa (isiXhosa)">
+                    <option value="Hausa">
+                    <option value="Yoruba (Yorùbá)">
+                    <option value="Igbo">
+                    <option value="Shona">
+                    <option value="Igbo">
+                    <option value="Quechua">
+                    <option value="Esperanto">
+                    <option value="Latin">
+                </datalist>
+            </div>
         </div>
-        <div id="chat-box">AI response will appear here...</div>
+
+        <div id="chat-box">AI response will appear here... Long conversation memory is active.</div>
+        
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Ask or share how you feel..." />
-            <button onclick="sendMessage()">Send</button>
+            <div id="file-indicator">No file attached</div>
+            <div class="input-row">
+                <label class="file-label" for="file-input">📷 File</label>
+                <input type="file" id="file-input" accept="image/*,.pdf,.txt" onchange="handleFileSelect()" />
+                <input type="text" id="user-input" placeholder="Ask a question or continue chat..." />
+                <button onclick="sendMessage()">Send</button>
+            </div>
         </div>
     </div>
 
     <script>
+        let selectedFileBase64 = null;
+        let chatHistory = [];
+
+        function handleFileSelect() {
+            const fileInput = document.getElementById('file-input');
+            const indicator = document.getElementById('file-indicator');
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                indicator.innerText = `Attached: ${file.name}`;
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedFileBase64 = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                indicator.innerText = "No file attached";
+                selectedFileBase64 = null;
+            }
+        }
+
         async function sendMessage() {
             const inputField = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
             const modeSelect = document.getElementById('mode-select');
+            const langSearch = document.getElementById('lang-search');
             const prompt = inputField.value.trim();
             
-            if (!prompt) return;
+            if (!prompt && !selectedFileBase64) return;
 
-            chatBox.innerHTML += `\n\nYou [${modeSelect.value}]: ${prompt}`;
+            chatBox.innerHTML += `\n\nYou [${modeSelect.value} | ${langSearch.value}]: ${prompt || "[Uploaded file/image]"}`;
+            
+            chatHistory.push({ role: 'user', content: prompt || "Please explain this attached image/file." });
+
             inputField.value = '';
             chatBox.innerHTML += `\n\nAI: Thinking...`;
 
@@ -52,11 +156,24 @@
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt, mode: modeSelect.value })
+                    body: JSON.stringify({ 
+                        messages: chatHistory, 
+                        mode: modeSelect.value,
+                        language: langSearch.value,
+                        image: selectedFileBase64 
+                    })
                 });
 
                 const data = await response.json();
-                chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${data.response || data.error}`);
+                const aiReply = data.response || data.error;
+
+                chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
+                
+                chatHistory.push({ role: 'assistant', content: aiReply });
+
+                document.getElementById('file-input').value = '';
+                document.getElementById('file-indicator').innerText = "No file attached";
+                selectedFileBase64 = null;
             } catch (err) {
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: Error connecting to server.`);
             }
@@ -66,6 +183,7 @@
     </script>
 </body>
 </html>
+
 
 
   
