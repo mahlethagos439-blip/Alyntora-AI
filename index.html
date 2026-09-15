@@ -133,7 +133,7 @@
                 
                 <button class="action-btn" id="record-btn" onclick="toggleAudioRecording()" title="Record Voice Note">🎙️</button>
                 <button class="action-btn" id="mic-btn" onclick="toggleVoiceMode()" title="Live Voice Mode">🎤</button>
-                <button class="action-btn" onclick="speakLastResponse()" title="Read Aloud">🔊</button>
+                <button class="action-btn" onclick="toggleSpeakerSpeech()" title="Read Aloud / Stop Speaker">🔊</button>
                 
                 <input type="text" id="user-input" placeholder="Type a message..." />
                 <button class="send-btn" onclick="sendTextMessage()">Send</button>
@@ -405,8 +405,13 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        function speakLastResponse() {
-            if (lastAiText) speakText(lastAiText);
+        // Tap speaker to read aloud, or tap again to instantly stop the voice!
+        function toggleSpeakerSpeech() {
+            if (isAiSpeaking) {
+                stopAllSpeech();
+            } else if (lastAiText) {
+                speakText(lastAiText);
+            }
         }
     </script>
 </body>
