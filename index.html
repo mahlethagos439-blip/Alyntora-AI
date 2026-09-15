@@ -5,10 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global AI Mahlet 🌍</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        
+        /* Sidebar Menu Styles */
+        .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: #181818; box-shadow: 4px 0 10px rgba(0,0,0,0.7); transition: left 0.3s ease; z-index: 1000; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box; }
+        .sidebar.open { left: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .sidebar-title { font-size: 18px; font-weight: bold; }
+        .close-sidebar { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+        .sidebar-nav { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-item { background: #222; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #ddd; text-align: left; border: none; width: 100%; }
+        .sidebar-item:hover { background: #333; }
+        .recents-header { font-size: 12px; color: #888; margin-top: 10px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .sidebar-footer { padding-top: 10px; border-top: 1px solid #333; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #ccc; }
+
+        /* Main Chat Container */
         .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 92vh; }
         
         .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .menu-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
         .top-btn { background: #333; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
         .top-btn:hover { background: #444; }
         
@@ -33,13 +48,47 @@
         .send-btn { padding: 10px 14px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         .send-btn:hover { background: #0056b3; }
         #file-indicator { font-size: 11px; color: #aaa; }
+
+        /* Settings Modal Overlay */
+        #settings-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: #222; padding: 20px; border-radius: 8px; width: 300px; display: flex; flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
 
+    <!-- Slide-out Sidebar (ChatGPT Style) -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-title">Global AI Mahlet</span>
+            <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+        </div>
+        <div class="sidebar-nav">
+            <button class="sidebar-item" onclick="startNewChat(); toggleSidebar();">＋ New Chat</button>
+            <div class="recents-header">Recent Chats</div>
+            <div id="recents-list" style="display: flex; flex-direction: column; gap: 4px;">
+                <span style="font-size: 12px; color: #666;">No recent chats yet</span>
+            </div>
+        </div>
+        <div class="sidebar-footer" onclick="openSettings()">
+            <span>⚙️ Settings</span>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal">
+        <div class="modal-content">
+            <h3>Settings</h3>
+            <p style="font-size: 13px; color: #aaa;">Customize your app preferences and voice engine behavior here.</p>
+            <button class="top-btn" onclick="closeSettings()" style="margin-top: 10px;">Close</button>
+        </div>
+    </div>
+
     <div class="chat-container">
         <div class="top-bar">
-            <h2 style="margin:0; font-size: 18px;">Global AI Mahlet 🌍</h2>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <button class="menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
+                <h2 style="margin:0; font-size: 18px;">Global AI Mahlet 🌍</h2>
+            </div>
             <button class="top-btn" onclick="startNewChat()">＋ New Chat</button>
         </div>
 
@@ -155,6 +204,18 @@
         let audioChunks = [];
         let isRecording = false;
 
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function openSettings() {
+            document.getElementById('settings-modal').style.display = 'flex';
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').style.display = 'none';
+        }
+
         function handleFileSelect() {
             const fileInput = document.getElementById('file-input');
             const indicator = document.getElementById('file-indicator');
@@ -235,11 +296,41 @@
 
         function startNewChat() {
             handleTempChatExitCheck(() => {
+                if (chatHistory.length > 0) {
+                    saveCurrentChatToRecents();
+                }
                 chatHistory = [];
                 document.getElementById('chat-box').innerHTML = "New chat started! Ask Mahlet anything.";
                 lastAiText = "";
                 stopAllSpeech();
             });
+        }
+
+        function saveCurrentChatToRecents() {
+            const firstMsg = chatHistory.find(m => m.role === 'user')?.content || "Untitled Chat";
+            const shortTitle = firstMsg.length > 25 ? firstMsg.substring(0, 25) + '...' : firstMsg;
+            savedChatsList.push({ title: shortTitle, history: [...chatHistory] });
+            
+            const recentsContainer = document.getElementById('recents-list');
+            recentsContainer.innerHTML = '';
+            savedChatsList.forEach((chat, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'sidebar-item';
+                btn.innerText = chat.title;
+                btn.onclick = () => loadRecentChat(idx);
+                recentsContainer.appendChild(btn);
+            });
+            document.getElementById('saved-chats-badge').innerText = `Saved Chats: ${savedChatsList.length}`;
+        }
+
+        function loadRecentChat(index) {
+            chatHistory = [...savedChatsList[index].history];
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = "";
+            chatHistory.forEach(msg => {
+                chatBox.innerHTML += `\n\n${msg.role === 'user' ? 'You' : 'AI'}: ${msg.content}`;
+            });
+            toggleSidebar();
         }
 
         function toggleTempChatMode() {
@@ -257,8 +348,7 @@
             if (isTempChat && chatHistory.length > 0) {
                 const wantSave = confirm("Do you want to save this temporary chat?\n\nOK = Yes | Cancel = No");
                 if (wantSave) {
-                    savedChatsList.push([...chatHistory]);
-                    document.getElementById('saved-chats-badge').innerText = `Saved Chats: ${savedChatsList.length}`;
+                    saveCurrentChatToRecents();
                 }
             }
             callback();
@@ -288,133 +378,4 @@
                 return;
             }
 
-            isVoiceMode = true;
-            micBtn.classList.add('listening');
-            startListening();
-        }
-
-        function startListening() {
-            if (!isVoiceMode || isAiSpeaking) return;
-
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.interimResults = false;
-
-            recognition.onresult = (event) => {
-                if (isAiSpeaking) return;
-                const speechToText = event.results[0][0].transcript;
-                document.getElementById('user-input').value = speechToText;
-                sendVoiceMessage();
-            };
-
-            recognition.onerror = () => {
-                if (isVoiceMode && !isAiSpeaking) setTimeout(startListening, 1000);
-            };
-
-            recognition.onend = () => {
-                if (isVoiceMode && !isAiSpeaking) setTimeout(startListening, 500);
-            };
-
-            try { recognition.start(); } catch (e) {}
-        }
-
-        async function sendTextMessage() {
-            await processMessage(false);
-        }
-
-        async function sendVoiceMessage() {
-            await processMessage(true);
-        }
-
-        async function processMessage(shouldSpeak) {
-            const inputField = document.getElementById('user-input');
-            const chatBox = document.getElementById('chat-box');
-            const modeSelect = document.getElementById('mode-select');
-            const langSelect = document.getElementById('lang-select');
-            const prompt = inputField.value.trim();
-            
-            if (!prompt && !selectedFileBase64) return;
-
-            let displayLabel = prompt || "[Uploaded file/audio]";
-            chatBox.innerHTML += `\n\nYou [${modeSelect.value}]: ${displayLabel}`;
-            chatHistory.push({ role: 'user', content: prompt || "Please analyze this attached file/audio." });
-
-            inputField.value = '';
-            chatBox.innerHTML += `\n\nAI: Thinking...`;
-
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        messages: chatHistory, 
-                        mode: modeSelect.value,
-                        language: langSelect.value,
-                        image: selectedFileBase64 
-                    })
-                });
-
-                const data = await response.json();
-                const aiReply = data.response || data.error;
-
-                chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
-                chatHistory.push({ role: 'assistant', content: aiReply });
-                lastAiText = aiReply;
-
-                if (shouldSpeak) {
-                    speakText(aiReply);
-                }
-
-                document.getElementById('file-input').value = '';
-                document.getElementById('file-indicator').innerText = "No file attached";
-                selectedFileBase64 = null;
-            } catch (err) {
-                chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: Error connecting to server.`);
-                if (isVoiceMode) setTimeout(startListening, 1000);
-            }
-            
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
-            
-            // Instantly cancel any previous lagging speech queue for maximum response speed
-            window.speechSynthesis.cancel();
-            
-            isAiSpeaking = true;
-            if (recognition) {
-                try { recognition.stop(); } catch (e) {}
-            }
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.rate = 1.0; // Normal fast talking speed
-            
-            utterance.onend = () => {
-                isAiSpeaking = false;
-                if (isVoiceMode) {
-                    setTimeout(startListening, 300);
-                }
-            };
-
-            utterance.onerror = () => {
-                isAiSpeaking = false;
-                if (isVoiceMode) {
-                    setTimeout(startListening, 300);
-                }
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function toggleSpeakerSpeech() {
-            if (isAiSpeaking) {
-                stopAllSpeech();
-            } else if (lastAiText) {
-                speakText(lastAiText);
-            }
-        }
-    </script>
-</body>
-</html>
+            i
