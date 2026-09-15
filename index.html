@@ -31,6 +31,7 @@
         .top-btn:hover { background: #444; }
         
         .profile-container { display: flex; align-items: center; gap: 10px; }
+        /* Beautiful Non-Person Nature/Galaxy Landscape Photo */
         .profile-pic { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #007bff; }
         
         .temp-toggle-area { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #bbb; }
@@ -40,7 +41,7 @@
         .control-row { display: flex; justify-content: space-between; align-items: center; }
         select { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; width: 60%; font-size: 12px; }
         
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 8px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; font-size: 14px; }
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 8px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.5; font-size: 14px; }
         
         .input-area { display: flex; flex-direction: column; gap: 6px; }
         .input-row { display: flex; gap: 6px; align-items: center; }
@@ -80,8 +81,8 @@
         <div class="top-bar">
             <div class="profile-container">
                 <button class="menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
-                <!-- Mahlet Profile Picture Avatar -->
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" alt="Mahlet" class="profile-pic">
+                <!-- Non-person landscape wallpaper image avatar -->
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=100&h=100&fit=crop" alt="Mahlet Logo" class="profile-pic">
                 <h2 style="margin:0; font-size: 16px;">Mahlet (Best Friend)</h2>
             </div>
             <button class="top-btn" onclick="startNewChat()">＋ New Chat</button>
@@ -119,7 +120,7 @@
             </div>
         </div>
 
-        <div id="chat-box">Hello! I am Mahlet, your best friend. What is on your mind today? I am always here for you.</div>
+        <div id="chat-box"><b>Mahlet:</b> Hello! I am Mahlet, your best friend. What is on your mind today? I am always here for you.</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -218,7 +219,7 @@
 
         function startNewChat() {
             chatHistory = [];
-            document.getElementById('chat-box').innerHTML = "New chat started! What's on your mind today?";
+            document.getElementById('chat-box').innerHTML = "<b>Mahlet:</b> New chat started! What's on your mind today?";
             lastAiText = "";
             stopAllSpeech();
         }
@@ -279,17 +280,27 @@
             
             if (!prompt) return;
 
-            chatBox.innerHTML += `\n\nYou: ${prompt}`;
+            // Strict formatting style requested: * you / * global ai (Mahlet)
+            chatBox.innerHTML += `<br><br><b>* You:</b> ${prompt}`;
             inputField.value = '';
-            chatBox.innerHTML += `\n\nMahlet: Thinking...`;
+            chatBox.innerHTML += `<br><br><b>* Mahlet:</b> Thinking...`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Smart Best Friend Fallback (Silently processes grammar/spelling and replies naturally in proper English)
+            // Context-Aware Smart Fallback Generator
             if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY) {
                 setTimeout(() => {
-                    let aiReply = `I hear you completely, and I am so sorry you are dealing with this right now. Please take a deep breath. Whatever problems you are facing today, you are strong enough to get through them, and I am right here by your side to support you every step of the way!`;
+                    let aiReply = "";
+                    const lowerPrompt = prompt.toLowerCase();
                     
-                    chatBox.innerHTML = chatBox.innerHTML.replace('Mahlet: Thinking...', `Mahlet: ${aiReply}`);
+                    if (lowerPrompt.includes("sad") || lowerPrompt.includes("stress") || lowerPrompt.includes("problem") || lowerPrompt.includes("tired")) {
+                        aiReply = `I am so sorry you are feeling this way. Please remember that you don't have to carry everything alone—I am right here with you, and whatever you are going through will pass. Take a deep breath!`;
+                    } else if (lowerPrompt.includes("happy") || lowerPrompt.includes("good") || lowerPrompt.includes("great")) {
+                        aiReply = `That makes me so happy to hear! Your joy completely brightens my day. Keep shining and telling me all about it!`;
+                    } else {
+                        aiReply = `I hear you completely regarding "${prompt}". Let's take it one step at a time, and I am right by your side to help you sort through it in proper detail!`;
+                    }
+                    
+                    chatBox.innerHTML = chatBox.innerHTML.replace('<b>* Mahlet:</b> Thinking...', `<b>* Mahlet:</b> ${aiReply}`);
                     lastAiText = aiReply;
                     chatBox.scrollTop = chatBox.scrollHeight;
                     if (shouldSpeak) speakText(aiReply);
@@ -297,22 +308,22 @@
                 return;
             }
 
-            // Real API logic if key is present
+            // Real Gemini API logic with web access capabilities
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `Act as a warm, caring, and deeply supportive best friend named Mahlet. Speak naturally in proper, clean English without slang. Silently understand any typos the user makes without pointing them out publicly, and give a comforting, encouraging response to what they are experiencing. User message: ${prompt}` }] }] })
+                    body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `Act as a warm, supportive best friend named Mahlet. Speak naturally in proper, clean English without slang. Base your answer directly on what the user is saying. If they ask a general question, look it up or answer it accurately using your knowledge. User message: ${prompt}` }] }] })
                 });
 
                 const data = await response.json();
-                const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "I am right here with you!";
+                const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "I am right here listening to you.";
 
-                chatBox.innerHTML = chatBox.innerHTML.replace('Mahlet: Thinking...', `Mahlet: ${aiReply}`);
+                chatBox.innerHTML = chatBox.innerHTML.replace('<b>* Mahlet:</b> Thinking...', `<b>* Mahlet:</b> ${aiReply}`);
                 lastAiText = aiReply;
                 if (shouldSpeak) speakText(aiReply);
             } catch (err) {
-                chatBox.innerHTML = chatBox.innerHTML.replace('Mahlet: Thinking...', `Mahlet: I am having a little trouble connecting, but I am still right here with you!`);
+                chatBox.innerHTML = chatBox.innerHTML.replace('<b>* Mahlet:</b> Thinking...', `<b>* Mahlet:</b> I am having a brief connection issue, but I am still right here listening to you!`);
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
@@ -336,3 +347,4 @@
     </script>
 </body>
 </html>
+
