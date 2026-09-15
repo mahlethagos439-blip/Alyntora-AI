@@ -7,17 +7,29 @@
     <style>
         body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
         
+        /* Account Modal Overlay */
+        #auth-modal { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; justify-content: center; align-items: center; }
+        .auth-card { background: #1e1e1e; padding: 25px; border-radius: 10px; width: 320px; display: flex; flex-direction: column; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+        .auth-card h3 { margin-top: 0; color: #fff; text-align: center; }
+        .auth-input { background: #333; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 5px; font-size: 14px; width: 100%; box-sizing: border-box; }
+        .auth-btn { background: #007bff; color: white; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; }
+        .auth-btn:hover { background: #0056b3; }
+
         /* Sidebar Menu Styles */
         .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: #181818; box-shadow: 4px 0 10px rgba(0,0,0,0.7); transition: left 0.3s ease; z-index: 1000; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box; }
         .sidebar.open { left: 0; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
         .sidebar-title { font-size: 18px; font-weight: bold; }
         .close-sidebar { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+        
+        /* Search Box in Sidebar */
+        .search-box { background: #2a2a2a; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 5px; font-size: 13px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+        
         .sidebar-nav { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .sidebar-item { background: #222; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #ddd; text-align: left; border: none; width: 100%; }
         .sidebar-item:hover { background: #333; }
-        .recents-header { font-size: 12px; color: #888; margin-top: 10px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-        .sidebar-footer { padding-top: 10px; border-top: 1px solid #333; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #ccc; }
+        .recents-header { font-size: 12px; color: #888; margin-top: 5px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .sidebar-footer { padding-top: 10px; border-top: 1px solid #333; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #ccc; }
 
         /* Main Chat Container */
         .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 92vh; }
@@ -56,21 +68,44 @@
 </head>
 <body>
 
-    <!-- Slide-out Sidebar (ChatGPT Style) -->
+    <!-- Account Registration Modal -->
+    <div id="auth-modal">
+        <div class="auth-card">
+            <h3>Welcome to Global AI Mahlet</h3>
+            <p style="font-size: 12px; color: #aaa; margin: 0;">Please create your profile to continue.</p>
+            <input type="text" id="reg-name" class="auth-input" placeholder="Your Name">
+            <input type="number" id="reg-age" class="auth-input" placeholder="Your Age">
+            <select id="reg-sex" class="auth-input" style="width:100%;">
+                <option value="">Select Sex / Gender</option>
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
+            </select>
+            <button class="auth-btn" onclick="registerUser()">Create Account</button>
+        </div>
+    </div>
+
+    <!-- Slide-out Sidebar -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <span class="sidebar-title">Global AI Mahlet</span>
+            <span class="sidebar-title" id="sidebar-username">Global AI</span>
             <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
         </div>
+        
+        <!-- Search Filter for Recent Chats -->
+        <input type="text" id="search-recents" class="search-box" placeholder="Search recent chats..." oninput="filterRecents()">
+
         <div class="sidebar-nav">
             <button class="sidebar-item" onclick="startNewChat(); toggleSidebar();">＋ New Chat</button>
             <div class="recents-header">Recent Chats</div>
             <div id="recents-list" style="display: flex; flex-direction: column; gap: 4px;">
-                <span style="font-size: 12px; color: #666;">No recent chats yet</span>
+                <span style="font-size: 12px; color: #666;" id="no-recents-text">No recent chats yet</span>
             </div>
         </div>
-        <div class="sidebar-footer" onclick="openSettings()">
-            <span>⚙️ Settings</span>
+        
+        <div class="sidebar-footer">
+            <div onclick="openSettings()" style="cursor: pointer;">⚙️ Settings</div>
+            <div onclick="deleteAccount()" style="cursor: pointer; color: #dc3545;">🗑️ Delete Account & Reset</div>
         </div>
     </div>
 
@@ -78,7 +113,7 @@
     <div id="settings-modal">
         <div class="modal-content">
             <h3>Settings</h3>
-            <p style="font-size: 13px; color: #aaa;">Customize your app preferences and voice engine behavior here.</p>
+            <p id="user-profile-info" style="font-size: 13px; color: #ccc;"></p>
             <button class="top-btn" onclick="closeSettings()" style="margin-top: 10px;">Close</button>
         </div>
     </div>
@@ -204,6 +239,44 @@
         let audioChunks = [];
         let isRecording = false;
 
+        // Check Account on Load
+        window.onload = function() {
+            const userProfile = localStorage.getItem('mahlet_user_profile');
+            if (userProfile) {
+                const profile = JSON.parse(userProfile);
+                document.getElementById('auth-modal').style.display = 'none';
+                document.getElementById('sidebar-username').innerText = profile.name;
+                document.getElementById('user-profile-info').innerText = `Name: ${profile.name}\nAge: ${profile.age}\nSex: ${profile.sex}`;
+            } else {
+                document.getElementById('auth-modal').style.display = 'flex';
+            }
+        };
+
+        function registerUser() {
+            const name = document.getElementById('reg-name').value.trim();
+            const age = document.getElementById('reg-age').value.trim();
+            const sex = document.getElementById('reg-sex').value;
+
+            if (!name || !age || !sex) {
+                alert("Please fill in all details to create your account.");
+                return;
+            }
+
+            const profile = { name, age, sex };
+            localStorage.setItem('mahlet_user_profile', JSON.stringify(profile));
+            
+            document.getElementById('auth-modal').style.display = 'none';
+            document.getElementById('sidebar-username').innerText = name;
+            document.getElementById('user-profile-info').innerText = `Name: ${name}\nAge: ${age}\nSex: ${sex}`;
+        }
+
+        function deleteAccount() {
+            if (confirm("Are you sure you want to delete your account? All settings and saved recents will be cleared.")) {
+                localStorage.removeItem('mahlet_user_profile');
+                location.reload();
+            }
+        }
+
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('open');
         }
@@ -214,6 +287,28 @@
 
         function closeSettings() {
             document.getElementById('settings-modal').style.display = 'none';
+        }
+
+        function filterRecents() {
+            const query = document.getElementById('search-recents').value.toLowerCase();
+            const recentsContainer = document.getElementById('recents-list');
+            recentsContainer.innerHTML = '';
+            
+            const filtered = savedChatsList.filter(chat => chat.title.toLowerCase().includes(query));
+            
+            if (filtered.length === 0) {
+                recentsContainer.innerHTML = '<span style="font-size: 12px; color: #666;">No matching chats</span>';
+                return;
+            }
+
+            filtered.forEach((chat) => {
+                const originalIndex = savedChatsList.indexOf(chat);
+                const btn = document.createElement('button');
+                btn.className = 'sidebar-item recents-item-btn';
+                btn.innerText = chat.title;
+                btn.onclick = () => loadRecentChat(originalIndex);
+                recentsContainer.appendChild(btn);
+            });
         }
 
         function handleFileSelect() {
@@ -250,132 +345,4 @@
                     };
                 };
                 reader.readAsDataURL(file);
-            } else {
-                indicator.innerText = "No file attached";
-                selectedFileBase64 = null;
-            }
-        }
-
-        async function toggleAudioRecording() {
-            const recordBtn = document.getElementById('record-btn');
-            const indicator = document.getElementById('file-indicator');
-
-            if (!isRecording) {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream);
-                    audioChunks = [];
-
-                    mediaRecorder.ondataavailable = event => {
-                        audioChunks.push(event.data);
-                    };
-
-                    mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-                        const reader = new FileReader();
-                        reader.readAsDataURL(audioBlob);
-                        reader.onloadend = function() {
-                            selectedFileBase64 = reader.result;
-                            indicator.innerText = "Attached: Voice Note (Ready)";
-                        };
-                    };
-
-                    mediaRecorder.start();
-                    isRecording = true;
-                    recordBtn.classList.add('recording');
-                    indicator.innerText = "Recording voice note... Tap record button again to stop.";
-                } catch (err) {
-                    alert("Microphone permission denied or unavailable.");
-                }
-            } else {
-                mediaRecorder.stop();
-                isRecording = false;
-                recordBtn.classList.remove('recording');
-            }
-        }
-
-        function startNewChat() {
-            handleTempChatExitCheck(() => {
-                if (chatHistory.length > 0) {
-                    saveCurrentChatToRecents();
-                }
-                chatHistory = [];
-                document.getElementById('chat-box').innerHTML = "New chat started! Ask Mahlet anything.";
-                lastAiText = "";
-                stopAllSpeech();
-            });
-        }
-
-        function saveCurrentChatToRecents() {
-            const firstMsg = chatHistory.find(m => m.role === 'user')?.content || "Untitled Chat";
-            const shortTitle = firstMsg.length > 25 ? firstMsg.substring(0, 25) + '...' : firstMsg;
-            savedChatsList.push({ title: shortTitle, history: [...chatHistory] });
-            
-            const recentsContainer = document.getElementById('recents-list');
-            recentsContainer.innerHTML = '';
-            savedChatsList.forEach((chat, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'sidebar-item';
-                btn.innerText = chat.title;
-                btn.onclick = () => loadRecentChat(idx);
-                recentsContainer.appendChild(btn);
-            });
-            document.getElementById('saved-chats-badge').innerText = `Saved Chats: ${savedChatsList.length}`;
-        }
-
-        function loadRecentChat(index) {
-            chatHistory = [...savedChatsList[index].history];
-            const chatBox = document.getElementById('chat-box');
-            chatBox.innerHTML = "";
-            chatHistory.forEach(msg => {
-                chatBox.innerHTML += `\n\n${msg.role === 'user' ? 'You' : 'AI'}: ${msg.content}`;
-            });
-            toggleSidebar();
-        }
-
-        function toggleTempChatMode() {
-            const checkbox = document.getElementById('temp-chat-toggle');
-            if (!checkbox.checked) {
-                handleTempChatExitCheck(() => {
-                    isTempChat = false;
-                });
-            } else {
-                isTempChat = true;
-            }
-        }
-
-        function handleTempChatExitCheck(callback) {
-            if (isTempChat && chatHistory.length > 0) {
-                const wantSave = confirm("Do you want to save this temporary chat?\n\nOK = Yes | Cancel = No");
-                if (wantSave) {
-                    saveCurrentChatToRecents();
-                }
-            }
-            callback();
-        }
-
-        function stopAllSpeech() {
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.cancel();
-            }
-            isAiSpeaking = false;
-        }
-
-        function toggleVoiceMode() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert("Speech recognition is not supported on this browser.");
-                return;
-            }
-
-            const micBtn = document.getElementById('mic-btn');
-
-            if (isVoiceMode) {
-                isVoiceMode = false;
-                if (recognition) recognition.stop();
-                stopAllSpeech();
-                micBtn.classList.remove('listening');
-                return;
-            }
-
-            i
+  
