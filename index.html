@@ -72,7 +72,7 @@
                     <option value="Marathi (मराठी)">Marathi (मराठी)</option>
                     <option value="Telugu (తెలుగు)">Telugu (తెలుగు)</option>
                     <option value="Tamil (தமிழ்)">Tamil (தமிழ்)</option>
-                    <option value="Gujarati (ગુજરાતી)">Gujarati (Gujarati)</option>
+                    <option value="Gujarati (ગુજરાતી)">Gujarati (ગુજરાતી)</option>
                     <option value="Kannada (ಕನ್ನಡ)">Kannada (ಕನ್ನಡ)</option>
                     <option value="Malayalam (മലയാളം)">Malayalam (മലയാളം)</option>
                     <option value="Thai (ไทย)">Thai (ไทย)</option>
@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Type, snap photos, or use voice!</div>
+        <div id="chat-box">AI response will appear here... Speak or type to chat with Mahlet!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -140,7 +140,7 @@
             }
         }
 
-        // Voice Input (Speech to Text)
+        // Voice Input: listens, types it, and automatically sends it!
         function toggleSpeechRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -155,6 +155,7 @@
             recognition.onresult = (event) => {
                 const speechToText = event.results[0][0].transcript;
                 document.getElementById('user-input').value = speechToText;
+                sendMessage(); // Automatically sends after you finish speaking!
             };
             recognition.onerror = () => { micBtn.classList.remove('listening'); };
             recognition.onend = () => { micBtn.classList.remove('listening'); };
@@ -162,19 +163,16 @@
             recognition.start();
         }
 
-        // Voice Output (Text to Speech)
-        function speakLastResponse() {
-            if (!lastAiText) {
-                alert("No AI response to read aloud yet!");
-                return;
-            }
-            if (!('speechSynthesis' in window)) {
-                alert("Text-to-speech not supported on this browser.");
-                return;
-            }
+        // Voice Output: Speaks text out loud automatically
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(lastAiText);
+            const utterance = new SpeechSynthesisUtterance(text);
             window.speechSynthesis.speak(utterance);
+        }
+
+        function speakLastResponse() {
+            if (lastAiText) speakText(lastAiText);
         }
 
         async function sendMessage() {
@@ -210,6 +208,9 @@
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
                 chatHistory.push({ role: 'assistant', content: aiReply });
                 lastAiText = aiReply;
+
+                // Automatically speak Mahlet's answer out loud!
+                speakText(aiReply);
 
                 document.getElementById('file-input').value = '';
                 document.getElementById('file-indicator').innerText = "No file attached";
