@@ -106,7 +106,7 @@
                     <option value="Czech (Čeština)">Czech</option>
                     <option value="Hungarian (Magyar)">Hungarian</option>
                     <option value="Swedish (Svenska)">Swedish</option>
-                    <option value="Danish (Dansk)">Danish</option>
+                    <option value="Danish (Dansk)">Dansk</option>
                     <option value="Finnish (Suomi)">Finnish</option>
                     <option value="Norwegian (Norsk)">Norwegian</option>
                     <option value="Afrikaans">Afrikaans</option>
@@ -379,6 +379,8 @@
 
         function speakText(text) {
             if (!('speechSynthesis' in window)) return;
+            
+            // Instantly cancel any previous lagging speech queue for maximum response speed
             window.speechSynthesis.cancel();
             
             isAiSpeaking = true;
@@ -387,25 +389,25 @@
             }
 
             const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 1.0; // Normal fast talking speed
             
             utterance.onend = () => {
                 isAiSpeaking = false;
                 if (isVoiceMode) {
-                    setTimeout(startListening, 600);
+                    setTimeout(startListening, 300);
                 }
             };
 
             utterance.onerror = () => {
                 isAiSpeaking = false;
                 if (isVoiceMode) {
-                    setTimeout(startListening, 600);
+                    setTimeout(startListening, 300);
                 }
             };
 
             window.speechSynthesis.speak(utterance);
         }
 
-        // Tap speaker to read aloud, or tap again to instantly stop the voice!
         function toggleSpeakerSpeech() {
             if (isAiSpeaking) {
                 stopAllSpeech();
