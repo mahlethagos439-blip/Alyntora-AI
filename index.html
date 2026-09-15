@@ -92,7 +92,7 @@
             <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
         </div>
         
-        <!-- Search Filter for Recent Chats -->
+        <!-- Search Box for Recent Chats -->
         <input type="text" id="search-recents" class="search-box" placeholder="Search recent chats..." oninput="filterRecents()">
 
         <div class="sidebar-nav">
@@ -239,7 +239,6 @@
         let audioChunks = [];
         let isRecording = false;
 
-        // Check Account on Load
         window.onload = function() {
             const userProfile = localStorage.getItem('mahlet_user_profile');
             if (userProfile) {
@@ -345,4 +344,5 @@
                     };
                 };
                 reader.readAsDataURL(file);
-  
+            } else {
+                i
