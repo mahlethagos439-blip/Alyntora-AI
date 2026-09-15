@@ -1,22 +1,37 @@
 export async function onRequestPost(context) {
   try {
-    const { prompt } = await context.request.json();
-    if (!prompt) {
+    const { messages, mode, language, image } = await context.request.json();
+    
+    if (!messages || messages.length === 0) {
       return new Response(JSON.stringify({ error: "Prompt is required" }), { status: 400 });
     }
 
-    // Comprehensive system instructions for personal growth, academic mentoring, and B2B/B2C business strategy
-    const systemInstruction = `You are Global AI Mahlet, an elite multi-purpose AI mentor, life coach, and business strategist. 
-    - PERSONAL & EMOTIONAL: If the user feels stressed, anxious, or experiences a setback, act as a caring human motivator. Validate them, identify their inner strengths and constructive areas for growth (weaknesses), and give practical, actionable steps for mindset changes and habits to adapt.
-    - ACADEMIC & PROFESSIONAL: If the user asks a serious or learning-based question, provide objective, precise, structured explanations to teach them effectively.
-    - BUSINESS (B2B & B2C): If the user asks about building a business, startups, market strategies, consumer psychology (B2C), or corporate partnerships and sales (B2B), act as an expert business consultant. Break down target audiences, monetization models, operational strengths and weaknesses, scaling tactics, and actionable strategies.
-    - Always respond in a clear, highly structured, and deeply supportive tone.`;
+    let roleInstruction = "You are Global AI Mahlet, a helpful AI assistant.";
+    if (mode === "coach") {
+      roleInstruction = "You are Global AI Mahlet, a deeply supportive, empathetic personal coach and stress motivator. Validate feelings, identify inner strengths, and offer positive habits.";
+    } else if (mode === "mentor") {
+      roleInstruction = "You are Global AI Mahlet, an expert academic and technical mentor. Provide structured, accurate, and precise educational guidance.";
+    } else if (mode === "business") {
+      roleInstruction = "You are Global AI Mahlet, an elite business strategist specializing in B2B and B2C scaling, market strategies, and consumer insight.";
+    }
+
+    const systemInstruction = `${roleInstruction} CRITICAL REQUIREMENT: You must respond entirely in the following language: ${language || "English"}. Ensure natural phrasing and correct style for this language.`;
+
+    let formattedMessages = [
+      { role: 'system', content: systemInstruction },
+      ...messages
+    ];
+
+    if (image && formattedMessages.length > 0) {
+      const lastUserMsgIndex = formattedMessages.length - 1;
+      formattedMessages[lastUserMsgIndex].content = [
+        { type: "text", text: formattedMessages[lastUserMsgIndex].content },
+        { type: "image_url", image_url: image }
+      ];
+    }
 
     const aiResponse = await context.env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
-      messages: [
-        { role: 'system', content: systemInstruction },
-        { role: 'user', content: prompt }
-      ]
+      messages: formattedMessages
     });
 
     return new Response(JSON.stringify({ response: aiResponse.response }), {
@@ -26,7 +41,3 @@ export async function onRequestPost(context) {
     return new Response(JSON.stringify({ error: err.message }), { status: 500 });
   }
 }
-
-
-
-
