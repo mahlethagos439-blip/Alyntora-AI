@@ -101,7 +101,7 @@
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Speak or type to chat with Mahlet!</div>
+        <div id="chat-box">AI response will appear here... Tap mic once for continuous voice mode!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -109,7 +109,7 @@
                 <label class="action-btn" for="file-input" title="Camera or File">📷</label>
                 <input type="file" id="file-input" accept="image/*,.pdf,.txt" capture="environment" onchange="handleFileSelect()" />
                 
-                <button class="action-btn" id="mic-btn" onclick="toggleSpeechRecognition()" title="Voice Input">🎤</button>
+                <button class="action-btn" id="mic-btn" onclick="toggleContinuousListening()" title="Continuous Voice Mode">🎤</button>
                 <button class="action-btn" onclick="speakLastResponse()" title="Read Aloud">🔊</button>
                 
                 <input type="text" id="user-input" placeholder="Type a message or use mic..." />
@@ -122,6 +122,8 @@
         let selectedFileBase64 = null;
         let chatHistory = [];
         let lastAiText = "";
+        let isContinuousMode = false;
+        let recognition = null;
 
         function handleFileSelect() {
             const fileInput = document.getElementById('file-input');
@@ -140,34 +142,85 @@
             }
         }
 
-        // Voice Input: listens, types it, and automatically sends it!
-        function toggleSpeechRecognition() {
+        // Toggle Continuous Hands-Free Mode
+        function toggleContinuousListening() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
                 alert("Speech recognition is not supported on this browser. Try Chrome on Android!");
                 return;
             }
-            const recognition = new SpeechRecognition();
-            recognition.lang = 'en-US'; 
+
             const micBtn = document.getElementById('mic-btn');
-            
-            recognition.onstart = () => { micBtn.classList.add('listening'); };
+
+            if (isContinuousMode) {
+                // Turn off continuous mode
+                isContinuousMode = false;
+                if (recognition) recognition.stop();
+                micBtn.classList.remove('listening');
+                alert("Continuous voice mode turned off.");
+                return;
+            }
+
+            // Turn on continuous mode
+            isContinuousMode = true;
+            micBtn.classList.add('listening');
+            startListening();
+        }
+
+        function startListening() {
+            if (!isContinuousMode) return;
+
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'en-US';
+            recognition.interimResults = false;
+
             recognition.onresult = (event) => {
                 const speechToText = event.results[0][0].transcript;
                 document.getElementById('user-input').value = speechToText;
-                sendMessage(); // Automatically sends after you finish speaking!
+                sendMessage(); // Automatically sends message and triggers AI reply
             };
-            recognition.onerror = () => { micBtn.classList.remove('listening'); };
-            recognition.onend = () => { micBtn.classList.remove('listening'); };
-            
-            recognition.start();
+
+            recognition.onerror = () => {
+                // Restart listening if it errors out briefly
+                if (isContinuousMode) {
+                    setTimeout(startListening, 1000);
+                }
+            };
+
+            recognition.onend = () => {
+                // Keep listening automatically if continuous mode is still active and AI isn't currently speaking
+                if (isContinuousMode) {
+                    setTimeout(startListening, 500);
+                }
+            };
+
+            try {
+                recognition.start();
+            } catch (e) {
+                // Ignore if already started
+            }
         }
 
-        // Voice Output: Speaks text out loud automatically
+        // Voice Output: Speaks text out loud and restarts mic after she finishes
         function speakText(text) {
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
+            
             const utterance = new SpeechSynthesisUtterance(text);
+            
+            // Temporarily pause continuous listening while Mahlet is talking so she doesn't hear herself
+            if (isContinuousMode && recognition) {
+                recognition.abort();
+            }
+
+            utterance.onend = () => {
+                // Resume listening automatically after Mahlet finishes talking!
+                if (isContinuousMode) {
+                    setTimeout(startListening, 800);
+                }
+            };
+
             window.speechSynthesis.speak(utterance);
         }
 
@@ -209,7 +262,7 @@
                 chatHistory.push({ role: 'assistant', content: aiReply });
                 lastAiText = aiReply;
 
-                // Automatically speak Mahlet's answer out loud!
+                // Speak reply and automatically turn mic back on when she finishes
                 speakText(aiReply);
 
                 document.getElementById('file-input').value = '';
@@ -217,6 +270,7 @@
                 selectedFileBase64 = null;
             } catch (err) {
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: Error connecting to server.`);
+                if (isContinuousMode) setTimeout(startListening, 1000);
             }
             
             chatBox.scrollTop = chatBox.scrollHeight;
@@ -224,3 +278,4 @@
     </script>
 </body>
 </html>
+
