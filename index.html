@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global AI Mahlet 🌍</title>
+    <title>Global AI Mahlet & Robert 🌍</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
         
         /* Sidebar Menu Styles */
         .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: #181818; box-shadow: 4px 0 10px rgba(0,0,0,0.7); transition: left 0.3s ease; z-index: 1000; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box; }
@@ -14,47 +14,57 @@
         .sidebar-title { font-size: 18px; font-weight: bold; }
         .close-sidebar { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
         
-        /* Search Box in Sidebar */
         .search-box { background: #2a2a2a; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 5px; font-size: 13px; width: 100%; box-sizing: border-box; margin-bottom: 10px; }
-        
         .sidebar-nav { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .sidebar-item { background: #222; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #ddd; text-align: left; border: none; width: 100%; }
         .sidebar-item:hover { background: #333; }
         .recents-header { font-size: 12px; color: #888; margin-top: 5px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
         /* Main Chat Container */
-        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 92vh; }
+        .chat-container { width: 92%; max-width: 650px; background: #1e1e1e; padding: 12px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 95vh; }
         
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
         .menu-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
-        .top-btn { background: #333; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .top-btn { background: #333; color: white; border: none; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; }
         .top-btn:hover { background: #444; }
         
-        .profile-container { display: flex; align-items: center; gap: 10px; }
-        /* Beautiful Non-Person Nature/Galaxy Landscape Photo */
-        .profile-pic { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #007bff; }
-        
-        .temp-toggle-area { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #bbb; }
-        .temp-checkbox { cursor: pointer; width: 15px; height: 15px; }
+        .profile-container { display: flex; align-items: center; gap: 8px; }
+        .profile-pic { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6; }
 
-        .controls { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; font-size: 13px; background: #252525; padding: 8px; border-radius: 6px; }
+        /* Robert's Live Talking Avatar Face Section */
+        .avatar-box { display: flex; flex-direction: column; align-items: center; background: #161616; padding: 8px; border-radius: 8px; border: 1px solid #333; margin-bottom: 6px; }
+        .robert-face { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 3px solid #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.3); transition: transform 0.1s ease; }
+        .robert-face.speaking { animation: avatarPulse 0.4s infinite alternate; }
+        @keyframes avatarPulse { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+        
+        .mouth-indicator { margin-top: 4px; width: 24px; height: 8px; background: #444; border-radius: 4px; transition: all 0.1s ease; }
+        .mouth-indicator.speaking { height: 14px; background: #00ffcc; border-radius: 50%; box-shadow: 0 0 6px #00ffcc; }
+        .status-text { font-size: 11px; color: #00ffcc; margin-top: 2px; font-weight: bold; }
+
+        .controls { display: flex; flex-direction: column; gap: 3px; margin-bottom: 4px; font-size: 11px; background: #252525; padding: 5px; border-radius: 6px; }
         .control-row { display: flex; justify-content: space-between; align-items: center; }
-        select { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; width: 60%; font-size: 12px; }
+        select { background: #333; color: #fff; border: 1px solid #444; padding: 3px; border-radius: 4px; width: 60%; font-size: 11px; }
         
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 8px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.5; font-size: 14px; }
+        /* Chat Box Bubble Interface */
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 10px; margin-bottom: 6px; border-radius: 8px; background: #181818; display: flex; flex-direction: column; gap: 10px; }
         
-        .input-area { display: flex; flex-direction: column; gap: 6px; }
-        .input-row { display: flex; gap: 6px; align-items: center; }
-        input[type="text"]#user-input { flex: 1; padding: 10px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
-        .action-btn { background: #444; padding: 9px 11px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; border: none; color: white; }
-        .action-btn:hover { background: #555; }
+        .message { display: flex; flex-direction: column; max-width: 80%; line-height: 1.4; font-size: 13px; padding: 8px 12px; border-radius: 10px; word-wrap: break-word; }
+        .message.user { align-self: flex-end; background: #2b5278; color: #fff; border-bottom-right-radius: 2px; }
+        .message.ai { align-self: flex-start; background: #2a2a2a; color: #e5e5e5; border-bottom-left-radius: 2px; border: 1px solid #333; }
+        .message-header { font-size: 10px; font-weight: bold; margin-bottom: 3px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .input-area { display: flex; flex-direction: column; gap: 4px; }
+        .input-row { display: flex; gap: 6px; align-items: center; background: #252525; padding: 5px; border-radius: 8px; border: 1px solid #444; }
+        input[type="text"]#user-input { flex: 1; padding: 7px; border: none; background: transparent; color: #fff; font-size: 13px; outline: none; }
+        .action-btn { background: #333; padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; border: none; color: white; }
+        .action-btn:hover { background: #444; }
         #mic-btn.listening { background: #dc3545; animation: pulse 1.5s infinite; }
         #record-btn.recording { background: #dc3545; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         input[type="file"] { display: none; }
-        .send-btn { padding: 10px 14px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        .send-btn:hover { background: #0056b3; }
-        #file-indicator { font-size: 11px; color: #aaa; }
+        .send-btn { background: #3b82f6; color: white; border: none; padding: 7px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .send-btn:hover { background: #2563eb; }
+        #file-indicator { font-size: 10px; color: #888; padding-left: 4px; }
     </style>
 </head>
 <body>
@@ -81,19 +91,18 @@
         <div class="top-bar">
             <div class="profile-container">
                 <button class="menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
-                <!-- Non-person landscape wallpaper image avatar -->
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=100&h=100&fit=crop" alt="Mahlet Logo" class="profile-pic">
-                <h2 style="margin:0; font-size: 16px;">Mahlet (Best Friend)</h2>
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?w=100&h=100&fit=crop" alt="Wallpaper Logo" class="profile-pic">
+                <h2 style="margin:0; font-size: 14px;">Mahlet & Robert AI</h2>
             </div>
             <button class="top-btn" onclick="startNewChat()">＋ New Chat</button>
         </div>
 
-        <div class="top-bar" style="margin-bottom: 6px;">
-            <div class="temp-toggle-area">
-                <input type="checkbox" id="temp-chat-toggle" class="temp-checkbox" onchange="toggleTempChatMode()">
-                <label for="temp-chat-toggle">Temporary Chat Mode</label>
-            </div>
-            <span id="saved-chats-badge" style="font-size: 11px; color: #888;">Saved Chats: 0</span>
+        <!-- Robert's Live Talking Face Display -->
+        <div class="avatar-box">
+            <!-- Robert's Photo (Using a crisp portrait representation) -->
+            <img id="robert-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop" alt="Robert Photo" class="robert-face">
+            <div id="robert-mouth" class="mouth-indicator"></div>
+            <div id="robert-status" class="status-text">Robert is listening...</div>
         </div>
         
         <div class="controls">
@@ -102,7 +111,7 @@
                 <select id="mode-select">
                     <option value="coach">❤️ Best Friend & Supportive Companion</option>
                     <option value="mentor">📚 Academic & Technical Mentor</option>
-                    <option value="business">💼 Business Strategist (B2B & B2C)</option>
+                    <option value="business">💼 Business Strategist</option>
                 </select>
             </div>
             <div class="control-row">
@@ -120,7 +129,13 @@
             </div>
         </div>
 
-        <div id="chat-box"><b>Mahlet:</b> Hello! I am Mahlet, your best friend. What is on your mind today? I am always here for you.</div>
+        <!-- Chat Box Bubble Interface -->
+        <div id="chat-box">
+            <div class="message ai">
+                <div class="message-header">Mahlet & Robert</div>
+                Hi! 👋😊 I am ready. What would you like to talk about or work on today?
+            </div>
+        </div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -128,12 +143,12 @@
                 <label class="action-btn" for="file-input" title="Camera or File">📷</label>
                 <input type="file" id="file-input" accept="image/*" capture="environment" onchange="handleFileSelect()" />
                 
-                <button class="action-btn" id="record-btn" onclick="toggleAudioRecording()" title="Record Voice Note">🎙️</button>
-                <button class="action-btn" id="mic-btn" onclick="toggleVoiceMode()" title="Live Voice Mode">🎤</button>
-                <button class="action-btn" onclick="toggleSpeakerSpeech()" title="Read Aloud / Stop Speaker">🔊</button>
+                <button class="action-btn" id="record-btn" onclick="toggleAudioRecording()" title="Record Voice">🎙️</button>
+                <button class="action-btn" id="mic-btn" onclick="toggleVoiceMode()" title="Live Voice">🎤</button>
+                <button class="action-btn" onclick="toggleSpeakerSpeech()" title="Read Aloud">🔊</button>
                 
-                <input type="text" id="user-input" placeholder="Type a message..." />
-                <button class="send-btn" onclick="sendTextMessage()">Send</button>
+                <input type="text" id="user-input" placeholder="Type a message..." onkeydown="if(event.key === 'Enter') sendTextMessage();" />
+                <button class="send-btn" onclick="sendTextMessage()">➤</button>
             </div>
         </div>
     </div>
@@ -146,9 +161,9 @@
         let savedChatsList = [];
         let lastAiText = "";
         let isVoiceMode = false;
-        let isTempChat = false;
         let recognition = null;
         let isAiSpeaking = false;
+        let mouthAnimationTimer = null;
         
         let mediaRecorder;
         let audioChunks = [];
@@ -219,18 +234,49 @@
 
         function startNewChat() {
             chatHistory = [];
-            document.getElementById('chat-box').innerHTML = "<b>Mahlet:</b> New chat started! What's on your mind today?";
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = `
+                <div class="message ai">
+                    <div class="message-header">Mahlet & Robert</div>
+                    New chat started! What's on your mind today?
+                </div>
+            `;
             lastAiText = "";
             stopAllSpeech();
-        }
-
-        function toggleTempChatMode() {
-            isTempChat = document.getElementById('temp-chat-toggle').checked;
         }
 
         function stopAllSpeech() {
             if ('speechSynthesis' in window) window.speechSynthesis.cancel();
             isAiSpeaking = false;
+            stopMouthMovement();
+        }
+
+        function startMouthMovement() {
+            const face = document.getElementById('robert-avatar-img');
+            const mouth = document.getElementById('robert-mouth');
+            const status = document.getElementById('robert-status');
+            
+            face.classList.add('speaking');
+            mouth.classList.add('speaking');
+            status.innerText = "Robert is speaking...";
+
+            // Toggle mouth indicator rapidly to mimic talking
+            if (mouthAnimationTimer) clearInterval(mouthAnimationTimer);
+            mouthAnimationTimer = setInterval(() => {
+                mouth.style.width = (Math.random() > 0.5) ? '32px' : '18px';
+            }, 120);
+        }
+
+        function stopMouthMovement() {
+            const face = document.getElementById('robert-avatar-img');
+            const mouth = document.getElementById('robert-mouth');
+            const status = document.getElementById('robert-status');
+            
+            face.classList.remove('speaking');
+            mouth.classList.remove('speaking');
+            status.innerText = "Robert is listening...";
+            if (mouthAnimationTimer) clearInterval(mouthAnimationTimer);
+            mouth.style.width = '24px';
         }
 
         function toggleVoiceMode() {
@@ -270,7 +316,7 @@
         }
 
         async function sendTextMessage() {
-            await processMessage(false);
+            await processMessage(true); // Automatically trigger voice speech and face movement on reply
         }
 
         async function processMessage(shouldSpeak) {
@@ -280,71 +326,45 @@
             
             if (!prompt) return;
 
-            // Strict formatting style requested: * you / * global ai (Mahlet)
-            chatBox.innerHTML += `<br><br><b>* You:</b> ${prompt}`;
+            // Append User Bubble
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'message user';
+            userMsgDiv.innerHTML = `<div class="message-header">You</div>${prompt}`;
+            chatBox.appendChild(userMsgDiv);
+
             inputField.value = '';
-            chatBox.innerHTML += `<br><br><b>* Mahlet:</b> Thinking...`;
             chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Context-Aware Smart Fallback Generator
+            // Append Thinking Bubble
+            const aiMsgDiv = document.createElement('div');
+            aiMsgDiv.className = 'message ai';
+            aiMsgDiv.innerHTML = `<div class="message-header">Mahlet & Robert</div>Thinking...`;
+            chatBox.appendChild(aiMsgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Fallback Engine if API key is placeholder
             if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY) {
                 setTimeout(() => {
-                    let aiReply = "";
-                    const lowerPrompt = prompt.toLowerCase();
+                    let aiReply = "I am listening closely. Tell me more about that so we can figure it out together!";
+                    const lower = prompt.toLowerCase();
                     
-                    if (lowerPrompt.includes("sad") || lowerPrompt.includes("stress") || lowerPrompt.includes("problem") || lowerPrompt.includes("tired")) {
-                        aiReply = `I am so sorry you are feeling this way. Please remember that you don't have to carry everything alone—I am right here with you, and whatever you are going through will pass. Take a deep breath!`;
-                    } else if (lowerPrompt.includes("happy") || lowerPrompt.includes("good") || lowerPrompt.includes("great")) {
-                        aiReply = `That makes me so happy to hear! Your joy completely brightens my day. Keep shining and telling me all about it!`;
+                    if (lower.includes("hi") || lower.includes("hello") || lower.includes("hey")) {
+                        aiReply = "Hello there! How can I help you out today?";
+                    } else if (lower.includes("question") || lower.includes("help")) {
+                        aiReply = "I'm ready! Go ahead and ask me whatever is on your mind.";
+                    } else if (lower.includes("sad") || lower.includes("stress") || lower.includes("tired")) {
+                        aiReply = "I'm so sorry you're feeling that way. Take a deep breath—you don't have to carry it all by yourself. I'm right here with you.";
                     } else {
-                        aiReply = `I hear you completely regarding "${prompt}". Let's take it one step at a time, and I am right by your side to help you sort through it in proper detail!`;
+                        aiReply = `That is really interesting. Let's look at it step by step—what specific part would you like to focus on first?`;
                     }
                     
-                    chatBox.innerHTML = chatBox.innerHTML.replace('<b>* Mahlet:</b> Thinking...', `<b>* Mahlet:</b> ${aiReply}`);
+                    aiMsgDiv.innerHTML = `<div class="message-header">Mahlet & Robert</div>${aiReply}`;
                     lastAiText = aiReply;
                     chatBox.scrollTop = chatBox.scrollHeight;
                     if (shouldSpeak) speakText(aiReply);
-                }, 600);
+                }, 300);
                 return;
             }
 
-            // Real Gemini API logic with web access capabilities
-            try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ role: 'user', parts: [{ text: `Act as a warm, supportive best friend named Mahlet. Speak naturally in proper, clean English without slang. Base your answer directly on what the user is saying. If they ask a general question, look it up or answer it accurately using your knowledge. User message: ${prompt}` }] }] })
-                });
-
-                const data = await response.json();
-                const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "I am right here listening to you.";
-
-                chatBox.innerHTML = chatBox.innerHTML.replace('<b>* Mahlet:</b> Thinking...', `<b>* Mahlet:</b> ${aiReply}`);
-                lastAiText = aiReply;
-                if (shouldSpeak) speakText(aiReply);
-            } catch (err) {
-                chatBox.innerHTML = chatBox.innerHTML.replace('<b>* Mahlet:</b> Thinking...', `<b>* Mahlet:</b> I am having a brief connection issue, but I am still right here listening to you!`);
-            }
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            isAiSpeaking = true;
-            if (recognition) { try { recognition.stop(); } catch (e) {} }
-
-            const utterance = new SpeechSynthesisUtterance(text.replace(/[*_#]/g, ''));
-            utterance.onend = () => { isAiSpeaking = false; if (isVoiceMode) setTimeout(startListening, 400); };
-            utterance.onerror = () => { isAiSpeaking = false; if (isVoiceMode) setTimeout(startListening, 400); };
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function toggleSpeakerSpeech() {
-            if (isAiSpeaking) stopAllSpeech();
-            else if (lastAiText) speakText(lastAiText);
-        }
-    </script>
-</body>
-</html>
-
+            // Real Fast Gemini API Integration
+  
