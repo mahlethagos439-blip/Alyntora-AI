@@ -67,7 +67,7 @@
 </head>
 <body>
 
-    <!-- Account Registration Modal (Includes Email & Fast Entry) -->
+    <!-- Account Registration Modal -->
     <div id="auth-modal">
         <div class="auth-card">
             <h3>Welcome to Global AI Mahlet</h3>
@@ -85,14 +85,14 @@
         </div>
     </div>
 
-    <!-- Slide-out Sidebar (3 Lines Menu + Settings Section) -->
+    <!-- Slide-out Sidebar (Menu & Settings) -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <span class="sidebar-title" id="sidebar-username">Global AI</span>
             <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
         </div>
         
-        <!-- Settings Section built directly inside the menu -->
+        <!-- Settings Section inside Sidebar -->
         <div class="sidebar-settings-section">
             <div style="font-weight: bold; margin-bottom: 4px; color: #fff;">⚙️ Account Settings</div>
             <div id="sidebar-profile-info">Loading profile...</div>
@@ -235,7 +235,6 @@
         let audioChunks = [];
         let isRecording = false;
 
-        // Instant account check on load
         window.onload = function() {
             const userProfile = localStorage.getItem('mahlet_user_profile');
             if (userProfile) {
@@ -248,7 +247,6 @@
             }
         };
 
-        // Instant Registration Function (No lagging)
         function registerUser() {
             const name = document.getElementById('reg-name').value.trim();
             const email = document.getElementById('reg-email').value.trim();
@@ -263,7 +261,6 @@
             const profile = { name, email, age, sex };
             localStorage.setItem('mahlet_user_profile', JSON.stringify(profile));
             
-            // Instantly hide modal and populate sidebar settings
             document.getElementById('auth-modal').style.display = 'none';
             document.getElementById('sidebar-username').innerText = name;
             document.getElementById('sidebar-profile-info').innerHTML = `Name: ${name}<br>Email: ${email}<br>Age: ${age} | Sex: ${sex}`;
@@ -337,4 +334,11 @@
                 };
                 reader.readAsDataURL(file);
             } else {
-                indicator.innerText = "N
+                indicator.innerText = "No file attached";
+                selectedFileBase64 = null;
+            }
+        }
+
+        async function toggleAudioRecording() {
+            const recordBtn = document.getElementById('record-btn');
+            const in
