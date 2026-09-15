@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global AI Mahlet</title>
+    <title>Global AI Mahlet 🌍</title>
     <style>
         body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 80vh; }
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 10px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; }
+        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 85vh; }
+        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 14px; }
+        select { background: #333; color: #fff; border: 1px solid #444; padding: 6px; border-radius: 5px; }
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; }
         .input-area { display: flex; gap: 10px; }
-        input { flex: 1; padding: 10px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; }
-        button { padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        input { flex: 1; padding: 12px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
+        button { padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
         button:hover { background: #0056b3; }
     </style>
 </head>
@@ -18,9 +20,17 @@
 
     <div class="chat-container">
         <h2>Global AI Mahlet 🌍</h2>
+        <div class="controls">
+            <label for="mode-select">Select AI Role/Mode:</label>
+            <select id="mode-select">
+                <option value="coach">❤️ Personal Coach & Stress Motivator</option>
+                <option value="mentor">📚 Academic & Technical Mentor</option>
+                <option value="business">💼 Business Strategist (B2B & B2C)</option>
+            </select>
+        </div>
         <div id="chat-box">AI response will appear here...</div>
         <div class="input-area">
-            <input type="text" id="user-input" placeholder="Ask a prompt here..." />
+            <input type="text" id="user-input" placeholder="Ask or share how you feel..." />
             <button onclick="sendMessage()">Send</button>
         </div>
     </div>
@@ -29,11 +39,12 @@
         async function sendMessage() {
             const inputField = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
+            const modeSelect = document.getElementById('mode-select');
             const prompt = inputField.value.trim();
             
             if (!prompt) return;
 
-            chatBox.innerHTML += `\n\nYou: ${prompt}`;
+            chatBox.innerHTML += `\n\nYou [${modeSelect.value}]: ${prompt}`;
             inputField.value = '';
             chatBox.innerHTML += `\n\nAI: Thinking...`;
 
@@ -41,11 +52,10 @@
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt: prompt })
+                    body: JSON.stringify({ prompt: prompt, mode: modeSelect.value })
                 });
 
                 const data = await response.json();
-                
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${data.response || data.error}`);
             } catch (err) {
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: Error connecting to server.`);
