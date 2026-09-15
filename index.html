@@ -12,7 +12,7 @@
         select, input[type="text"]#lang-search { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; width: 60%; }
         #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; font-size: 14px; }
         .input-area { display: flex; flex-direction: column; gap: 8px; }
-        .input-row { display: flex; gap: 10px; }
+        .input-row { display: flex; gap: 10px; align-items: center; }
         input[type="text"]#user-input { flex: 1; padding: 12px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
         .file-label { background: #444; padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
         .file-label:hover { background: #555; }
@@ -27,7 +27,6 @@
     <div class="chat-container">
         <h2>Global AI Mahlet 🌍</h2>
         
-        <!-- Controls for Role and Extended Language Selection -->
         <div class="controls">
             <div class="control-row">
                 <label for="mode-select">AI Role:</label>
@@ -38,14 +37,18 @@
                 </select>
             </div>
             <div class="control-row">
-                <label for="lang-search">Language:</label>
-                <input list="languages-list" id="lang-search" value="English" placeholder="Type or select language..." />
+                <label for="lang-search">Language (100+):</label>
+                <input list="languages-list" id="lang-search" value="Auto-Detect (Match My Keyboard)" placeholder="Type or select language..." />
                 <datalist id="languages-list">
-                    <option value="English">
+                    <!-- Universal Option -->
+                    <option value="Auto-Detect (Match My Keyboard)">
+                    
+                    <!-- Regional & Major Languages -->
                     <option value="Amharic (አማርኛ)">
                     <option value="Afaan Oromoo">
                     <option value="Tigrinya (ትግርኛ)">
                     <option value="Somali (Soomaaliga)">
+                    <option value="English">
                     <option value="Spanish (Español)">
                     <option value="French (Français)">
                     <option value="Arabic (العربية)">
@@ -86,7 +89,6 @@
                     <option value="Danish (Dansk)">
                     <option value="Finnish (Suomi)">
                     <option value="Norwegian (Norsk)">
-                    <option value="Czech (Čeština)">
                     <option value="Afrikaans">
                     <option value="Zulu (isiZulu)">
                     <option value="Xhosa (isiXhosa)">
@@ -94,22 +96,57 @@
                     <option value="Yoruba (Yorùbá)">
                     <option value="Igbo">
                     <option value="Shona">
-                    <option value="Igbo">
                     <option value="Quechua">
                     <option value="Esperanto">
                     <option value="Latin">
+                    <option value="Albanian (Shqip)">
+                    <option value="Armenian (Հայերեն)">
+                    <option value="Azerbaijani (Azərbaycan dili)">
+                    <option value="Basque (Euskara)">
+                    <option value="Belarusian (Беларуская)">
+                    <option value="Bosnian (Bosanski)">
+                    <option value="Bulgarian (Български)">
+                    <option value="Catalan (Català)">
+                    <option value="Cebuano">
+                    <option value="Chichewa">
+                    <option value="Corsican">
+                    <option value="Croatian (Hrvatski)">
+                    <option value="Estonian (Eesti)">
+                    <option value="Galician (Galego)">
+                    <option value="Georgian (ქართული)">
+                    <option value="Haitian Creole">
+                    <option value="Hmong">
+                    <option value="Icelandic (Íslenska)">
+                    <option value="Irish (Gaeilge)">
+                    <option value="Javanese">
+                    <option value="Kazakh (Қазақ тілі)">
+                    <option value="Khmer (ខ្មែរ)">
+                    <option value="Kurdish (Kurmanji)">
+                    <option value="Kyrgyz (Кыргызча)">
+                    <option value="Lao (ລາວ)">
+                    <option value="Latvian (Latviešu)">
+                    <option value="Lithuanian (Lietuvių)">
+                    <option value="Luxembourgish">
+                    <option value="Macedonian (Македонски)">
+                    <option value="Malagasy">
+                    <option value="Maltese (Malti)">
+                    <option value="Maori">
+                    <option value="Mongolian (Монгол)">
+                    <option value="Myanmar (Burmese)">
+                    Nepali (नेपाली), Pashto (پښتو), Samoan, Scots Gaelic, Serbian, Sesotho, Sinhala, Slovak, Slovenian, Sundanese, Tajik, Tatar, Turkmen, Uyghur, Uzbek, Welsh, Yiddish.
                 </datalist>
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Long conversation memory is active.</div>
+        <div id="chat-box">AI response will appear here... Send photos, files, or use any language!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
             <div class="input-row">
-                <label class="file-label" for="file-input">📷 File</label>
-                <input type="file" id="file-input" accept="image/*,.pdf,.txt" onchange="handleFileSelect()" />
-                <input type="text" id="user-input" placeholder="Ask a question or continue chat..." />
+                <!-- Camera / Photo / File Trigger -->
+                <label class="file-label" for="file-input">📷 Camera/File</label>
+                <input type="file" id="file-input" accept="image/*,.pdf,.txt" capture="environment" onchange="handleFileSelect()" />
+                <input type="text" id="user-input" placeholder="Type a message or question..." />
                 <button onclick="sendMessage()">Send</button>
             </div>
         </div>
@@ -145,9 +182,8 @@
             
             if (!prompt && !selectedFileBase64) return;
 
-            chatBox.innerHTML += `\n\nYou [${modeSelect.value} | ${langSearch.value}]: ${prompt || "[Uploaded file/image]"}`;
-            
-            chatHistory.push({ role: 'user', content: prompt || "Please explain this attached image/file." });
+            chatBox.innerHTML += `\n\nYou [${modeSelect.value}]: ${prompt || "[Uploaded photo/file]"}`;
+            chatHistory.push({ role: 'user', content: prompt || "Please analyze this attached photo/file." });
 
             inputField.value = '';
             chatBox.innerHTML += `\n\nAI: Thinking...`;
@@ -168,7 +204,6 @@
                 const aiReply = data.response || data.error;
 
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
-                
                 chatHistory.push({ role: 'assistant', content: aiReply });
 
                 document.getElementById('file-input').value = '';
@@ -183,22 +218,3 @@
     </script>
 </body>
 </html>
-
-
-
-  
-        
-
-
-  
-
-  
-
-
-
-
-
-
-
-
-
