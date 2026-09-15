@@ -12,13 +12,15 @@
         select { background: #333; color: #fff; border: 1px solid #444; padding: 6px; border-radius: 5px; width: 60%; }
         #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; font-size: 14px; }
         .input-area { display: flex; flex-direction: column; gap: 8px; }
-        .input-row { display: flex; gap: 10px; align-items: center; }
+        .input-row { display: flex; gap: 8px; align-items: center; }
         input[type="text"]#user-input { flex: 1; padding: 12px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
-        .file-label { background: #444; padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
-        .file-label:hover { background: #555; }
+        .action-btn { background: #444; padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; border: none; color: white; }
+        .action-btn:hover { background: #555; }
+        #mic-btn.listening { background: #dc3545; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         input[type="file"] { display: none; }
-        button { padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #0056b3; }
+        .send-btn { padding: 12px 16px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .send-btn:hover { background: #0056b3; }
         #file-indicator { font-size: 12px; color: #aaa; }
     </style>
 </head>
@@ -70,95 +72,48 @@
                     <option value="Marathi (मराठी)">Marathi (मराठी)</option>
                     <option value="Telugu (తెలుగు)">Telugu (తెలుగు)</option>
                     <option value="Tamil (தமிழ்)">Tamil (தமிழ்)</option>
-                    <option value="Gujarati (ગુજરાતી)">Gujarati (ગુજરાતી)</option>
+                    <option value="Gujarati (ગુજરાતી)">Gujarati (Gujarati)</option>
                     <option value="Kannada (ಕನ್ನಡ)">Kannada (ಕನ್ನಡ)</option>
                     <option value="Malayalam (മലയാളം)">Malayalam (മലയാളം)</option>
                     <option value="Thai (ไทย)">Thai (ไทย)</option>
-                    <option value="Indonesian (Bahasa Indonesia)">Indonesian (Bahasa Indonesia)</option>
-                    <option value="Malay (Bahasa Melayu)">Malay (Bahasa Melayu)</option>
+                    <option value="Indonesian (Bahasa Indonesia)">Indonesian</option>
+                    <option value="Malay (Bahasa Melayu)">Malay</option>
                     <option value="Filipino (Tagalog)">Filipino (Tagalog)</option>
-                    <option value="Ukrainian (Українська)">Ukrainian (Українська)</option>
-                    <option value="Romanian (Română)">Romanian (Română)</option>
-                    <option value="Czech (Čeština)">Czech (Čeština)</option>
-                    <option value="Hungarian (Magyar)">Hungarian (Magyar)</option>
-                    <option value="Swedish (Svenska)">Swedish (Svenska)</option>
-                    <option value="Danish (Dansk)">Danish (Dansk)</option>
-                    <option value="Finnish (Suomi)">Finnish (Suomi)</option>
-                    <option value="Norwegian (Norsk)">Norwegian (Norsk)</option>
+                    <option value="Ukrainian (Українська)">Ukrainian</option>
+                    <option value="Romanian (Română)">Romanian</option>
+                    <option value="Czech (Čeština)">Czech</option>
+                    <option value="Hungarian (Magyar)">Hungarian</option>
+                    <option value="Swedish (Svenska)">Swedish</option>
+                    <option value="Danish (Dansk)">Danish</option>
+                    <option value="Finnish (Suomi)">Finnish</option>
+                    <option value="Norwegian (Norsk)">Norwegian</option>
                     <option value="Afrikaans">Afrikaans</option>
-                    <option value="Zulu (isiZulu)">Zulu (isiZulu)</option>
-                    <option value="Xhosa (isiXhosa)">Xhosa (isiXhosa)</option>
+                    <option value="Zulu (isiZulu)">Zulu</option>
+                    <option value="Xhosa (isiXhosa)">Xhosa</option>
                     <option value="Hausa">Hausa</option>
-                    <option value="Yoruba (Yorùbá)">Yoruba (Yorùbá)</option>
+                    <option value="Yoruba (Yorùbá)">Yoruba</option>
                     <option value="Igbo">Igbo</option>
                     <option value="Shona">Shona</option>
                     <option value="Quechua">Quechua</option>
                     <option value="Esperanto">Esperanto</option>
                     <option value="Latin">Latin</option>
-                    <option value="Albanian (Shqip)">Albanian (Shqip)</option>
-                    <option value="Armenian (Հայերեն)">Armenian (Հայերեն)</option>
-                    <option value="Azerbaijani (Azərbaycan dili)">Azerbaijani (Azərbaycan dili)</option>
-                    <option value="Basque (Euskara)">Basque (Euskara)</option>
-                    <option value="Belarusian (Беларуская)">Belarusian (Беларуская)</option>
-                    <option value="Bosnian (Bosanski)">Bosnian (Bosanski)</option>
-                    <option value="Bulgarian (Български)">Bulgarian (Български)</option>
-                    <option value="Catalan (Català)">Catalan (Català)</option>
-                    <option value="Cebuano">Cebuano</option>
-                    <option value="Chichewa">Chichewa</option>
-                    <option value="Corsican">Corsican</option>
-                    <option value="Croatian (Hrvatski)">Croatian (Hrvatski)</option>
-                    <option value="Estonian (Eesti)">Estonian (Eesti)</option>
-                    <option value="Galician (Galego)">Galician (Galego)</option>
-                    <option value="Georgian (ქართული)">Georgian (ქართული)</option>
-                    <option value="Haitian Creole">Haitian Creole</option>
-                    <option value="Hmong">Hmong</option>
-                    <option value="Icelandic (Íslenska)">Icelandic (Íslenska)</option>
-                    <option value="Irish (Gaeilge)">Irish (Gaeilge)</option>
-                    <option value="Javanese">Javanese</option>
-                    <option value="Kazakh (Қазақ тілі)">Kazakh (Қазақ тілі)</option>
-                    <option value="Khmer (ខ្មែរ)">Khmer (ខ្មែរ)</option>
-                    <option value="Kurdish (Kurmanji)">Kurdish (Kurmanji)</option>
-                    <option value="Kyrgyz (Кыргызча)">Kyrgyz (Кыргызча)</option>
-                    <option value="Lao (ລາວ)">Lao (ລາວ)</option>
-                    <option value="Latvian (Latviešu)">Latvian (Latviešu)</option>
-                    <option value="Lithuanian (Lietuvių)">Lithuanian (Lietuvių)</option>
-                    <option value="Luxembourgish">Luxembourgish</option>
-                    <option value="Macedonian (Македонски)">Macedonian (Македонски)</option>
-                    <option value="Malagasy">Malagasy</option>
-                    <option value="Maltese (Malti)">Maltese (Malti)</option>
-                    <option value="Maori">Maori</option>
-                    <option value="Mongolian (Монгол)">Mongolian (Монгол)</option>
-                    <option value="Myanmar (Burmese)">Myanmar (Burmese)</option>
-                    <option value="Nepali (नेपाली)">Nepali (नेपाली)</option>
-                    <option value="Pashto (پښتو)">Pashto (پښتو)</option>
-                    <option value="Samoan">Samoan</option>
-                    <option value="Scots Gaelic">Scots Gaelic</option>
-                    <option value="Serbian">Serbian</option>
-                    <option value="Sesotho">Sesotho</option>
-                    <option value="Sinhala">Sinhala</option>
-                    <option value="Slovak">Slovak</option>
-                    <option value="Slovenian">Slovenian</option>
-                    <option value="Sundanese">Sundanese</option>
-                    <option value="Tajik">Tajik</option>
-                    <option value="Tatar">Tatar</option>
-                    <option value="Turkmen">Turkmen</option>
-                    <option value="Uyghur">Uyghur</option>
-                    <option value="Uzbek">Uzbek</option>
-                    <option value="Welsh">Welsh</option>
-                    <option value="Yiddish">Yiddish</option>
                 </select>
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Choose your language from the dropdown arrow!</div>
+        <div id="chat-box">AI response will appear here... Type, snap photos, or use voice!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
             <div class="input-row">
-                <label class="file-label" for="file-input">📷 Camera/File</label>
+                <label class="action-btn" for="file-input" title="Camera or File">📷</label>
                 <input type="file" id="file-input" accept="image/*,.pdf,.txt" capture="environment" onchange="handleFileSelect()" />
-                <input type="text" id="user-input" placeholder="Type a message or question..." />
-                <button onclick="sendMessage()">Send</button>
+                
+                <button class="action-btn" id="mic-btn" onclick="toggleSpeechRecognition()" title="Voice Input">🎤</button>
+                <button class="action-btn" onclick="speakLastResponse()" title="Read Aloud">🔊</button>
+                
+                <input type="text" id="user-input" placeholder="Type a message or use mic..." />
+                <button class="send-btn" onclick="sendMessage()">Send</button>
             </div>
         </div>
     </div>
@@ -166,6 +121,7 @@
     <script>
         let selectedFileBase64 = null;
         let chatHistory = [];
+        let lastAiText = "";
 
         function handleFileSelect() {
             const fileInput = document.getElementById('file-input');
@@ -182,6 +138,43 @@
                 indicator.innerText = "No file attached";
                 selectedFileBase64 = null;
             }
+        }
+
+        // Voice Input (Speech to Text)
+        function toggleSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Speech recognition is not supported on this browser. Try Chrome on Android!");
+                return;
+            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US'; 
+            const micBtn = document.getElementById('mic-btn');
+            
+            recognition.onstart = () => { micBtn.classList.add('listening'); };
+            recognition.onresult = (event) => {
+                const speechToText = event.results[0][0].transcript;
+                document.getElementById('user-input').value = speechToText;
+            };
+            recognition.onerror = () => { micBtn.classList.remove('listening'); };
+            recognition.onend = () => { micBtn.classList.remove('listening'); };
+            
+            recognition.start();
+        }
+
+        // Voice Output (Text to Speech)
+        function speakLastResponse() {
+            if (!lastAiText) {
+                alert("No AI response to read aloud yet!");
+                return;
+            }
+            if (!('speechSynthesis' in window)) {
+                alert("Text-to-speech not supported on this browser.");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(lastAiText);
+            window.speechSynthesis.speak(utterance);
         }
 
         async function sendMessage() {
@@ -216,8 +209,9 @@
 
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
                 chatHistory.push({ role: 'assistant', content: aiReply });
+                lastAiText = aiReply;
 
-                document.getElementById('file-input').value = **''**;
+                document.getElementById('file-input').value = '';
                 document.getElementById('file-indicator').innerText = "No file attached";
                 selectedFileBase64 = null;
             } catch (err) {
@@ -228,5 +222,4 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
