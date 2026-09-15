@@ -68,12 +68,13 @@
 </head>
 <body>
 
-    <!-- Account Registration Modal -->
+    <!-- Account Registration Modal (Includes Email & instant instant response) -->
     <div id="auth-modal">
         <div class="auth-card">
             <h3>Welcome to Global AI Mahlet</h3>
-            <p style="font-size: 12px; color: #aaa; margin: 0;">Please create your profile to continue.</p>
+            <p style="font-size: 12px; color: #aaa; margin: 0;">Create your account instantly.</p>
             <input type="text" id="reg-name" class="auth-input" placeholder="Your Name">
+            <input type="email" id="reg-email" class="auth-input" placeholder="Your Email Address">
             <input type="number" id="reg-age" class="auth-input" placeholder="Your Age">
             <select id="reg-sex" class="auth-input" style="width:100%;">
                 <option value="">Select Sex / Gender</option>
@@ -81,11 +82,11 @@
                 <option value="Male">Male</option>
                 <option value="Other">Other</option>
             </select>
-            <button class="auth-btn" onclick="registerUser()">Create Account</button>
+            <button class="auth-btn" onclick="registerUser()">Create Account & Start</button>
         </div>
     </div>
 
-    <!-- Slide-out Sidebar -->
+    <!-- Slide-out Sidebar (3 Lines Menu) -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <span class="sidebar-title" id="sidebar-username">Global AI</span>
@@ -109,12 +110,12 @@
         </div>
     </div>
 
-    <!-- Settings Modal -->
+    <!-- Settings Modal (Inside 3 Lines Menu) -->
     <div id="settings-modal">
         <div class="modal-content">
-            <h3>Settings</h3>
-            <p id="user-profile-info" style="font-size: 13px; color: #ccc;"></p>
-            <button class="top-btn" onclick="closeSettings()" style="margin-top: 10px;">Close</button>
+            <h3>Account Settings</h3>
+            <p id="user-profile-info" style="font-size: 13px; color: #ccc; line-height: 1.5;"></p>
+            <button class="top-btn" onclick="closeSettings()" style="margin-top: 10px;">Close Settings</button>
         </div>
     </div>
 
@@ -207,7 +208,7 @@
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... All features loaded!</div>
+        <div id="chat-box">AI response will appear here... All features loaded fast!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -239,34 +240,38 @@
         let audioChunks = [];
         let isRecording = false;
 
+        // Instant account check on startup
         window.onload = function() {
             const userProfile = localStorage.getItem('mahlet_user_profile');
             if (userProfile) {
                 const profile = JSON.parse(userProfile);
                 document.getElementById('auth-modal').style.display = 'none';
                 document.getElementById('sidebar-username').innerText = profile.name;
-                document.getElementById('user-profile-info').innerText = `Name: ${profile.name}\nAge: ${profile.age}\nSex: ${profile.sex}`;
+                document.getElementById('user-profile-info').innerHTML = `<strong>Name:</strong> ${profile.name}<br><strong>Email:</strong> ${profile.email}<br><strong>Age:</strong> ${profile.age}<br><strong>Sex:</strong> ${profile.sex}`;
             } else {
                 document.getElementById('auth-modal').style.display = 'flex';
             }
         };
 
+        // Instant Registration Function
         function registerUser() {
             const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
             const age = document.getElementById('reg-age').value.trim();
             const sex = document.getElementById('reg-sex').value;
 
-            if (!name || !age || !sex) {
-                alert("Please fill in all details to create your account.");
+            if (!name || !email || !age || !sex) {
+                alert("Please fill in all details (Name, Email, Age, Sex) to proceed.");
                 return;
             }
 
-            const profile = { name, age, sex };
+            const profile = { name, email, age, sex };
             localStorage.setItem('mahlet_user_profile', JSON.stringify(profile));
             
+            // Instantly hide modal without any delay
             document.getElementById('auth-modal').style.display = 'none';
             document.getElementById('sidebar-username').innerText = name;
-            document.getElementById('user-profile-info').innerText = `Name: ${name}\nAge: ${age}\nSex: ${sex}`;
+            document.getElementById('user-profile-info').innerHTML = `<strong>Name:</strong> ${name}<br><strong>Email:</strong> ${email}<br><strong>Age:</strong> ${age}<br><strong>Sex:</strong> ${sex}`;
         }
 
         function deleteAccount() {
@@ -331,18 +336,4 @@
                         if (width > height) {
                             if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
                         } else {
-                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        
-                        selectedFileBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                        indicator.innerText = `Attached: ${file.name} (Ready)`;
-                    };
-                };
-                reader.readAsDataURL(file);
-            } else {
-                i
+           
