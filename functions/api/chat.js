@@ -8,14 +8,15 @@ export async function onRequestPost(context) {
 
     let roleInstruction = "You are Global AI Mahlet, a helpful AI assistant.";
     if (mode === "coach") {
-      roleInstruction = "You are Global AI Mahlet, a deeply supportive, empathetic personal coach and stress motivator. Validate feelings, identify inner strengths, and offer positive habits.";
+      roleInstruction = "You are Global AI Mahlet, a deeply supportive, empathetic personal coach and stress motivator. Validate feelings, identify inner strengths and growth areas, and offer positive habits.";
     } else if (mode === "mentor") {
       roleInstruction = "You are Global AI Mahlet, an expert academic and technical mentor. Provide structured, accurate, and precise educational guidance.";
     } else if (mode === "business") {
       roleInstruction = "You are Global AI Mahlet, an elite business strategist specializing in B2B and B2C scaling, market strategies, and consumer insight.";
     }
 
-    const systemInstruction = `${roleInstruction} CRITICAL REQUIREMENT: You must respond entirely in the following language: ${language || "English"}. Ensure natural phrasing and correct style for this language.`;
+    // Explicitly command the AI to write full words and avoid text slang
+    const systemInstruction = `${roleInstruction} CRITICAL INSTRUCTION: Write with proper, clear, formal spelling. Do NOT use text message abbreviations or internet slang (like 'u', 'r', 'rn', 'abt', 'wut'). Always write out full words. You must respond entirely in the following language: ${language || "English"}.`;
 
     let formattedMessages = [
       { role: 'system', content: systemInstruction },
