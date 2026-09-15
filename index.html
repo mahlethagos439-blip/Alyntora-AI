@@ -123,7 +123,7 @@
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... All systems ready!</div>
+        <div id="chat-box">AI response will appear here... All features loaded!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -222,7 +222,7 @@
                     mediaRecorder.start();
                     isRecording = true;
                     recordBtn.classList.add('recording');
-                    indicator.innerText = "Recording voice note... Tap mic button again to stop.";
+                    indicator.innerText = "Recording voice note... Tap record button again to stop.";
                 } catch (err) {
                     alert("Microphone permission denied or unavailable.");
                 }
@@ -238,17 +238,18 @@
                 chatHistory = [];
                 document.getElementById('chat-box').innerHTML = "New chat started! Ask Mahlet anything.";
                 lastAiText = "";
+                stopAllSpeech();
             });
         }
 
         function toggleTempChatMode() {
             const checkbox = document.getElementById('temp-chat-toggle');
-            if (checkbox.checked) {
-                isTempChat = true;
-            } else {
+            if (!checkbox.checked) {
                 handleTempChatExitCheck(() => {
                     isTempChat = false;
                 });
+            } else {
+                isTempChat = true;
             }
         }
 
@@ -263,6 +264,13 @@
             callback();
         }
 
+        function stopAllSpeech() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            isAiSpeaking = false;
+        }
+
         function toggleVoiceMode() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (!SpeechRecognition) {
@@ -275,6 +283,7 @@
             if (isVoiceMode) {
                 isVoiceMode = false;
                 if (recognition) recognition.stop();
+                stopAllSpeech();
                 micBtn.classList.remove('listening');
                 return;
             }
@@ -402,4 +411,3 @@
     </script>
 </body>
 </html>
-
