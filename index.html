@@ -9,7 +9,7 @@
         .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 90vh; }
         .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; font-size: 13px; background: #252525; padding: 10px; border-radius: 6px; }
         .control-row { display: flex; justify-content: space-between; align-items: center; }
-        select, input[type="text"]#lang-search { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; width: 60%; }
+        select { background: #333; color: #fff; border: 1px solid #444; padding: 6px; border-radius: 5px; width: 60%; }
         #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; font-size: 14px; }
         .input-area { display: flex; flex-direction: column; gap: 8px; }
         .input-row { display: flex; gap: 10px; align-items: center; }
@@ -37,113 +37,124 @@
                 </select>
             </div>
             <div class="control-row">
-                <label for="lang-search">Language (100+):</label>
-                <input list="languages-list" id="lang-search" value="Auto-Detect (Match My Keyboard)" placeholder="Type or select language..." />
-                <datalist id="languages-list">
-                    <!-- Universal Option -->
-                    <option value="Auto-Detect (Match My Keyboard)">
-                    
-                    <!-- Regional & Major Languages -->
-                    <option value="Amharic (አማርኛ)">
-                    <option value="Afaan Oromoo">
-                    <option value="Tigrinya (ትግርኛ)">
-                    <option value="Somali (Soomaaliga)">
-                    <option value="English">
-                    <option value="Spanish (Español)">
-                    <option value="French (Français)">
-                    <option value="Arabic (العربية)">
-                    <option value="Mandarin Chinese (中文)">
-                    <option value="Hindi (हिन्दी)">
-                    <option value="Swahili (Kiswahili)">
-                    <option value="German (Deutsch)">
-                    <option value="Portuguese (Português)">
-                    <option value="Japanese (日本語)">
-                    <option value="Russian (Русский)">
-                    <option value="Italian (Italiano)">
-                    <option value="Turkish (Türkçe)">
-                    <option value="Korean (한국어)">
-                    <option value="Vietnamese (Tiếng Việt)">
-                    <option value="Polish (Polski)">
-                    <option value="Dutch (Nederlands)">
-                    <option value="Greek (Ελληνικά)">
-                    <option value="Hebrew (עברית)">
-                    <option value="Persian (فارسی)">
-                    <option value="Urdu (اردو)">
-                    <option value="Bengali (বাংলা)">
-                    <option value="Punjabi (ਪੰਜਾਬੀ)">
-                    <option value="Marathi (मराठी)">
-                    <option value="Telugu (తెలుగు)">
-                    <option value="Tamil (தமிழ்)">
-                    <option value="Gujarati (ગુજરાતી)">
-                    <option value="Kannada (ಕನ್ನಡ)">
-                    <option value="Malayalam (മലയാളം)">
-                    <option value="Thai (ไทย)">
-                    <option value="Indonesian (Bahasa Indonesia)">
-                    <option value="Malay (Bahasa Melayu)">
-                    <option value="Filipino (Tagalog)">
-                    <option value="Ukrainian (Українська)">
-                    <option value="Romanian (Română)">
-                    <option value="Czech (Čeština)">
-                    <option value="Hungarian (Magyar)">
-                    <option value="Swedish (Svenska)">
-                    <option value="Danish (Dansk)">
-                    <option value="Finnish (Suomi)">
-                    <option value="Norwegian (Norsk)">
-                    <option value="Afrikaans">
-                    <option value="Zulu (isiZulu)">
-                    <option value="Xhosa (isiXhosa)">
-                    <option value="Hausa">
-                    <option value="Yoruba (Yorùbá)">
-                    <option value="Igbo">
-                    <option value="Shona">
-                    <option value="Quechua">
-                    <option value="Esperanto">
-                    <option value="Latin">
-                    <option value="Albanian (Shqip)">
-                    <option value="Armenian (Հայերեն)">
-                    <option value="Azerbaijani (Azərbaycan dili)">
-                    <option value="Basque (Euskara)">
-                    <option value="Belarusian (Беларуская)">
-                    <option value="Bosnian (Bosanski)">
-                    <option value="Bulgarian (Български)">
-                    <option value="Catalan (Català)">
-                    <option value="Cebuano">
-                    <option value="Chichewa">
-                    <option value="Corsican">
-                    <option value="Croatian (Hrvatski)">
-                    <option value="Estonian (Eesti)">
-                    <option value="Galician (Galego)">
-                    <option value="Georgian (ქართული)">
-                    <option value="Haitian Creole">
-                    <option value="Hmong">
-                    <option value="Icelandic (Íslenska)">
-                    <option value="Irish (Gaeilge)">
-                    <option value="Javanese">
-                    <option value="Kazakh (Қазақ тілі)">
-                    <option value="Khmer (ខ្មែរ)">
-                    <option value="Kurdish (Kurmanji)">
-                    <option value="Kyrgyz (Кыргызча)">
-                    <option value="Lao (ລາວ)">
-                    <option value="Latvian (Latviešu)">
-                    <option value="Lithuanian (Lietuvių)">
-                    <option value="Luxembourgish">
-                    <option value="Macedonian (Македонски)">
-                    <option value="Malagasy">
-                    <option value="Maltese (Malti)">
-                    <option value="Maori">
-                    <option value="Mongolian (Монгол)">
-                    <option value="Myanmar (Burmese)">
-                    Nepali (नेपाली), Pashto (پښتو), Samoan, Scots Gaelic, Serbian, Sesotho, Sinhala, Slovak, Slovenian, Sundanese, Tajik, Tatar, Turkmen, Uyghur, Uzbek, Welsh, Yiddish.
-                </datalist>
+                <label for="lang-select">Language:</label>
+                <select id="lang-select">
+                    <option value="Auto-Detect (Match My Keyboard)">🌍 Auto-Detect (Match Keyboard)</option>
+                    <option value="Amharic (አማርኛ)">Amharic (አማርኛ)</option>
+                    <option value="Afaan Oromoo">Afaan Oromoo</option>
+                    <option value="Tigrinya (ትግርኛ)">Tigrinya (ትግርኛ)</option>
+                    <option value="Somali (Soomaaliga)">Somali (Soomaaliga)</option>
+                    <option value="English">English</option>
+                    <option value="Spanish (Español)">Spanish (Español)</option>
+                    <option value="French (Français)">French (Français)</option>
+                    <option value="Arabic (العربية)">Arabic (العربية)</option>
+                    <option value="Mandarin Chinese (中文)">Mandarin Chinese (中文)</option>
+                    <option value="Hindi (हिन्दी)">Hindi (हिन्दी)</option>
+                    <option value="Swahili (Kiswahili)">Swahili (Kiswahili)</option>
+                    <option value="German (Deutsch)">German (Deutsch)</option>
+                    <option value="Portuguese (Português)">Portuguese (Português)</option>
+                    <option value="Japanese (日本語)">Japanese (日本語)</option>
+                    <option value="Russian (Русский)">Russian (Русский)</option>
+                    <option value="Italian (Italiano)">Italian (Italiano)</option>
+                    <option value="Turkish (Türkçe)">Turkish (Türkçe)</option>
+                    <option value="Korean (한국어)">Korean (한국어)</option>
+                    <option value="Vietnamese (Tiếng Việt)">Vietnamese (Tiếng Việt)</option>
+                    <option value="Polish (Polski)">Polish (Polski)</option>
+                    <option value="Dutch (Nederlands)">Dutch (Nederlands)</option>
+                    <option value="Greek (Ελληνικά)">Greek (Ελληνικά)</option>
+                    <option value="Hebrew (עברית)">Hebrew (עברית)</option>
+                    <option value="Persian (فارسی)">Persian (فارسی)</option>
+                    <option value="Urdu (اردو)">Urdu (اردو)</option>
+                    <option value="Bengali (বাংলা)">Bengali (বাংলা)</option>
+                    <option value="Punjabi (ਪੰਜਾਬੀ)">Punjabi (ਪੰਜਾਬੀ)</option>
+                    <option value="Marathi (मराठी)">Marathi (मराठी)</option>
+                    <option value="Telugu (తెలుగు)">Telugu (తెలుగు)</option>
+                    <option value="Tamil (தமிழ்)">Tamil (தமிழ்)</option>
+                    <option value="Gujarati (ગુજરાતી)">Gujarati (ગુજરાતી)</option>
+                    <option value="Kannada (ಕನ್ನಡ)">Kannada (ಕನ್ನಡ)</option>
+                    <option value="Malayalam (മലയാളം)">Malayalam (മലയാളം)</option>
+                    <option value="Thai (ไทย)">Thai (ไทย)</option>
+                    <option value="Indonesian (Bahasa Indonesia)">Indonesian (Bahasa Indonesia)</option>
+                    <option value="Malay (Bahasa Melayu)">Malay (Bahasa Melayu)</option>
+                    <option value="Filipino (Tagalog)">Filipino (Tagalog)</option>
+                    <option value="Ukrainian (Українська)">Ukrainian (Українська)</option>
+                    <option value="Romanian (Română)">Romanian (Română)</option>
+                    <option value="Czech (Čeština)">Czech (Čeština)</option>
+                    <option value="Hungarian (Magyar)">Hungarian (Magyar)</option>
+                    <option value="Swedish (Svenska)">Swedish (Svenska)</option>
+                    <option value="Danish (Dansk)">Danish (Dansk)</option>
+                    <option value="Finnish (Suomi)">Finnish (Suomi)</option>
+                    <option value="Norwegian (Norsk)">Norwegian (Norsk)</option>
+                    <option value="Afrikaans">Afrikaans</option>
+                    <option value="Zulu (isiZulu)">Zulu (isiZulu)</option>
+                    <option value="Xhosa (isiXhosa)">Xhosa (isiXhosa)</option>
+                    <option value="Hausa">Hausa</option>
+                    <option value="Yoruba (Yorùbá)">Yoruba (Yorùbá)</option>
+                    <option value="Igbo">Igbo</option>
+                    <option value="Shona">Shona</option>
+                    <option value="Quechua">Quechua</option>
+                    <option value="Esperanto">Esperanto</option>
+                    <option value="Latin">Latin</option>
+                    <option value="Albanian (Shqip)">Albanian (Shqip)</option>
+                    <option value="Armenian (Հայերեն)">Armenian (Հայերեն)</option>
+                    <option value="Azerbaijani (Azərbaycan dili)">Azerbaijani (Azərbaycan dili)</option>
+                    <option value="Basque (Euskara)">Basque (Euskara)</option>
+                    <option value="Belarusian (Беларуская)">Belarusian (Беларуская)</option>
+                    <option value="Bosnian (Bosanski)">Bosnian (Bosanski)</option>
+                    <option value="Bulgarian (Български)">Bulgarian (Български)</option>
+                    <option value="Catalan (Català)">Catalan (Català)</option>
+                    <option value="Cebuano">Cebuano</option>
+                    <option value="Chichewa">Chichewa</option>
+                    <option value="Corsican">Corsican</option>
+                    <option value="Croatian (Hrvatski)">Croatian (Hrvatski)</option>
+                    <option value="Estonian (Eesti)">Estonian (Eesti)</option>
+                    <option value="Galician (Galego)">Galician (Galego)</option>
+                    <option value="Georgian (ქართული)">Georgian (ქართული)</option>
+                    <option value="Haitian Creole">Haitian Creole</option>
+                    <option value="Hmong">Hmong</option>
+                    <option value="Icelandic (Íslenska)">Icelandic (Íslenska)</option>
+                    <option value="Irish (Gaeilge)">Irish (Gaeilge)</option>
+                    <option value="Javanese">Javanese</option>
+                    <option value="Kazakh (Қазақ тілі)">Kazakh (Қазақ тілі)</option>
+                    <option value="Khmer (ខ្មែរ)">Khmer (ខ្មែរ)</option>
+                    <option value="Kurdish (Kurmanji)">Kurdish (Kurmanji)</option>
+                    <option value="Kyrgyz (Кыргызча)">Kyrgyz (Кыргызча)</option>
+                    <option value="Lao (ລາວ)">Lao (ລາວ)</option>
+                    <option value="Latvian (Latviešu)">Latvian (Latviešu)</option>
+                    <option value="Lithuanian (Lietuvių)">Lithuanian (Lietuvių)</option>
+                    <option value="Luxembourgish">Luxembourgish</option>
+                    <option value="Macedonian (Македонски)">Macedonian (Македонски)</option>
+                    <option value="Malagasy">Malagasy</option>
+                    <option value="Maltese (Malti)">Maltese (Malti)</option>
+                    <option value="Maori">Maori</option>
+                    <option value="Mongolian (Монгол)">Mongolian (Монгол)</option>
+                    <option value="Myanmar (Burmese)">Myanmar (Burmese)</option>
+                    <option value="Nepali (नेपाली)">Nepali (नेपाली)</option>
+                    <option value="Pashto (پښتو)">Pashto (پښتو)</option>
+                    <option value="Samoan">Samoan</option>
+                    <option value="Scots Gaelic">Scots Gaelic</option>
+                    <option value="Serbian">Serbian</option>
+                    <option value="Sesotho">Sesotho</option>
+                    <option value="Sinhala">Sinhala</option>
+                    <option value="Slovak">Slovak</option>
+                    <option value="Slovenian">Slovenian</option>
+                    <option value="Sundanese">Sundanese</option>
+                    <option value="Tajik">Tajik</option>
+                    <option value="Tatar">Tatar</option>
+                    <option value="Turkmen">Turkmen</option>
+                    <option value="Uyghur">Uyghur</option>
+                    <option value="Uzbek">Uzbek</option>
+                    <option value="Welsh">Welsh</option>
+                    <option value="Yiddish">Yiddish</option>
+                </select>
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Send photos, files, or use any language!</div>
+        <div id="chat-box">AI response will appear here... Choose your language from the dropdown arrow!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
             <div class="input-row">
-                <!-- Camera / Photo / File Trigger -->
                 <label class="file-label" for="file-input">📷 Camera/File</label>
                 <input type="file" id="file-input" accept="image/*,.pdf,.txt" capture="environment" onchange="handleFileSelect()" />
                 <input type="text" id="user-input" placeholder="Type a message or question..." />
@@ -177,7 +188,7 @@
             const inputField = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
             const modeSelect = document.getElementById('mode-select');
-            const langSearch = document.getElementById('lang-search');
+            const langSelect = document.getElementById('lang-select');
             const prompt = inputField.value.trim();
             
             if (!prompt && !selectedFileBase64) return;
@@ -195,7 +206,7 @@
                     body: JSON.stringify({ 
                         messages: chatHistory, 
                         mode: modeSelect.value,
-                        language: langSearch.value,
+                        language: langSelect.value,
                         image: selectedFileBase64 
                     })
                 });
@@ -206,7 +217,7 @@
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
                 chatHistory.push({ role: 'assistant', content: aiReply });
 
-                document.getElementById('file-input').value = '';
+                document.getElementById('file-input').value = **''**;
                 document.getElementById('file-indicator').innerText = "No file attached";
                 selectedFileBase64 = null;
             } catch (err) {
@@ -217,4 +228,5 @@
         }
     </script>
 </body>
-</html>
+    </html>
+    
