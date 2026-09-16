@@ -25,8 +25,7 @@
         .drawer.open { left: 0; }
         .drawer h3 { margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .drawer input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; }
-        .new-chat-btn { background: #28a745; color: #fff; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 5px; }
-        .new-chat-btn:hover { background: #218838; }
+        .new-chat-btn { background: #28a745; color: #fff; border: none; padding: 8px; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
         .recent-chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .recent-item { background: #252525; padding: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
         .recent-item span { cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px; }
@@ -56,7 +55,7 @@
         <div>
             <label style="font-size: 12px; color: #aaa;">Recent Chats:</label>
             <div class="recent-chat-list" id="recent-list">
-                <!-- Populated dynamically -->
+                <div class="recent-item"><span onclick="switchChat(0)">Welcome Chat</span><div class="recent-actions"><button onclick="renameChat(0)">Rename</button><button onclick="deleteChat(0)">Delete</button></div></div>
             </div>
         </div>
         <div>
@@ -108,6 +107,7 @@
                     <option value="zu">Zulu (isiZulu)</option>
                     <option value="af">Afrikaans</option>
                     <option value="sq">Albanian (Shqip)</option>
+                    <option value="am">Amharic (አማርኛ)</option>
                     <option value="hy">Armenian (Հայերեն)</option>
                     <option value="az">Azerbaijani (Azərbaycan)</option>
                     <option value="eu">Basque (Euskara)</option>
@@ -191,7 +191,6 @@
         const sendBtn = document.getElementById('send-btn');
         const nodeSelect = document.getElementById('node-select');
         const langSelect = document.getElementById('lang-select');
-        
         const menuToggle = document.getElementById('menu-toggle');
         const appDrawer = document.getElementById('app-drawer');
         const closeMenu = document.getElementById('close-menu');
@@ -200,7 +199,6 @@
         const settingsBtn = document.getElementById('settings-btn');
         const tempChatToggle = document.getElementById('temp-chat-toggle');
         const newChatBtn = document.getElementById('new-chat-btn');
-
         const cameraBtn = document.getElementById('camera-btn');
         const photoBtn = document.getElementById('photo-btn');
         const fileBtn = document.getElementById('file-btn');
@@ -209,70 +207,49 @@
         const photoInput = document.getElementById('photo-input');
         const fileInput = document.getElementById('file-input');
 
-        let recentChatsData = [{ title: "Welcome Chat", messages: [] }];
-        let activeChatIndex = 0;
+        let chatSessions = [{ title: "Welcome Chat", history: [] }];
+        let activeIndex = 0;
 
         menuToggle.addEventListener('click', () => appDrawer.classList.toggle('open'));
         closeMenu.addEventListener('click', () => appDrawer.classList.remove('open'));
+        settingsBtn.addEventListener('click', () => alert("Settings panel: Customization and preference options."));
 
-        settingsBtn.addEventListener('click', () => {
-            alert("Settings panel: Customization and preference options.");
-        });
+        function renderList(filter = '') {
+            recentList.innerHTML = '';
+            chatSessions.filter(c => c.title.toLowerCase().includes(filter)).forEach((c, idx) => {
+                recentList.innerHTML += `<div class="recent-item"><span onclick="switchChat(${idx})">${c.title}</span><div class="recent-actions"><button onclick="renameChat(${idx})">Rename</button><button onclick="deleteChat(${idx})">Delete</button></div></div>`;
+            });
+        }
+
+        window.switchChat = function(idx) {
+            activeIndex = idx;
+            chatBox.innerHTML = '';
+            chatSessions[idx].history.forEach(m => chatBox.innerHTML += `<div><b>${m.sender}:</b> ${m.text}</div>`);
+            appDrawer.classList.remove('open');
+        }
+
+        window.deleteChat = function(idx) {
+            chatSessions.splice(idx, 1);
+            if (chatSessions.length === 0) chatSessions.push({ title: "Welcome Chat", history: [] });
+            activeIndex = 0;
+            switchChat(0);
+            renderList(searchChats.value.toLowerCase());
+        }
+
+        window.renameChat = function(idx) {
+            let n = prompt("Rename chat:", chatSessions[idx].title);
+            if(n) { chatSessions[idx].title = n; renderList(searchChats.value.toLowerCase()); }
+        }
 
         newChatBtn.addEventListener('click', () => {
-            recentChatsData.unshift({ title: "New Conversation", messages: [] });
-            activeChatIndex = 0;
+            chatSessions.unshift({ title: "New Conversation", history: [] });
+            activeIndex = 0;
             chatBox.innerHTML = `<div>Hey bestie! Choose Learning or Languages mode to study something new today!</div>`;
-            renderRecentList();
+            renderList();
             appDrawer.classList.remove('open');
         });
 
-        function renderRecentList(filter = '') {
-            recentList.innerHTML = '';
-            recentChatsData.filter(c => c.title.toLowerCase().includes(filter)).forEach((chat, index) => {
-                recentList.innerHTML += `
-                    <div class="recent-item">
-                        <span onclick="window.loadChat(${index})">${chat.title}</span>
-                        <div class="recent-actions">
-                            <button onclick="window.renameItem(${index})">Rename</button>
-                            <button onclick="window.deleteItem(${index})">Delete</button>
-                        </div>
-                    </div>`;
-            });
-        }
-
-        window.loadChat = function(index) {
-            activeChatIndex = index;
-            chatBox.innerHTML = '';
-            recentChatsData[index].messages.forEach(msg => {
-                chatBox.innerHTML += `<div><b>${msg.sender}:</b> ${msg.text}</div>`;
-            });
-            appDrawer.classList.remove('open');
-        }
-
-        window.deleteItem = function(index) {
-            recentChatsData.splice(index, 1);
-            if(recentChatsData.length === 0) {
-                recentChatsData.push({ title: "Welcome Chat", messages: [] });
-            }
-            activeChatIndex = 0;
-            window.loadChat(0);
-            renderRecentList(searchChats.value.toLowerCase());
-        }
-
-        window.renameItem = function(index) {
-            const newName = prompt("Rename chat:", recentChatsData[index].title);
-            if(newName) {
-                recentChatsData[index].title = newName;
-                renderRecentList(searchChats.value.toLowerCase());
-            }
-        }
-
-        searchChats.addEventListener('input', (e) => {
-            renderRecentList(e.target.value.toLowerCase());
-        });
-
-        renderRecentList();
+        searchChats.addEventListener('input', (e) => renderList(e.target.value.toLowerCase()));
 
         cameraBtn.addEventListener('click', () => cameraInput.click());
         photoBtn.addEventListener('click', () => photoInput.click());
@@ -280,84 +257,75 @@
 
         cameraInput.addEventListener('change', (e) => {
             if(e.target.files[0]) {
-                const txt = "[Captured Photo from Camera]";
-                chatBox.innerHTML += `<div><b>You:</b> ${txt}</div>`;
+                let t = "[Captured Photo from Camera]";
+                chatBox.innerHTML += `<div><b>You:</b> ${t}</div>`;
                 if(!tempChatToggle.checked) {
-                    recentChatsData[activeChatIndex].messages.push({ sender: "You", text: txt });
-                    if(recentChatsData[activeChatIndex].title === "New Conversation" || recentChatsData[activeChatIndex].title === "Welcome Chat") {
-                        recentChatsData[activeChatIndex].title = txt;
-                    }
-                    renderRecentList();
+                    chatSessions[activeIndex].history.push({sender: "You", text: t});
+                    if(chatSessions[activeIndex].title === "Welcome Chat" || chatSessions[activeIndex].title === "New Conversation") chatSessions[activeIndex].title = t;
+                    renderList();
                 }
             }
         });
         photoInput.addEventListener('change', (e) => {
             if(e.target.files[0]) {
-                const txt = `[Uploaded Photo: ${e.target.files[0].name}]`;
-                chatBox.innerHTML += `<div><b>You:</b> ${txt}</div>`;
+                let t = `[Uploaded Photo: ${e.target.files[0].name}]`;
+                chatBox.innerHTML += `<div><b>You:</b> ${t}</div>`;
                 if(!tempChatToggle.checked) {
-                    recentChatsData[activeChatIndex].messages.push({ sender: "You", text: txt });
-                    if(recentChatsData[activeChatIndex].title === "New Conversation" || recentChatsData[activeChatIndex].title === "Welcome Chat") {
-                        recentChatsData[activeChatIndex].title = txt;
-                    }
-                    renderRecentList();
+                    chatSessions[activeIndex].history.push({sender: "You", text: t});
+                    if(chatSessions[activeIndex].title === "Welcome Chat" || chatSessions[activeIndex].title === "New Conversation") chatSessions[activeIndex].title = t;
+                    renderList();
                 }
             }
         });
         fileInput.addEventListener('change', (e) => {
             if(e.target.files[0]) {
-                const txt = `[Uploaded File: ${e.target.files[0].name}]`;
-                chatBox.innerHTML += `<div><b>You:</b> ${txt}</div>`;
+                let t = `[Uploaded File: ${e.target.files[0].name}]`;
+                chatBox.innerHTML += `<div><b>You:</b> ${t}</div>`;
                 if(!tempChatToggle.checked) {
-                    recentChatsData[activeChatIndex].messages.push({ sender: "You", text: txt });
-                    if(recentChatsData[activeChatIndex].title === "New Conversation" || recentChatsData[activeChatIndex].title === "Welcome Chat") {
-                        recentChatsData[activeChatIndex].title = txt;
-                    }
-                    renderRecentList();
+                    chatSessions[activeIndex].history.push({sender: "You", text: t});
+                    if(chatSessions[activeIndex].title === "Welcome Chat" || chatSessions[activeIndex].title === "New Conversation") chatSessions[activeIndex].title = t;
+                    renderList();
                 }
             }
         });
 
-        let isRecording = false;
+        let isRec = false;
         recordBtn.addEventListener('click', () => {
-            isRecording = !isRecording;
-            if(isRecording) {
+            isRec = !isRec;
+            if(isRec) {
                 recordBtn.style.background = '#d9534f';
                 chatBox.innerHTML += `<div><b>System:</b> Recording audio... Click mic again to stop.</div>`;
             } else {
                 recordBtn.style.background = '#444';
-                const txt = "[Voice Recording Sent]";
-                chatBox.innerHTML += `<div><b>You:</b> ${txt}</div>`;
+                let t = "[Voice Recording Sent]";
+                chatBox.innerHTML += `<div><b>You:</b> ${t}</div>`;
                 if(!tempChatToggle.checked) {
-                    recentChatsData[activeChatIndex].messages.push({ sender: "You", text: txt });
-                    if(recentChatsData[activeChatIndex].title === "New Conversation" || recentChatsData[activeChatIndex].title === "Welcome Chat") {
-                        recentChatsData[activeChatIndex].title = txt;
-                    }
-                    renderRecentList();
+                    chatSessions[activeIndex].history.push({sender: "You", text: t});
+                    if(chatSessions[activeIndex].title === "Welcome Chat" || chatSessions[activeIndex].title === "New Conversation") chatSessions[activeIndex].title = t;
+                    renderList();
                 }
             }
         });
 
         async function handleSend() {
-            let rawText = userInput.value.trim();
-            if (!rawText) return;
-
-            chatBox.innerHTML += `<div><b>You:</b> ${rawText}</div>`;
-            
+            let raw = userInput.value.trim();
+            if (!raw) return;
+            chatBox.innerHTML += `<div><b>You:</b> ${raw}</div>`;
             if(!tempChatToggle.checked) {
-                recentChatsData[activeChatIndex].messages.push({ sender: "You", text: rawText });
-                if(recentChatsData[activeChatIndex].title === "New Conversation" || recentChatsData[activeChatIndex].title === "Welcome Chat") {
-                    recentChatsData[activeChatIndex].title = rawText;
-                }
-                renderRecentList(searchChats.value.toLowerCase());
+                chatSessions[activeIndex].history.push({sender: "You", text: raw});
+                if(chatSessions[activeIndex].title === "Welcome Chat" || chatSessions[activeIndex].title === "New Conversation") chatSessions[activeIndex].title = raw;
+                renderList(searchChats.value.toLowerCase());
             }
-
             userInput.value = '';
-
-            let text = rawText.toLowerCase();
-            text = text.replace(/\bfad\b/g, 'bad');
-            text = text.replace(/\bteh\b/g, 'the');
-            text = text.replace(/\bhav\b/g, 'have');
-
-            const mode = nodeSelect.value;
-            const currentLang =
+            let text = raw.toLowerCase().replace(/\bfad\b/g, 'bad').replace(/\bteh\b/g, 'the').replace(/\bhav\b/g, 'have');
+            let mode = nodeSelect.value, lang = langSelect.value, reply = "";
+            if (text.startsWith('search ') || text.startsWith('what is ') || text.startsWith('who is ') || text.startsWith('tell me about ')) {
+                let q = text.replace('search ', '').replace('what is ', '').replace('who is ', '').replace('tell me about ', '');
+                try {
+                    let res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&format=json&origin=*`);
+                    let data = await res.json();
+                    reply = (data.query && data.query.search.length > 0) ? `🌐 Online Search Result for "${q}": ${data.query.search[0].snippet.replace(/(<([^>]+)>)/gi, "")}... (Source: Wikipedia)` : `I searched online for "${q}", but couldn't find a direct match.`;
+                } catch(e) { reply = "I tried searching online, but encountered a network issue."; }
+            } else {
+                if (mode === 'friend') {
+                   
