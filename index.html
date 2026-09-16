@@ -9,16 +9,18 @@
         .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 90vh; }
         .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; font-size: 13px; background: #252525; padding: 10px; border-radius: 6px; }
         .control-row { display: flex; justify-content: space-between; align-items: center; }
-        select, input[type="text"]#lang-search { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; width: 60%; }
+        select { background: #333; color: #fff; border: 1px solid #444; padding: 6px; border-radius: 5px; width: 60%; }
         #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; font-size: 14px; }
         .input-area { display: flex; flex-direction: column; gap: 8px; }
-        .input-row { display: flex; gap: 10px; }
+        .input-row { display: flex; gap: 8px; align-items: center; }
         input[type="text"]#user-input { flex: 1; padding: 12px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
-        .file-label { background: #444; padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; }
-        .file-label:hover { background: #555; }
+        .action-btn { background: #444; padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; border: none; color: white; }
+        .action-btn:hover { background: #555; }
+        #mic-btn.listening { background: #dc3545; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         input[type="file"] { display: none; }
-        button { padding: 12px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
-        button:hover { background: #0056b3; }
+        .send-btn { padding: 12px 16px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .send-btn:hover { background: #0056b3; }
         #file-indicator { font-size: 12px; color: #aaa; }
     </style>
 </head>
@@ -27,7 +29,6 @@
     <div class="chat-container">
         <h2>Global AI Mahlet 🌍</h2>
         
-        <!-- Controls for Role and Extended Language Selection -->
         <div class="controls">
             <div class="control-row">
                 <label for="mode-select">AI Role:</label>
@@ -38,79 +39,81 @@
                 </select>
             </div>
             <div class="control-row">
-                <label for="lang-search">Language:</label>
-                <input list="languages-list" id="lang-search" value="English" placeholder="Type or select language..." />
-                <datalist id="languages-list">
-                    <option value="English">
-                    <option value="Amharic (አማርኛ)">
-                    <option value="Afaan Oromoo">
-                    <option value="Tigrinya (ትግርኛ)">
-                    <option value="Somali (Soomaaliga)">
-                    <option value="Spanish (Español)">
-                    <option value="French (Français)">
-                    <option value="Arabic (العربية)">
-                    <option value="Mandarin Chinese (中文)">
-                    <option value="Hindi (हिन्दी)">
-                    <option value="Swahili (Kiswahili)">
-                    <option value="German (Deutsch)">
-                    <option value="Portuguese (Português)">
-                    <option value="Japanese (日本語)">
-                    <option value="Russian (Русский)">
-                    <option value="Italian (Italiano)">
-                    <option value="Turkish (Türkçe)">
-                    <option value="Korean (한국어)">
-                    <option value="Vietnamese (Tiếng Việt)">
-                    <option value="Polish (Polski)">
-                    <option value="Dutch (Nederlands)">
-                    <option value="Greek (Ελληνικά)">
-                    <option value="Hebrew (עברית)">
-                    <option value="Persian (فارسی)">
-                    <option value="Urdu (اردو)">
-                    <option value="Bengali (বাংলা)">
-                    <option value="Punjabi (ਪੰਜਾਬੀ)">
-                    <option value="Marathi (मराठी)">
-                    <option value="Telugu (తెలుగు)">
-                    <option value="Tamil (தமிழ்)">
-                    <option value="Gujarati (ગુજરાતી)">
-                    <option value="Kannada (ಕನ್ನಡ)">
-                    <option value="Malayalam (മലയാളം)">
-                    <option value="Thai (ไทย)">
-                    <option value="Indonesian (Bahasa Indonesia)">
-                    <option value="Malay (Bahasa Melayu)">
-                    <option value="Filipino (Tagalog)">
-                    <option value="Ukrainian (Українська)">
-                    <option value="Romanian (Română)">
-                    <option value="Czech (Čeština)">
-                    <option value="Hungarian (Magyar)">
-                    <option value="Swedish (Svenska)">
-                    <option value="Danish (Dansk)">
-                    <option value="Finnish (Suomi)">
-                    <option value="Norwegian (Norsk)">
-                    <option value="Czech (Čeština)">
-                    <option value="Afrikaans">
-                    <option value="Zulu (isiZulu)">
-                    <option value="Xhosa (isiXhosa)">
-                    <option value="Hausa">
-                    <option value="Yoruba (Yorùbá)">
-                    <option value="Igbo">
-                    <option value="Shona">
-                    <option value="Igbo">
-                    <option value="Quechua">
-                    <option value="Esperanto">
-                    <option value="Latin">
-                </datalist>
+                <label for="lang-select">Language:</label>
+                <select id="lang-select">
+                    <option value="Auto-Detect (Match My Keyboard)">🌍 Auto-Detect (Match Keyboard)</option>
+                    <option value="Amharic (አማርኛ)">Amharic (አማርኛ)</option>
+                    <option value="Afaan Oromoo">Afaan Oromoo</option>
+                    <option value="Tigrinya (ትግርኛ)">Tigrinya (ትግርኛ)</option>
+                    <option value="Somali (Soomaaliga)">Somali (Soomaaliga)</option>
+                    <option value="English">English</option>
+                    <option value="Spanish (Español)">Spanish (Español)</option>
+                    <option value="French (Français)">French (Français)</option>
+                    <option value="Arabic (العربية)">Arabic (العربية)</option>
+                    <option value="Mandarin Chinese (中文)">Mandarin Chinese (中文)</option>
+                    <option value="Hindi (हिन्दी)">Hindi (हिन्दी)</option>
+                    <option value="Swahili (Kiswahili)">Swahili (Kiswahili)</option>
+                    <option value="German (Deutsch)">German (Deutsch)</option>
+                    <option value="Portuguese (Português)">Portuguese (Português)</option>
+                    <option value="Japanese (日本語)">Japanese (日本語)</option>
+                    <option value="Russian (Русский)">Russian (Русский)</option>
+                    <option value="Italian (Italiano)">Italian (Italiano)</option>
+                    <option value="Turkish (Türkçe)">Turkish (Türkçe)</option>
+                    <option value="Korean (한국어)">Korean (한국어)</option>
+                    <option value="Vietnamese (Tiếng Việt)">Vietnamese (Tiếng Việt)</option>
+                    <option value="Polish (Polski)">Polish (Polski)</option>
+                    <option value="Dutch (Nederlands)">Dutch (Nederlands)</option>
+                    <option value="Greek (Ελληνικά)">Greek (Ελληνικά)</option>
+                    <option value="Hebrew (עברית)">Hebrew (עברית)</option>
+                    <option value="Persian (فارسی)">Persian (فارسی)</option>
+                    <option value="Urdu (اردو)">Urdu (اردو)</option>
+                    <option value="Bengali (বাংলা)">Bengali (বাংলা)</option>
+                    <option value="Punjabi (ਪੰਜਾਬੀ)">Punjabi (ਪੰਜਾਬੀ)</option>
+                    <option value="Marathi (मराठी)">Marathi (मराठी)</option>
+                    <option value="Telugu (తెలుగు)">Telugu (తెలుగు)</option>
+                    <option value="Tamil (தமிழ்)">Tamil (தமிழ்)</option>
+                    <option value="Gujarati (ગુજરાતી)">Gujarati (Gujarati)</option>
+                    <option value="Kannada (ಕನ್ನಡ)">Kannada (ಕನ್ನಡ)</option>
+                    <option value="Malayalam (മലയാളം)">Malayalam (മലയാളം)</option>
+                    <option value="Thai (ไทย)">Thai (ไทย)</option>
+                    <option value="Indonesian (Bahasa Indonesia)">Indonesian</option>
+                    <option value="Malay (Bahasa Melayu)">Malay</option>
+                    <option value="Filipino (Tagalog)">Filipino (Tagalog)</option>
+                    <option value="Ukrainian (Українська)">Ukrainian</option>
+                    <option value="Romanian (Română)">Romanian</option>
+                    <option value="Czech (Čeština)">Czech</option>
+                    <option value="Hungarian (Magyar)">Hungarian</option>
+                    <option value="Swedish (Svenska)">Swedish</option>
+                    <option value="Danish (Dansk)">Danish</option>
+                    <option value="Finnish (Suomi)">Finnish</option>
+                    <option value="Norwegian (Norsk)">Norwegian</option>
+                    <option value="Afrikaans">Afrikaans</option>
+                    <option value="Zulu (isiZulu)">Zulu</option>
+                    <option value="Xhosa (isiXhosa)">Xhosa</option>
+                    <option value="Hausa">Hausa</option>
+                    <option value="Yoruba (Yorùbá)">Yoruba</option>
+                    <option value="Igbo">Igbo</option>
+                    <option value="Shona">Shona</option>
+                    <option value="Quechua">Quechua</option>
+                    <option value="Esperanto">Esperanto</option>
+                    <option value="Latin">Latin</option>
+                </select>
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Long conversation memory is active.</div>
+        <div id="chat-box">AI response will appear here... Type, snap photos, or use voice!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
             <div class="input-row">
-                <label class="file-label" for="file-input">📷 File</label>
-                <input type="file" id="file-input" accept="image/*,.pdf,.txt" onchange="handleFileSelect()" />
-                <input type="text" id="user-input" placeholder="Ask a question or continue chat..." />
-                <button onclick="sendMessage()">Send</button>
+                <label class="action-btn" for="file-input" title="Camera or File">📷</label>
+                <input type="file" id="file-input" accept="image/*,.pdf,.txt" capture="environment" onchange="handleFileSelect()" />
+                
+                <button class="action-btn" id="mic-btn" onclick="toggleSpeechRecognition()" title="Voice Input">🎤</button>
+                <button class="action-btn" onclick="speakLastResponse()" title="Read Aloud">🔊</button>
+                
+                <input type="text" id="user-input" placeholder="Type a message or use mic..." />
+                <button class="send-btn" onclick="sendMessage()">Send</button>
             </div>
         </div>
     </div>
@@ -118,6 +121,7 @@
     <script>
         let selectedFileBase64 = null;
         let chatHistory = [];
+        let lastAiText = "";
 
         function handleFileSelect() {
             const fileInput = document.getElementById('file-input');
@@ -136,18 +140,54 @@
             }
         }
 
+        // Voice Input (Speech to Text)
+        function toggleSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Speech recognition is not supported on this browser. Try Chrome on Android!");
+                return;
+            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'en-US'; 
+            const micBtn = document.getElementById('mic-btn');
+            
+            recognition.onstart = () => { micBtn.classList.add('listening'); };
+            recognition.onresult = (event) => {
+                const speechToText = event.results[0][0].transcript;
+                document.getElementById('user-input').value = speechToText;
+            };
+            recognition.onerror = () => { micBtn.classList.remove('listening'); };
+            recognition.onend = () => { micBtn.classList.remove('listening'); };
+            
+            recognition.start();
+        }
+
+        // Voice Output (Text to Speech)
+        function speakLastResponse() {
+            if (!lastAiText) {
+                alert("No AI response to read aloud yet!");
+                return;
+            }
+            if (!('speechSynthesis' in window)) {
+                alert("Text-to-speech not supported on this browser.");
+                return;
+            }
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(lastAiText);
+            window.speechSynthesis.speak(utterance);
+        }
+
         async function sendMessage() {
             const inputField = document.getElementById('user-input');
             const chatBox = document.getElementById('chat-box');
             const modeSelect = document.getElementById('mode-select');
-            const langSearch = document.getElementById('lang-search');
+            const langSelect = document.getElementById('lang-select');
             const prompt = inputField.value.trim();
             
             if (!prompt && !selectedFileBase64) return;
 
-            chatBox.innerHTML += `\n\nYou [${modeSelect.value} | ${langSearch.value}]: ${prompt || "[Uploaded file/image]"}`;
-            
-            chatHistory.push({ role: 'user', content: prompt || "Please explain this attached image/file." });
+            chatBox.innerHTML += `\n\nYou [${modeSelect.value}]: ${prompt || "[Uploaded photo/file]"}`;
+            chatHistory.push({ role: 'user', content: prompt || "Please analyze this attached photo/file." });
 
             inputField.value = '';
             chatBox.innerHTML += `\n\nAI: Thinking...`;
@@ -159,7 +199,7 @@
                     body: JSON.stringify({ 
                         messages: chatHistory, 
                         mode: modeSelect.value,
-                        language: langSearch.value,
+                        language: langSelect.value,
                         image: selectedFileBase64 
                     })
                 });
@@ -168,8 +208,8 @@
                 const aiReply = data.response || data.error;
 
                 chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
-                
                 chatHistory.push({ role: 'assistant', content: aiReply });
+                lastAiText = aiReply;
 
                 document.getElementById('file-input').value = '';
                 document.getElementById('file-indicator').innerText = "No file attached";
