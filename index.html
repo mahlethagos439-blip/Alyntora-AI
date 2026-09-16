@@ -20,10 +20,10 @@
         .sidebar-item:hover { background: #333; }
         .recents-header { font-size: 12px; color: #888; margin-top: 5px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Main Chat Container */
-        .chat-container { width: 92%; max-width: 650px; background: #1e1e1e; padding: 12px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 95vh; }
+        /* Main Chat Container - Fixed height and layout */
+        .chat-container { width: 92%; max-width: 650px; background: #1e1e1e; padding: 12px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 96vh; box-sizing: border-box; }
         
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; flex-shrink: 0; }
         .menu-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
         .top-btn { background: #333; color: white; border: none; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; }
         .top-btn:hover { background: #444; }
@@ -32,37 +32,38 @@
         .profile-pic { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6; }
 
         /* Robert's Live Talking Avatar Face Section */
-        .avatar-box { display: flex; flex-direction: column; align-items: center; background: #161616; padding: 8px; border-radius: 8px; border: 1px solid #333; margin-bottom: 6px; }
-        .robert-face { width: 75px; height: 75px; border-radius: 50%; object-fit: cover; border: 3px solid #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.3); transition: transform 0.1s ease; }
+        .avatar-box { display: flex; flex-direction: column; align-items: center; background: #161616; padding: 6px; border-radius: 8px; border: 1px solid #333; margin-bottom: 4px; flex-shrink: 0; }
+        .robert-face { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; border: 3px solid #00ffcc; box-shadow: 0 0 10px rgba(0,255,204,0.3); transition: transform 0.1s ease; }
         .robert-face.speaking { animation: avatarPulse 0.4s infinite alternate; }
         @keyframes avatarPulse { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
         
-        .mouth-indicator { margin-top: 4px; width: 24px; height: 8px; background: #444; border-radius: 4px; transition: all 0.1s ease; }
-        .mouth-indicator.speaking { height: 14px; background: #00ffcc; border-radius: 50%; box-shadow: 0 0 6px #00ffcc; }
-        .status-text { font-size: 11px; color: #00ffcc; margin-top: 2px; font-weight: bold; }
+        .mouth-indicator { margin-top: 3px; width: 20px; height: 6px; background: #444; border-radius: 4px; transition: all 0.1s ease; }
+        .mouth-indicator.speaking { height: 12px; background: #00ffcc; border-radius: 50%; box-shadow: 0 0 6px #00ffcc; }
+        .status-text { font-size: 10px; color: #00ffcc; margin-top: 1px; font-weight: bold; }
 
-        .controls { display: flex; flex-direction: column; gap: 3px; margin-bottom: 4px; font-size: 11px; background: #252525; padding: 5px; border-radius: 6px; }
+        .controls { display: flex; flex-direction: column; gap: 3px; margin-bottom: 4px; font-size: 11px; background: #252525; padding: 5px; border-radius: 6px; flex-shrink: 0; }
         .control-row { display: flex; justify-content: space-between; align-items: center; }
         select { background: #333; color: #fff; border: 1px solid #444; padding: 3px; border-radius: 4px; width: 60%; font-size: 11px; }
         
-        /* Chat Box Bubble Interface */
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 10px; margin-bottom: 6px; border-radius: 8px; background: #181818; display: flex; flex-direction: column; gap: 10px; }
+        /* Chat Box Bubble Interface - Scrollable */
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 10px; margin-bottom: 6px; border-radius: 8px; background: #181818; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
         
         .message { display: flex; flex-direction: column; max-width: 80%; line-height: 1.4; font-size: 13px; padding: 8px 12px; border-radius: 10px; word-wrap: break-word; }
         .message.user { align-self: flex-end; background: #2b5278; color: #fff; border-bottom-right-radius: 2px; }
         .message.ai { align-self: flex-start; background: #2a2a2a; color: #e5e5e5; border-bottom-left-radius: 2px; border: 1px solid #333; }
         .message-header { font-size: 10px; font-weight: bold; margin-bottom: 3px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
 
-        .input-area { display: flex; flex-direction: column; gap: 4px; }
-        .input-row { display: flex; gap: 6px; align-items: center; background: #252525; padding: 5px; border-radius: 8px; border: 1px solid #444; }
-        input[type="text"]#user-input { flex: 1; padding: 7px; border: none; background: transparent; color: #fff; font-size: 13px; outline: none; }
-        .action-btn { background: #333; padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; border: none; color: white; }
+        /* Input Area - Pinned cleanly at bottom */
+        .input-area { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; }
+        .input-row { display: flex; gap: 5px; align-items: center; background: #252525; padding: 5px; border-radius: 8px; border: 1px solid #444; }
+        input[type="text"]#user-input { flex: 1; padding: 7px; border: none; background: transparent; color: #fff; font-size: 13px; outline: none; min-width: 0; }
+        .action-btn { background: #333; padding: 6px 8px; border-radius: 6px; cursor: pointer; font-size: 11px; display: flex; align-items: center; justify-content: center; border: none; color: white; flex-shrink: 0; }
         .action-btn:hover { background: #444; }
         #mic-btn.listening { background: #dc3545; animation: pulse 1.5s infinite; }
         #record-btn.recording { background: #dc3545; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         input[type="file"] { display: none; }
-        .send-btn { background: #3b82f6; color: white; border: none; padding: 7px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .send-btn { background: #3b82f6; color: white; border: none; padding: 7px 10px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .send-btn:hover { background: #2563eb; }
         #file-indicator { font-size: 10px; color: #888; padding-left: 4px; }
     </style>
@@ -99,7 +100,6 @@
 
         <!-- Robert's Live Talking Face Display -->
         <div class="avatar-box">
-            <!-- Robert's Photo (Using a crisp portrait representation) -->
             <img id="robert-avatar-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&h=150&fit=crop" alt="Robert Photo" class="robert-face">
             <div id="robert-mouth" class="mouth-indicator"></div>
             <div id="robert-status" class="status-text">Robert is listening...</div>
@@ -118,13 +118,107 @@
                 <label for="lang-select">Language:</label>
                 <select id="lang-select">
                     <option value="English">English</option>
-                    <option value="Amharic (አማርኛ)">Amharic (አማርኛ)</option>
+                    <option value="Amharic">Amharic (አማርኛ)</option>
                     <option value="Afaan Oromoo">Afaan Oromoo</option>
-                    <option value="Tigrinya (ትግርኛ)">Tigrinya (ትግርኛ)</option>
-                    <option value="Somali (Soomaaliga)">Somali (Soomaaliga)</option>
-                    <option value="Spanish (Español)">Spanish (Español)</option>
-                    <option value="French (Français)">French (Français)</option>
-                    <option value="Arabic (العربية)">Arabic (العربية)</option>
+                    <option value="Tigrinya">Tigrinya (ትግርኛ)</option>
+                    <option value="Somali">Somali (Soomaaliga)</option>
+                    <option value="Arabic">Arabic (العربية)</option>
+                    <option value="Spanish">Spanish (Español)</option>
+                    <option value="French">French (Français)</option>
+                    <option value="German">German (Deutsch)</option>
+                    <option value="Chinese">Chinese (中文)</option>
+                    <option value="Japanese">Japanese (日本語)</option>
+                    <option value="Korean">Korean (한국어)</option>
+                    <option value="Hindi">Hindi (हिन्दी)</option>
+                    <option value="Portuguese">Portuguese (Português)</option>
+                    <option value="Russian">Russian (Русский)</option>
+                    <option value="Italian">Italian (Italiano)</option>
+                    <option value="Turkish">Turkish (Türkçe)</option>
+                    <option value="Vietnamese">Vietnamese (Tiếng Việt)</option>
+                    <option value="Polish">Polish (Polski)</option>
+                    <option value="Dutch">Dutch (Nederlands)</option>
+                    <option value="Greek">Greek (Ελληνικά)</option>
+                    <option value="Hebrew">Hebrew (עברית)</option>
+                    <option value="Indonesian">Indonesian (Bahasa Indonesia)</option>
+                    <option value="Malay">Malay (Bahasa Melayu)</option>
+                    <option value="Tagalog">Tagalog (Filipino)</option>
+                    <option value="Thai">Thai (ไทย)</option>
+                    <option value="Ukrainian">Ukrainian (Українська)</option>
+                    <option value="Urdu">Urdu (اردو)</option>
+                    <option value="Persian">Persian (فارسی)</option>
+                    <option value="Swahili">Swahili (Kiswahili)</option>
+                    <option value="Afrikaans">Afrikaans</option>
+                    <option value="Albanian">Albanian (Shqip)</option>
+                    <option value="Amharic">Amharic</option>
+                    <option value="Armenian">Armenian (Հայերեն)</option>
+                    <option value="Azerbaijani">Azerbaijani (Azərbaycan)</option>
+                    <option value="Basque">Basque (Euskara)</option>
+                    <option value="Belarusian">Belarusian (Беларуская)</option>
+                    <option value="Bengali">Bengali (বাংলা)</option>
+                    <option value="Bosnian">Bosnian (Bosanski)</option>
+                    <option value="Bulgarian">Bulgarian (Български)</option>
+                    <option value="Catalan">Catalan (Català)</option>
+                    <option value="Cebuano">Cebuano</option>
+                    <option value="Corsican">Corsican</option>
+                    <option value="Croatian">Croatian (Hrvatski)</option>
+                    <option value="Czech">Czech (Čeština)</option>
+                    <option value="Danish">Dansk</option>
+                    <option value="Esperanto">Esperanto</option>
+                    <option value="Estonian">Eesti</option>
+                    <option value="Finnish">Suomi</option>
+                    <option value="Galician">Galego</option>
+                    <option value="Georgian">ქართული</option>
+                    <option value="Gujarati">ગુજરાતી</option>
+                    <option value="Haitian Creole">Kreyòl ayisyen</option>
+                    <option value="Hausa">Hausa</option>
+                    <option value="Hawaiian">Ōlelo Hawaiʻi</option>
+                    <option value="Hmong">Hmoob</option>
+                    <option value="Hungarian">Magyar</option>
+                    <option value="Icelandic">Íslenska</option>
+                    <option value="Igbo">Igbo</option>
+                    <option value="Irish">Gaeilge</option>
+                    <option value="Javanese">Basa Jawa</option>
+                    <option value="Kannada">ಕನ್ನಡ</option>
+                    <option value="Kazakh">Қазақ тілі</option>
+                    <option value="Khmer">ខ្មែរ</option>
+                    <option value="Kurdish">Kurdî</option>
+                    <option value="Kyrgyz">Кыргызча</option>
+                    <option value="Lao">ລາວ</option>
+                    <option value="Latin">Latina</option>
+                    <option value="Latvian">Latviešu</option>
+                    <option value="Lithuanian">Lietuvių</option>
+                    <option value="Luxembourgish">Lëtzebuergesch</option>
+                    <option value="Macedonian">Македонски</option>
+                    <option value="Malagasy">Malagasy</option>
+                    <option value="Malayalam">മലയാളം</option>
+                    <option value="Maltese">Malti</option>
+                    <option value="Maori">Māori</option>
+                    <option value="Marathi">मराठी</option>
+                    <option value="Mongolian">Монгол</option>
+                    <option value="Myanmar">မြန်မာ</option>
+                    <option value="Nepali">नेपाली</option>
+                    <option value="Norwegian">Norsk</option>
+                    <option value="Pashto">پښتو</option>
+                    <option value="Punjabi">ਪੰਜਾਬੀ</option>
+                    <option value="Romanian">Română</option>
+                    <option value="Samoan">Samoan</option>
+                    <option value="Scots Gaelic">Gàidhlig</option>
+                    <option value="Serbian">Српски</option>
+                    <option value="Sesotho">Sesotho</option>
+                    <option value="Shona">Shona</option>
+                    <option value="Sindhi">سنڌي</option>
+                    <option value="Sinhala">සිංහල</option>
+                    <option value="Slovak">Slovenčina</option>
+                    <option value="Slovenian">Slovenščina</option>
+                    <option value="Sundanese">Basa Sunda</option>
+                    <option value="Tajik">Тоҷикӣ</option>
+                    <option value="Tamil">தமிழ்</option>
+                    <option value="Telugu">తెలుగు</option>
+                    <option value="Uzbek">O‘zbek</option>
+                    <option value="Welsh">Cymraeg</option>
+                    <option value="Yiddish">ייִדיش</option>
+                    <option value="Yoruba">Yorùbá</option>
+                    <option value="Zulu">isiZulu</option>
                 </select>
             </div>
         </div>
@@ -232,139 +326,4 @@
             }
         }
 
-        function startNewChat() {
-            chatHistory = [];
-            const chatBox = document.getElementById('chat-box');
-            chatBox.innerHTML = `
-                <div class="message ai">
-                    <div class="message-header">Mahlet & Robert</div>
-                    New chat started! What's on your mind today?
-                </div>
-            `;
-            lastAiText = "";
-            stopAllSpeech();
-        }
-
-        function stopAllSpeech() {
-            if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-            isAiSpeaking = false;
-            stopMouthMovement();
-        }
-
-        function startMouthMovement() {
-            const face = document.getElementById('robert-avatar-img');
-            const mouth = document.getElementById('robert-mouth');
-            const status = document.getElementById('robert-status');
-            
-            face.classList.add('speaking');
-            mouth.classList.add('speaking');
-            status.innerText = "Robert is speaking...";
-
-            // Toggle mouth indicator rapidly to mimic talking
-            if (mouthAnimationTimer) clearInterval(mouthAnimationTimer);
-            mouthAnimationTimer = setInterval(() => {
-                mouth.style.width = (Math.random() > 0.5) ? '32px' : '18px';
-            }, 120);
-        }
-
-        function stopMouthMovement() {
-            const face = document.getElementById('robert-avatar-img');
-            const mouth = document.getElementById('robert-mouth');
-            const status = document.getElementById('robert-status');
-            
-            face.classList.remove('speaking');
-            mouth.classList.remove('speaking');
-            status.innerText = "Robert is listening...";
-            if (mouthAnimationTimer) clearInterval(mouthAnimationTimer);
-            mouth.style.width = '24px';
-        }
-
-        function toggleVoiceMode() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert("Speech recognition not supported on this browser.");
-                return;
-            }
-            const micBtn = document.getElementById('mic-btn');
-            if (isVoiceMode) {
-                isVoiceMode = false;
-                if (recognition) recognition.stop();
-                stopAllSpeech();
-                micBtn.classList.remove('listening');
-                return;
-            }
-            isVoiceMode = true;
-            micBtn.classList.add('listening');
-            startListening();
-        }
-
-        function startListening() {
-            if (!isVoiceMode || isAiSpeaking) return;
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.interimResults = false;
-
-            recognition.onresult = (event) => {
-                if (isAiSpeaking) return;
-                document.getElementById('user-input').value = event.results[0][0].transcript;
-                processMessage(true);
-            };
-            recognition.onerror = () => { if (isVoiceMode && !isAiSpeaking) setTimeout(startListening, 1000); };
-            recognition.onend = () => { if (isVoiceMode && !isAiSpeaking) setTimeout(startListening, 500); };
-            try { recognition.start(); } catch (e) {}
-        }
-
-        async function sendTextMessage() {
-            await processMessage(true); // Automatically trigger voice speech and face movement on reply
-        }
-
-        async function processMessage(shouldSpeak) {
-            const inputField = document.getElementById('user-input');
-            const chatBox = document.getElementById('chat-box');
-            const prompt = inputField.value.trim();
-            
-            if (!prompt) return;
-
-            // Append User Bubble
-            const userMsgDiv = document.createElement('div');
-            userMsgDiv.className = 'message user';
-            userMsgDiv.innerHTML = `<div class="message-header">You</div>${prompt}`;
-            chatBox.appendChild(userMsgDiv);
-
-            inputField.value = '';
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Append Thinking Bubble
-            const aiMsgDiv = document.createElement('div');
-            aiMsgDiv.className = 'message ai';
-            aiMsgDiv.innerHTML = `<div class="message-header">Mahlet & Robert</div>Thinking...`;
-            chatBox.appendChild(aiMsgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Fallback Engine if API key is placeholder
-            if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY_HERE" || !GEMINI_API_KEY) {
-                setTimeout(() => {
-                    let aiReply = "I am listening closely. Tell me more about that so we can figure it out together!";
-                    const lower = prompt.toLowerCase();
-                    
-                    if (lower.includes("hi") || lower.includes("hello") || lower.includes("hey")) {
-                        aiReply = "Hello there! How can I help you out today?";
-                    } else if (lower.includes("question") || lower.includes("help")) {
-                        aiReply = "I'm ready! Go ahead and ask me whatever is on your mind.";
-                    } else if (lower.includes("sad") || lower.includes("stress") || lower.includes("tired")) {
-                        aiReply = "I'm so sorry you're feeling that way. Take a deep breath—you don't have to carry it all by yourself. I'm right here with you.";
-                    } else {
-                        aiReply = `That is really interesting. Let's look at it step by step—what specific part would you like to focus on first?`;
-                    }
-                    
-                    aiMsgDiv.innerHTML = `<div class="message-header">Mahlet & Robert</div>${aiReply}`;
-                    lastAiText = aiReply;
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                    if (shouldSpeak) speakText(aiReply);
-                }, 300);
-                return;
-            }
-
-            // Real Fast Gemini API Integration
-  
+        function start
