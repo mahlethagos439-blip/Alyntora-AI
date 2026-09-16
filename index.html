@@ -5,23 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Global AI Mahlet 🌍</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 90vh; }
-        .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; font-size: 13px; background: #252525; padding: 10px; border-radius: 6px; }
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; height: 100vh; margin: 0; }
+        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 8px; margin-top: 20px; flex: 1; max-height: 85vh; }
+        .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; font-size: 13px; background: #252525; padding: 10px; border-radius: 8px; }
         .control-row { display: flex; justify-content: space-between; align-items: center; }
         select { background: #333; color: #fff; border: 1px solid #444; padding: 6px; border-radius: 5px; width: 60%; }
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; font-size: 14px; }
-        .input-area { display: flex; flex-direction: column; gap: 8px; }
-        .input-row { display: flex; gap: 8px; align-items: center; }
-        input[type="text"]#user-input { flex: 1; padding: 12px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
-        .action-btn { background: #444; padding: 10px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; border: none; color: white; }
-        .action-btn:hover { background: #555; }
-        #mic-btn.listening { background: #dc3545; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
-        input[type="file"] { display: none; }
-        .send-btn { padding: 12px 16px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: #181818; display: flex; flex-direction: column; gap: 10px; }
+        .input-area { display: flex; gap: 8px; align-items: center; }
+        input[type="text"] { flex: 1; padding: 12px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; outline: none; }
+        .send-btn { background: #007bff; color: white; border: none; border-radius: 5px; padding: 12px 18px; cursor: pointer; font-size: 13px; }
         .send-btn:hover { background: #0056b3; }
-        #file-indicator { font-size: 12px; color: #aaa; }
     </style>
 </head>
 <body>
@@ -31,280 +24,62 @@
         
         <div class="controls">
             <div class="control-row">
-                <label for="mode-select">AI Role:</label>
-                <select id="mode-select">
+                <label for="node-select">AI Role:</label>
+                <select id="node-select">
                     <option value="coach">❤️ Personal Coach & Stress Motivator</option>
-                    <option value="mentor">📚 Academic & Technical Mentor</option>
-                    <option value="business">💼 Business Strategist (B2B & B2C)</option>
-                </select>
-            </div>
-            <div class="control-row">
-                <label for="lang-select">Language:</label>
-                <select id="lang-select">
-                    <option value="Auto-Detect (Match My Keyboard)">🌍 Auto-Detect (Match Keyboard)</option>
-                    <option value="Amharic (አማርኛ)">Amharic (አማርኛ)</option>
-                    <option value="Afaan Oromoo">Afaan Oromoo</option>
-                    <option value="Tigrinya (ትግርኛ)">Tigrinya (ትግርኛ)</option>
-                    <option value="Somali (Soomaaliga)">Somali (Soomaaliga)</option>
-                    <option value="English">English</option>
-                    <option value="Spanish (Español)">Spanish (Español)</option>
-                    <option value="French (Français)">French (Français)</option>
-                    <option value="Arabic (العربية)">Arabic (العربية)</option>
-                    <option value="Mandarin Chinese (中文)">Mandarin Chinese (中文)</option>
-                    <option value="Hindi (हिन्दी)">Hindi (हिन्दी)</option>
-                    <option value="Swahili (Kiswahili)">Swahili (Kiswahili)</option>
-                    <option value="German (Deutsch)">German (Deutsch)</option>
-                    <option value="Portuguese (Português)">Portuguese (Português)</option>
-                    <option value="Japanese (日本語)">Japanese (日本語)</option>
-                    <option value="Russian (Русский)">Russian (Русский)</option>
-                    <option value="Italian (Italiano)">Italian (Italiano)</option>
-                    <option value="Turkish (Türkçe)">Turkish (Türkçe)</option>
-                    <option value="Korean (한국어)">Korean (한국어)</option>
-                    <option value="Vietnamese (Tiếng Việt)">Vietnamese (Tiếng Việt)</option>
-                    <option value="Polish (Polski)">Polish (Polski)</option>
-                    <option value="Dutch (Nederlands)">Dutch (Nederlands)</option>
-                    <option value="Greek (Ελληνικά)">Greek (Ελληνικά)</option>
-                    <option value="Hebrew (עברית)">Hebrew (עברית)</option>
-                    <option value="Persian (فارسی)">Persian (فارسی)</option>
-                    <option value="Urdu (اردو)">Urdu (اردو)</option>
-                    <option value="Bengali (বাংলা)">Bengali (বাংলা)</option>
-                    <option value="Punjabi (ਪੰਜਾਬੀ)">Punjabi (Punjabi)</option>
-                    <option value="Marathi (मराठी)">Marathi</option>
-                    <option value="Telugu (తెలుగు)">Telugu</option>
-                    <option value="Tamil (தமிழ்)">Tamil</option>
-                    <option value="Gujarati (ગુજરાતી)">Gujarati</option>
-                    <option value="Kannada (ಕನ್ನಡ)">Kannada</option>
-                    <option value="Malayalam (മലയാളം)">Malayalam</option>
-                    <option value="Thai (ไทย)">Thai</option>
-                    <option value="Indonesian (Bahasa Indonesia)">Indonesian</option>
-                    <option value="Malay (Bahasa Melayu)">Malay</option>
-                    <option value="Filipino (Tagalog)">Filipino</option>
-                    <option value="Ukrainian (Українська)">Ukrainian</option>
-                    <option value="Romanian (Română)">Romanian</option>
-                    <option value="Czech (Čeština)">Czech</option>
-                    <option value="Hungarian (Magyar)">Hungarian</option>
-                    <option value="Swedish (Svenska)">Swedish</option>
-                    <option value="Danish (Dansk)">Danish</option>
-                    <option value="Finnish (Suomi)">Finnish</option>
-                    <option value="Norwegian (Norsk)">Norwegian</option>
-                    <option value="Afrikaans">Afrikaans</option>
-                    <option value="Zulu (isiZulu)">Zulu</option>
-                    <option value="Xhosa (isiXhosa)">Xhosa</option>
-                    <option value="Hausa">Hausa</option>
-                    <option value="Yoruba (Yorùbá)">Yoruba</option>
-                    <option value="Igbo">Igbo</option>
-                    <option value="Shona">Shona</option>
-                    <option value="Quechua">Quechua</option>
-                    <option value="Esperanto">Esperanto</option>
-                    <option value="Latin">Latin</option>
+                    <option value="mentor">🎓 Academic & Technical Mentor</option>
+                    <option value="business">💼 Business Strategist</option>
                 </select>
             </div>
         </div>
 
-        <div id="chat-box">AI response will appear here... Type for text-only, or tap mic for voice mode!</div>
-        
+        <div id="chat-box">
+            <div>AI response will appear here... Type your message below!</div>
+        </div>
+
         <div class="input-area">
-            <div id="file-indicator">No file attached</div>
-            <div class="input-row">
-                <label class="action-btn" for="file-input" title="Camera or File">📷</label>
-                <input type="file" id="file-input" accept="image/*" capture="environment" onchange="handleFileSelect()" />
-                
-                <button class="action-btn" id="mic-btn" onclick="toggleVoiceMode()" title="Voice Mode">🎤</button>
-                <button class="action-btn" onclick="speakLastResponse()" title="Read Aloud">🔊</button>
-                
-                <input type="text" id="user-input" placeholder="Type a message..." />
-                <button class="send-btn" onclick="sendTextMessage()">Send</button>
-            </div>
+            <input type="text" id="user-input" placeholder="Type a message...">
+            <button class="send-btn" id="send-btn">Send</button>
         </div>
     </div>
 
     <script>
-        let selectedFileBase64 = null;
-        let chatHistory = [];
-        let lastAiText = "";
-        let isVoiceMode = false;
-        let recognition = null;
-        let isAiSpeaking = false;
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+        const nodeSelect = document.getElementById('node-select');
 
-        // Compress image so it uploads instantly without error
-        function handleFileSelect() {
-            const fileInput = document.getElementById('file-input');
-            const indicator = document.getElementById('file-indicator');
-            if (fileInput.files.length > 0) {
-                const file = fileInput.files[0];
-                indicator.innerText = `Compressing ${file.name}...`;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const MAX_WIDTH = 800;
-                        const MAX_HEIGHT = 800;
-                        let width = img.width;
-                        let height = img.height;
+        function handleSend() {
+            const prompt = userInput.value.trim();
+            if (!prompt) return;
 
-                        if (width > height) {
-                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                        } else {
-                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
-                        }
+            // Display user message
+            chatBox.innerHTML += `<div><b>You:</b> ${prompt}</div>`;
+            userInput.value = '';
 
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        
-                        selectedFileBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                        indicator.innerText = `Attached: ${file.name} (Ready)`;
-                    };
-                };
-                reader.readAsDataURL(file);
-            } else {
-                indicator.innerText = "No file attached";
-                selectedFileBase64 = null;
-            }
-        }
-
-        // Toggle Voice Mode (Silently without any annoying popups)
-        function toggleVoiceMode() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SpeechRecognition) {
-                alert("Speech recognition is not supported on this browser. Try Chrome on Android!");
-                return;
-            }
-
-            const micBtn = document.getElementById('mic-btn');
-
-            if (isVoiceMode) {
-                isVoiceMode = false;
-                if (recognition) recognition.stop();
-                micBtn.classList.remove('listening');
-                return;
-            }
-
-            isVoiceMode = true;
-            micBtn.classList.add('listening');
-            startListening();
-        }
-
-        function startListening() {
-            if (!isVoiceMode || isAiSpeaking) return;
-
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'en-US';
-            recognition.interimResults = false;
-
-            recognition.onresult = (event) => {
-                if (isAiSpeaking) return;
-                const speechToText = event.results[0][0].transcript;
-                document.getElementById('user-input').value = speechToText;
-                sendVoiceMessage();
-            };
-
-            recognition.onerror = () => {
-                if (isVoiceMode && !isAiSpeaking) setTimeout(startListening, 1000);
-            };
-
-            recognition.onend = () => {
-                if (isVoiceMode && !isAiSpeaking) setTimeout(startListening, 500);
-            };
-
-            try { recognition.start(); } catch (e) {}
-        }
-
-        async function sendTextMessage() {
-            await processMessage(false);
-        }
-
-        async function sendVoiceMessage() {
-            await processMessage(true);
-        }
-
-        async function processMessage(shouldSpeak) {
-            const inputField = document.getElementById('user-input');
-            const chatBox = document.getElementById('chat-box');
-            const modeSelect = document.getElementById('mode-select');
-            const langSelect = document.getElementById('lang-select');
-            const prompt = inputField.value.trim();
-            
-            if (!prompt && !selectedFileBase64) return;
-
-            chatBox.innerHTML += `\n\nYou [${modeSelect.value}]: ${prompt || "[Uploaded photo]"}`;
-            chatHistory.push({ role: 'user', content: prompt || "Please analyze this attached photo." });
-
-            inputField.value = '';
-            chatBox.innerHTML += `\n\nAI: Thinking...`;
-
-            try {
-                const response = await fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ 
-                        messages: chatHistory, 
-                        mode: modeSelect.value,
-                        language: langSelect.value,
-                        image: selectedFileBase64 
-                    })
-                });
-
-                const data = await response.json();
-                const aiReply = data.response || data.error;
-
-                chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: ${aiReply}`);
-                chatHistory.push({ role: 'assistant', content: aiReply });
-                lastAiText = aiReply;
-
-                if (shouldSpeak) {
-                    speakText(aiReply);
+            // Simulated AI response
+            setTimeout(() => {
+                const role = nodeSelect.value;
+                let reply = "I am your local browser AI! How can I help you today?";
+                if (role === 'coach') {
+                    reply = "Take a deep breath! You are doing great, let's take things one step at a time.";
+                } else if (role === 'mentor') {
+                    reply = "That's an interesting technical question. Let's break it down logically.";
+                } else if (role === 'business') {
+                    reply = "Focus on your primary value proposition and target audience scale.";
                 }
 
-                document.getElementById('file-input').value = '';
-                document.getElementById('file-indicator').innerText = "No file attached";
-                selectedFileBase64 = null;
-            } catch (err) {
-                chatBox.innerHTML = chatBox.innerHTML.replace('AI: Thinking...', `AI: Error connecting to server.`);
-                if (isVoiceMode) setTimeout(startListening, 1000);
-            }
-            
+                chatBox.innerHTML += `<div><b>AI (${role}):</b> ${reply}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 500);
+
             chatBox.scrollTop = chatBox.scrollHeight;
         }
 
-        // Perfectly block microphone while AI is speaking to completely stop echo/destructive voice
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            
-            isAiSpeaking = true;
-            if (recognition) {
-                try { recognition.stop(); } catch (e) {}
-            }
-
-            const utterance = new SpeechSynthesisUtterance(text);
-            
-            utterance.onend = () => {
-                isAiSpeaking = false;
-                if (isVoiceMode) {
-                    setTimeout(startListening, 600);
-                }
-            };
-
-            utterance.onerror = () => {
-                isAiSpeaking = false;
-                if (isVoiceMode) {
-                    setTimeout(startListening, 600);
-                }
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function speakLastResponse() {
-            if (lastAiText) speakText(lastAiText);
-        }
+        sendBtn.addEventListener('click', handleSend);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') handleSend();
+        });
     </script>
 </body>
 </html>
-
