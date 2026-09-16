@@ -3,253 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global AI 🌍</title>
-    <meta name="description" content="Welcome to Global AI. Your AI for Learning, Creating, Researching & Getting Things Done.">
+    <title>Global AI Mahlet 🌍</title>
     <style>
-        * { box-sizing: border-box; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
-            background: #121212; 
-            color: #fff; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            justify-content: flex-start; 
-            min-height: 100dvh; 
-            margin: 0; 
-            padding: 10px;
-            overflow-y: auto; 
-        }
+        body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
         
         /* Sidebar Menu Styles */
-        .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: #181818; box-shadow: 4px 0 10px rgba(0,0,0,0.7); transition: left 0.3s ease; z-index: 1000; display: flex; flex-direction: column; padding: 15px; }
+        .sidebar { position: fixed; top: 0; left: -280px; width: 260px; height: 100%; background: #181818; box-shadow: 4px 0 10px rgba(0,0,0,0.7); transition: left 0.3s ease; z-index: 1000; display: flex; flex-direction: column; padding: 15px; box-sizing: border-box; }
         .sidebar.open { left: 0; }
-        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .sidebar-title { font-size: 18px; font-weight: bold; }
         .close-sidebar { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
-        
-        .search-box { background: #2a2a2a; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 5px; font-size: 13px; width: 100%; margin-bottom: 10px; }
         .sidebar-nav { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .sidebar-item { background: #222; padding: 10px; border-radius: 6px; cursor: pointer; font-size: 13px; color: #ddd; text-align: left; border: none; width: 100%; }
         .sidebar-item:hover { background: #333; }
-        .recents-header { font-size: 12px; color: #888; margin-top: 5px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
-
-        /* Intro Welcome Section */
-        .intro-section {
-            text-align: center;
-            max-width: 650px;
-            margin-bottom: 15px;
-            padding: 10px;
-            font-size: 13px;
-            line-height: 1.5;
-            color: #ddd;
-        }
-        .intro-section h1 {
-            font-size: 18px;
-            margin-bottom: 8px;
-            color: #fff;
-        }
+        .recents-header { font-size: 12px; color: #888; margin-top: 10px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .sidebar-footer { padding-top: 10px; border-top: 1px solid #333; display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #ccc; }
 
         /* Main Chat Container */
-        .chat-container { width: 100%; max-width: 650px; background: #1e1e1e; padding: 10px; display: flex; flex-direction: column; height: 70vh; border-radius: 8px; border: 1px solid #333; }
+        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; height: 92vh; }
         
-        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; flex-shrink: 0; }
+        .top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .menu-btn { background: none; border: none; color: white; font-size: 22px; cursor: pointer; }
-        .top-btn { background: #333; color: white; border: none; padding: 4px 8px; border-radius: 5px; cursor: pointer; font-size: 11px; }
+        .top-btn { background: #333; color: white; border: none; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 12px; }
         .top-btn:hover { background: #444; }
         
-        .profile-container { display: flex; align-items: center; gap: 8px; }
-        .profile-pic { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6; }
+        .temp-toggle-area { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #bbb; }
+        .temp-checkbox { cursor: pointer; width: 15px; height: 15px; }
 
-        .controls { display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px; font-size: 11px; background: #252525; padding: 6px; border-radius: 6px; flex-shrink: 0; }
+        .controls { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; font-size: 13px; background: #252525; padding: 8px; border-radius: 6px; }
         .control-row { display: flex; justify-content: space-between; align-items: center; }
-        select { background: #333; color: #fff; border: 1px solid #444; padding: 3px; border-radius: 4px; width: 65%; font-size: 11px; }
+        select { background: #333; color: #fff; border: 1px solid #444; padding: 5px; border-radius: 5px; width: 60%; font-size: 12px; }
         
-        /* Chat Box Bubble Interface */
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 10px; margin-bottom: 6px; border-radius: 8px; background: #181818; display: flex; flex-direction: column; gap: 10px; min-height: 0; }
+        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 8px; border-radius: 5px; background: #2a2a2a; white-space: pre-wrap; line-height: 1.4; font-size: 14px; }
         
-        .message { display: flex; flex-direction: column; max-width: 85%; line-height: 1.4; font-size: 13px; padding: 8px 12px; border-radius: 10px; word-wrap: break-word; }
-        .message.user { align-self: flex-end; background: #2b5278; color: #fff; border-bottom-right-radius: 2px; }
-        .message.ai { align-self: flex-start; background: #2a2a2a; color: #e5e5e5; border-bottom-left-radius: 2px; border: 1px solid #333; }
-        .message-header { font-size: 10px; font-weight: bold; margin-bottom: 3px; color: #aaa; text-transform: uppercase; letter-spacing: 0.5px; }
-
-        /* Input Area */
-        .input-area { display: flex; flex-direction: column; gap: 4px; flex-shrink: 0; padding-bottom: 4px; }
-        .input-row { display: flex; gap: 4px; align-items: center; background: #252525; padding: 6px; border-radius: 8px; border: 1px solid #444; }
-        input[type="text"]#user-input { flex: 1; padding: 8px; border: none; background: transparent; color: #fff; font-size: 13px; outline: none; min-width: 0; }
-        .action-btn { background: #333; padding: 7px 8px; border-radius: 6px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; border: none; color: white; flex-shrink: 0; }
-        .action-btn:hover { background: #444; }
+        .input-area { display: flex; flex-direction: column; gap: 6px; }
+        .input-row { display: flex; gap: 6px; align-items: center; }
+        input[type="text"]#user-input { flex: 1; padding: 10px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; font-size: 14px; }
+        .action-btn { background: #444; padding: 9px 11px; border-radius: 5px; cursor: pointer; font-size: 13px; display: flex; align-items: center; justify-content: center; border: none; color: white; }
+        .action-btn:hover { background: #555; }
         #mic-btn.listening { background: #dc3545; animation: pulse 1.5s infinite; }
         #record-btn.recording { background: #dc3545; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
         input[type="file"] { display: none; }
-        .send-btn { background: #3b82f6; color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .send-btn:hover { background: #2563eb; }
-        #file-indicator { font-size: 10px; color: #888; padding-left: 2px; }
+        .send-btn { padding: 10px 14px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .send-btn:hover { background: #0056b3; }
+        #file-indicator { font-size: 11px; color: #aaa; }
+
+        /* Settings Modal Overlay */
+        #settings-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: #222; padding: 20px; border-radius: 8px; width: 300px; display: flex; flex-direction: column; gap: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Slide-out Sidebar -->
+    <!-- Slide-out Sidebar (ChatGPT Style) -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
-            <span class="sidebar-title">Global AI</span>
+            <span class="sidebar-title">Global AI Mahlet</span>
             <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
         </div>
-
-        <input type="text" id="search-recents" class="search-box" placeholder="Search recent chats..." oninput="filterRecents()">
-
         <div class="sidebar-nav">
             <button class="sidebar-item" onclick="startNewChat(); toggleSidebar();">＋ New Chat</button>
             <div class="recents-header">Recent Chats</div>
             <div id="recents-list" style="display: flex; flex-direction: column; gap: 4px;">
-                <span style="font-size: 12px; color: #666;" id="no-recents-text">No recent chats yet</span>
+                <span style="font-size: 12px; color: #666;">No recent chats yet</span>
             </div>
+        </div>
+        <div class="sidebar-footer" onclick="openSettings()">
+            <span>⚙️ Settings</span>
         </div>
     </div>
 
-    <!-- Intro Welcome Text -->
-    <div class="intro-section">
-        <h1>Welcome to Global AI 🌍 — Your AI for Learning, Creating, Researching & Getting Things Done.</h1>
-        <p>Ask questions, understand difficult topics, analyze documents and images, improve your writing, explore ideas, and get help with everyday problems — all in one place.</p>
-        <p>Whether you are a student, creator, researcher, entrepreneur, or simply curious, Global AI is built to help you turn questions into useful results.</p>
-        <p><strong>Start your journey with Global AI today.</strong></p>
+    <!-- Settings Modal -->
+    <div id="settings-modal">
+        <div class="modal-content">
+            <h3>Settings</h3>
+            <p style="font-size: 13px; color: #aaa;">Customize your app preferences and voice engine behavior here.</p>
+            <button class="top-btn" onclick="closeSettings()" style="margin-top: 10px;">Close</button>
+        </div>
     </div>
 
     <div class="chat-container">
         <div class="top-bar">
-            <div class="profile-container">
+            <div style="display: flex; align-items: center; gap: 10px;">
                 <button class="menu-btn" onclick="toggleSidebar()" title="Menu">☰</button>
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100&h=100&fit=crop" alt="Logo" class="profile-pic">
-                <h2 style="margin:0; font-size: 14px;">Global AI</h2>
+                <h2 style="margin:0; font-size: 18px;">Global AI Mahlet 🌍</h2>
             </div>
             <button class="top-btn" onclick="startNewChat()">＋ New Chat</button>
+        </div>
+
+        <div class="top-bar" style="margin-bottom: 6px;">
+            <div class="temp-toggle-area">
+                <input type="checkbox" id="temp-chat-toggle" class="temp-checkbox" onchange="toggleTempChatMode()">
+                <label for="temp-chat-toggle">Temporary Chat Mode</label>
+            </div>
+            <span id="saved-chats-badge" style="font-size: 11px; color: #888;">Saved Chats: 0</span>
         </div>
         
         <div class="controls">
             <div class="control-row">
                 <label for="mode-select">AI Role:</label>
                 <select id="mode-select">
-                    <option value="coach">❤️ Supportive Companion</option>
+                    <option value="coach">❤️ Personal Coach & Stress Motivator</option>
                     <option value="mentor">📚 Academic & Technical Mentor</option>
-                    <option value="business">💼 Business Strategist</option>
+                    <option value="business">💼 Business Strategist (B2B & B2C)</option>
                 </select>
             </div>
             <div class="control-row">
-                <label for="lang-select">Language (100):</label>
+                <label for="lang-select">Language:</label>
                 <select id="lang-select">
-                    <option value="English">English</option>
-                    <option value="Amharic">Amharic (አማርኛ)</option>
+                    <option value="Auto-Detect (Match My Keyboard)">🌍 Auto-Detect (Match Keyboard)</option>
+                    <option value="Amharic (አማርኛ)">Amharic (አማርኛ)</option>
                     <option value="Afaan Oromoo">Afaan Oromoo</option>
-                    <option value="Tigrinya">Tigrinya (ትግርኛ)</option>
-                    <option value="Somali">Somali (Soomaaliga)</option>
-                    <option value="Arabic">Arabic (العربية)</option>
-                    <option value="Spanish">Spanish (Español)</option>
-                    <option value="French">French (Français)</option>
-                    <option value="German">German (Deutsch)</option>
-                    <option value="Chinese">Chinese (中文)</option>
-                    <option value="Japanese">Japanese (日本語)</option>
-                    <option value="Korean">Korean (한국어)</option>
-                    <option value="Hindi">Hindi (हिन्दी)</option>
-                    <option value="Portuguese">Portuguese (Português)</option>
-                    <option value="Russian">Russian (Русский)</option>
-                    <option value="Italian">Italian (Italiano)</option>
-                    <option value="Turkish">Turkish (Türkçe)</option>
-                    <option value="Vietnamese">Vietnamese (Tiếng Việt)</option>
-                    <option value="Polish">Polish (Polski)</option>
-                    <option value="Dutch">Dutch (Nederlands)</option>
-                    <option value="Greek">Greek (Ελληνικά)</option>
-                    <option value="Hebrew">Hebrew (עברית)</option>
-                    <option value="Indonesian">Indonesian (Bahasa Indonesia)</option>
-                    <option value="Malay">Malay (Bahasa Melayu)</option>
-                    <option value="Tagalog">Tagalog (Filipino)</option>
-                    <option value="Thai">Thai (ไทย)</option>
-                    <option value="Ukrainian">Ukrainian (Українська)</option>
-                    <option value="Urdu">Urdu (اردو)</option>
-                    <option value="Persian">Persian (فارسی)</option>
-                    <option value="Swahili">Swahili (Kiswahili)</option>
+                    <option value="Tigrinya (ትግርኛ)">Tigrinya (ትግርኛ)</option>
+                    <option value="Somali (Soomaaliga)">Somali (Soomaaliga)</option>
+                    <option value="English">English</option>
+                    <option value="Spanish (Español)">Spanish (Español)</option>
+                    <option value="French (Français)">French (Français)</option>
+                    <option value="Arabic (العربية)">Arabic (العربية)</option>
+                    <option value="Mandarin Chinese (中文)">Mandarin Chinese (中文)</option>
+                    <option value="Hindi (हिन्दी)">Hindi (हिन्दी)</option>
+                    <option value="Swahili (Kiswahili)">Swahili (Kiswahili)</option>
+                    <option value="German (Deutsch)">German (Deutsch)</option>
+                    <option value="Portuguese (Português)">Portuguese (Português)</option>
+                    <option value="Japanese (日本語)">Japanese (日本語)</option>
+                    <option value="Russian (Русский)">Russian (Русский)</option>
+                    <option value="Italian (Italiano)">Italian (Italiano)</option>
+                    <option value="Turkish (Türkçe)">Turkish (Türkçe)</option>
+                    <option value="Korean (한국어)">Korean (한국어)</option>
+                    <option value="Vietnamese (Tiếng Việt)">Vietnamese (Tiếng Việt)</option>
+                    <option value="Polish (Polski)">Polish (Polski)</option>
+                    <option value="Dutch (Nederlands)">Dutch (Nederlands)</option>
+                    <option value="Greek (Ελληνικά)">Greek (Ελληνικά)</option>
+                    <option value="Hebrew (עברית)">Hebrew (עברית)</option>
+                    <option value="Persian (فارسی)">Persian (فارسی)</option>
+                    <option value="Urdu (اردو)">Urdu (Urdu)</option>
+                    <option value="Bengali (বাংলা)">Bengali (বাংলা)</option>
+                    <option value="Punjabi (ਪੰਜਾਬੀ)">Punjabi</option>
+                    <option value="Marathi (मराठी)">Marathi</option>
+                    <option value="Telugu (తెలుగు)">Telugu</option>
+                    <option value="Tamil (தமிழ்)">Tamil</option>
+                    <option value="Gujarati (ગુજરાતી)">Gujarati</option>
+                    <option value="Kannada (ಕನ್ನಡ)">Kannada</option>
+                    <option value="Malayalam (മലയാളം)">Malayalam</option>
+                    <option value="Thai (ไทย)">Thai</option>
+                    <option value="Indonesian (Bahasa Indonesia)">Indonesian</option>
+                    <option value="Malay (Bahasa Melayu)">Malay</option>
+                    <option value="Filipino (Tagalog)">Filipino</option>
+                    <option value="Ukrainian (Українська)">Ukrainian</option>
+                    <option value="Romanian (Română)">Romanian</option>
+                    <option value="Czech (Čeština)">Czech</option>
+                    <option value="Hungarian (Magyar)">Hungarian</option>
+                    <option value="Swedish (Svenska)">Swedish</option>
+                    <option value="Danish (Dansk)">Dansk</option>
+                    <option value="Finnish (Suomi)">Finnish</option>
+                    <option value="Norwegian (Norsk)">Norwegian</option>
                     <option value="Afrikaans">Afrikaans</option>
-                    <option value="Albanian">Albanian (Shqip)</option>
-                    <option value="Armenian">Armenian (Հայերեն)</option>
-                    <option value="Azerbaijani">Azerbaijani (Azərbaycan)</option>
-                    <option value="Basque">Basque (Euskara)</option>
-                    <option value="Belarusian">Belarusian (Беларуская)</option>
-                    <option value="Bengali">Bengali (বাংলা)</option>
-                    <option value="Bosnian">Bosnian (Bosanski)</option>
-                    <option value="Bulgarian">Bulgarian (Български)</option>
-                    <option value="Catalan">Catalan (Català)</option>
-                    <option value="Cebuano">Cebuano</option>
-                    <option value="Corsican">Corsican</option>
-                    <option value="Croatian">Croatian (Hrvatski)</option>
-                    <option value="Czech">Czech (Čeština)</option>
-                    <option value="Danish">Dansk</option>
-                    <option value="Esperanto">Esperanto</option>
-                    <option value="Estonian">Eesti</option>
-                    <option value="Finnish">Suomi</option>
-                    <option value="Galician">Galego</option>
-                    <option value="Georgian">ქართული</option>
-                    <option value="Gujarati">ગુજરાતી</option>
-                    <option value="Haitian Creole">Kreyòl ayisyen</option>
+                    <option value="Zulu (isiZulu)">Zulu</option>
+                    <option value="Xhosa (isiXhosa)">Xhosa</option>
                     <option value="Hausa">Hausa</option>
-                    <option value="Hawaiian">Ōlelo Hawaiʻi</option>
-                    <option value="Hmong">Hmoob</option>
-                    <option value="Hungarian">Magyar</option>
-                    <option value="Icelandic">Íslenska</option>
+                    <option value="Yoruba (Yorùbá)">Yoruba</option>
                     <option value="Igbo">Igbo</option>
-                    <option value="Irish">Gaeilge</option>
-                    <option value="Javanese">Basa Jawa</option>
-                    <option value="Kannada">ಕನ್ನಡ</option>
-                    <option value="Kazakh">Қазақ тілі</option>
-                    <option value="Khmer">ខ្មែរ</option>
-                    <option value="Kurdish">Kurdî</option>
-                    <option value="Kyrgyz">Кыргызча</option>
-                    <option value="Lao">ລາວ</option>
-                    <option value="Latin">Latina</option>
-                    <option value="Latvian">Latviešu</option>
-                    <option value="Lithuanian">Lietuvių</option>
-                    <option value="Luxembourgish">Lëtzebuergesch</option>
-                    <option value="Macedonian">Македонски</option>
-                    <option value="Malagasy">Malagasy</option>
-                    <option value="Malayalam">മലയാളം</option>
-                    <option value="Maltese">Malti</option>
-                    <option value="Maori">Māori</option>
-                    <option value="Marathi">मराठी</option>
-                    <option value="Mongolian">Монгол</option>
-                    <option value="Myanmar">မြန်မာ</option>
-                    <option value="Nepali">नेपाली</option>
-                    <option value="Norwegian">Norsk</option>
-                    <option value="Pashto">پښتو</option>
-                    <option value="Punjabi">ਪੰਜਾਬੀ</option>
-                    <option value="Romanian">Română</option>
-                    <option value="Samoan">Samoan</option>
-                    <option value="Scots Gaelic">Gàidhlig</option>
-                    <option value="Serbian">Српски</option>
-                    <option value="Sesotho">Sesotho</option>
                     <option value="Shona">Shona</option>
-                    <option value="Sindhi">سنڌي</option>
-                    <option value="Sinhala">සිංහල</option>
-                    <option value="Slovak">Slovenčina</option>
-                    <option value="Slovenian">Slovenščina</option>
-                    <option value="Sundanese">Basa Sunda</option>
-                    <option value="Tajik">Тоҷикӣ</option>
-                    <option value="Tamil">தமிழ்</option>
-                    <option value="Telugu">తెలుగు</option>
-                    <option value="Uzbek">O‘zbek</option>
-                    <option value="Welsh">Cymraeg</option>
-                    <option value="Yiddish">ייִדיش</option>
-                    <option value="Yoruba">Yorùbá</option>
-                    <option value="Zulu">isiZulu</option>
+                    <option value="Quechua">Quechua</option>
+                    <option value="Esperanto">Esperanto</option>
+                    <option value="Latin">Latin</option>
                 </select>
             </div>
         </div>
 
-        <!-- Chat Box Bubble Interface -->
-        <div id="chat-box">
-            <div class="message ai">
-                <div class="message-header">Global AI</div>
-                Hello! I am ready. What would you like to discuss or work on today?
-            </div>
-        </div>
+        <div id="chat-box">AI response will appear here... All features loaded!</div>
         
         <div class="input-area">
             <div id="file-indicator">No file attached</div>
@@ -257,12 +180,12 @@
                 <label class="action-btn" for="file-input" title="Camera or File">📷</label>
                 <input type="file" id="file-input" accept="image/*" capture="environment" onchange="handleFileSelect()" />
                 
-                <button class="action-btn" id="record-btn" onclick="toggleAudioRecording()" title="Record Voice">🎙️</button>
-                <button class="action-btn" id="mic-btn" onclick="toggleVoiceMode()" title="Live Voice">🎤</button>
-                <button class="action-btn" onclick="toggleSpeakerSpeech()" title="Read Aloud">🔊</button>
+                <button class="action-btn" id="record-btn" onclick="toggleAudioRecording()" title="Record Voice Note">🎙️</button>
+                <button class="action-btn" id="mic-btn" onclick="toggleVoiceMode()" title="Live Voice Mode">🎤</button>
+                <button class="action-btn" onclick="toggleSpeakerSpeech()" title="Read Aloud / Stop Speaker">🔊</button>
                 
-                <input type="text" id="user-input" placeholder="Type a message..." onkeydown="if(event.key === 'Enter') sendTextMessage();" />
-                <button class="send-btn" onclick="sendTextMessage()">➤</button>
+                <input type="text" id="user-input" placeholder="Type a message..." />
+                <button class="send-btn" onclick="sendTextMessage()">Send</button>
             </div>
         </div>
     </div>
@@ -273,6 +196,7 @@
         let savedChatsList = [];
         let lastAiText = "";
         let isVoiceMode = false;
+        let isTempChat = false;
         let recognition = null;
         let isAiSpeaking = false;
         
@@ -284,24 +208,12 @@
             document.getElementById('sidebar').classList.toggle('open');
         }
 
-        function filterRecents() {
-            const query = document.getElementById('search-recents').value.toLowerCase();
-            const recentsContainer = document.getElementById('recents-list');
-            recentsContainer.innerHTML = '';
-            
-            const filtered = savedChatsList.filter(chat => chat.title.toLowerCase().includes(query));
-            if (filtered.length === 0) {
-                recentsContainer.innerHTML = '<span style="font-size: 12px; color: #666;">No matching chats</span>';
-                return;
-            }
-            filtered.forEach((chat) => {
-                const originalIndex = savedChatsList.indexOf(chat);
-                const btn = document.createElement('button');
-                btn.className = 'sidebar-item';
-                btn.innerText = chat.title;
-                btn.onclick = () => loadRecentChat(originalIndex);
-                recentsContainer.appendChild(btn);
-            });
+        function openSettings() {
+            document.getElementById('settings-modal').style.display = 'flex';
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').style.display = 'none';
         }
 
         function handleFileSelect() {
@@ -309,11 +221,33 @@
             const indicator = document.getElementById('file-indicator');
             if (fileInput.files.length > 0) {
                 const file = fileInput.files[0];
-                indicator.innerText = `Attached: ${file.name} (Ready)`;
+                indicator.innerText = `Compressing ${file.name}...`;
                 
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    selectedFileBase64 = e.target.result;
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 800;
+                        const MAX_HEIGHT = 800;
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        } else {
+                            if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        selectedFileBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                        indicator.innerText = `Attached: ${file.name} (Ready)`;
+                    };
                 };
                 reader.readAsDataURL(file);
             } else {
@@ -331,16 +265,27 @@
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     mediaRecorder = new MediaRecorder(stream);
                     audioChunks = [];
-                    mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
-                    mediaRecorder.onstop = () => {
-                        indicator.innerText = "Attached: Voice Note (Ready)";
+
+                    mediaRecorder.ondataavailable = event => {
+                        audioChunks.push(event.data);
                     };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const reader = new FileReader();
+                        reader.readAsDataURL(audioBlob);
+                        reader.onloadend = function() {
+                            selectedFileBase64 = reader.result;
+                            indicator.innerText = "Attached: Voice Note (Ready)";
+                        };
+                    };
+
                     mediaRecorder.start();
                     isRecording = true;
                     recordBtn.classList.add('recording');
-                    indicator.innerText = "Recording... Tap again to stop.";
+                    indicator.innerText = "Recording voice note... Tap record button again to stop.";
                 } catch (err) {
-                    alert("Microphone permission denied.");
+                    alert("Microphone permission denied or unavailable.");
                 }
             } else {
                 mediaRecorder.stop();
@@ -350,8 +295,87 @@
         }
 
         function startNewChat() {
-            chatHistory = [];
+            handleTempChatExitCheck(() => {
+                if (chatHistory.length > 0) {
+                    saveCurrentChatToRecents();
+                }
+                chatHistory = [];
+                document.getElementById('chat-box').innerHTML = "New chat started! Ask Mahlet anything.";
+                lastAiText = "";
+                stopAllSpeech();
+            });
+        }
+
+        function saveCurrentChatToRecents() {
+            const firstMsg = chatHistory.find(m => m.role === 'user')?.content || "Untitled Chat";
+            const shortTitle = firstMsg.length > 25 ? firstMsg.substring(0, 25) + '...' : firstMsg;
+            savedChatsList.push({ title: shortTitle, history: [...chatHistory] });
+            
+            const recentsContainer = document.getElementById('recents-list');
+            recentsContainer.innerHTML = '';
+            savedChatsList.forEach((chat, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'sidebar-item';
+                btn.innerText = chat.title;
+                btn.onclick = () => loadRecentChat(idx);
+                recentsContainer.appendChild(btn);
+            });
+            document.getElementById('saved-chats-badge').innerText = `Saved Chats: ${savedChatsList.length}`;
+        }
+
+        function loadRecentChat(index) {
+            chatHistory = [...savedChatsList[index].history];
             const chatBox = document.getElementById('chat-box');
-            chatBox.innerHTML = `
-                <div class="message ai">
-                
+            chatBox.innerHTML = "";
+            chatHistory.forEach(msg => {
+                chatBox.innerHTML += `\n\n${msg.role === 'user' ? 'You' : 'AI'}: ${msg.content}`;
+            });
+            toggleSidebar();
+        }
+
+        function toggleTempChatMode() {
+            const checkbox = document.getElementById('temp-chat-toggle');
+            if (!checkbox.checked) {
+                handleTempChatExitCheck(() => {
+                    isTempChat = false;
+                });
+            } else {
+                isTempChat = true;
+            }
+        }
+
+        function handleTempChatExitCheck(callback) {
+            if (isTempChat && chatHistory.length > 0) {
+                const wantSave = confirm("Do you want to save this temporary chat?\n\nOK = Yes | Cancel = No");
+                if (wantSave) {
+                    saveCurrentChatToRecents();
+                }
+            }
+            callback();
+        }
+
+        function stopAllSpeech() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+            isAiSpeaking = false;
+        }
+
+        function toggleVoiceMode() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("Speech recognition is not supported on this browser.");
+                return;
+            }
+
+            const micBtn = document.getElementById('mic-btn');
+
+            if (isVoiceMode) {
+                isVoiceMode = false;
+                if (recognition) recognition.stop();
+                stopAllSpeech();
+                micBtn.classList.remove('listening');
+                return;
+            }
+
+            i
