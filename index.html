@@ -26,15 +26,13 @@
             <div class="control-row">
                 <label for="node-select">AI Role:</label>
                 <select id="node-select">
-                    <option value="coach">❤️ Personal Coach & Stress Motivator</option>
-                    <option value="mentor">🎓 Academic & Technical Mentor</option>
-                    <option value="business">💼 Business Strategist</option>
+                    <option value="coach">❤️ Best Friend & Supportive Coach</option>
                 </select>
             </div>
         </div>
 
         <div id="chat-box">
-            <div>AI response will appear here... Type your message below!</div>
+            <div>Hey bestie! What's on your mind today? Tell me everything!</div>
         </div>
 
         <div class="input-area">
@@ -47,40 +45,42 @@
         const chatBox = document.getElementById('chat-box');
         const userInput = document.getElementById('user-input');
         const sendBtn = document.getElementById('send-btn');
-        const nodeSelect = document.getElementById('node-select');
 
         function handleSend() {
-            const rawText = userInput.value.trim();
+            let rawText = userInput.value.trim();
             if (!rawText) return;
 
             // Display user message
             chatBox.innerHTML += `<div><b>You:</b> ${rawText}</div>`;
             userInput.value = '';
 
-            // Smart keyword matching (handles typos like 'hii' or missing words)
-            const text = rawText.toLowerCase();
+            // Fix common typos automatically (e.g. 'fad' -> 'bad', 'hii' -> 'hi')
+            let text = rawText.toLowerCase();
+            text = text.replace(/\bfad\b/g, 'bad');
+            text = text.replace(/\bteh\b/g, 'the');
+            text = text.replace(/\bhav\b/g, 'have');
+
             let reply = "";
 
             setTimeout(() => {
-                const role = nodeSelect.value;
-
-                if (text.includes('hi') || text.includes('hii') || text.includes('hey') || text.includes('hello')) {
-                    reply = "Hello there! How can I support you today?";
-                } else if (text.includes('problem') || text.includes('issue') || text.includes('error') || text.includes('mistake')) {
-                    reply = "I understand you're facing a hurdle. Let's look at it step-by-step to figure it out together!";
-                } else if (text.includes('name') || text.includes('who are you')) {
-                    reply = "I am Global AI Mahlet, your browser assistant ready to help you solve problems.";
+                if (text.includes('hi') || text.includes('hey') || text.includes('hello')) {
+                    reply = "Hey bestie! So good to hear from you. How are you feeling right now?";
+                } else if (text.includes('bad') || text.includes('sad') || text.includes('hard') || text.includes('problem')) {
+                    reply = "Oh no, I'm so sorry you're having a rough time. I'm right here with you—do you want to vent about it or talk through how to fix it?";
+                } else if (text.includes('happy') || text.includes('good') || text.includes('great')) {
+                    reply = "Yay! That makes me so happy to hear! Tell me everything, what's making you smile today?";
                 } else {
-                    // Fallback varied smart responses
-                    const variedReplies = [
-                        "That is an interesting point. Can you tell me a little more about what you want to achieve?",
-                        "I'm tracking with you. Let's break down your question to find the best approach.",
-                        "Got it! How would you like to proceed with this next?"
+                    // Best friend chatty fallback responses
+                    const friendReplies = [
+                        "Aww I totally get what you mean! Tell me more about that, I'm listening.",
+                        "For real? That's so interesting! What happened next?",
+                        "I'm always here for you, bestie. How do you want to handle this?",
+                        "That totally makes sense. You've got this, and I've got your back no matter what!"
                     ];
-                    reply = variedReplies[Math.floor(Math.random() * variedReplies.length)];
+                    reply = friendReplies[Math.floor(Math.random() * friendReplies.length)];
                 }
 
-                chatBox.innerHTML += `<div><b>AI (${role}):</b> ${reply}</div>`;
+                chatBox.innerHTML += `<div><b>Best Friend AI:</b> ${reply}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
             }, 500);
 
@@ -94,3 +94,4 @@
     </script>
 </body>
 </html>
+
