@@ -50,23 +50,34 @@
         const nodeSelect = document.getElementById('node-select');
 
         function handleSend() {
-            const prompt = userInput.value.trim();
-            if (!prompt) return;
+            const rawText = userInput.value.trim();
+            if (!rawText) return;
 
             // Display user message
-            chatBox.innerHTML += `<div><b>You:</b> ${prompt}</div>`;
+            chatBox.innerHTML += `<div><b>You:</b> ${rawText}</div>`;
             userInput.value = '';
 
-            // Simulated AI response
+            // Smart keyword matching (handles typos like 'hii' or missing words)
+            const text = rawText.toLowerCase();
+            let reply = "";
+
             setTimeout(() => {
                 const role = nodeSelect.value;
-                let reply = "I am your local browser AI! How can I help you today?";
-                if (role === 'coach') {
-                    reply = "Take a deep breath! You are doing great, let's take things one step at a time.";
-                } else if (role === 'mentor') {
-                    reply = "That's an interesting technical question. Let's break it down logically.";
-                } else if (role === 'business') {
-                    reply = "Focus on your primary value proposition and target audience scale.";
+
+                if (text.includes('hi') || text.includes('hii') || text.includes('hey') || text.includes('hello')) {
+                    reply = "Hello there! How can I support you today?";
+                } else if (text.includes('problem') || text.includes('issue') || text.includes('error') || text.includes('mistake')) {
+                    reply = "I understand you're facing a hurdle. Let's look at it step-by-step to figure it out together!";
+                } else if (text.includes('name') || text.includes('who are you')) {
+                    reply = "I am Global AI Mahlet, your browser assistant ready to help you solve problems.";
+                } else {
+                    // Fallback varied smart responses
+                    const variedReplies = [
+                        "That is an interesting point. Can you tell me a little more about what you want to achieve?",
+                        "I'm tracking with you. Let's break down your question to find the best approach.",
+                        "Got it! How would you like to proceed with this next?"
+                    ];
+                    reply = variedReplies[Math.floor(Math.random() * variedReplies.length)];
                 }
 
                 chatBox.innerHTML += `<div><b>AI (${role}):</b> ${reply}</div>`;
