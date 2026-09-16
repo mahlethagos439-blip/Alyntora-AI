@@ -59,7 +59,6 @@
         .top-btn:hover { background: #444; }
         
         .profile-container { display: flex; align-items: center; gap: 8px; }
-        /* Abstract glowing tech background image (no people/robots) */
         .profile-pic { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; border: 2px solid #3b82f6; }
 
         .controls { display: flex; flex-direction: column; gap: 4px; margin-bottom: 6px; font-size: 11px; background: #252525; padding: 6px; border-radius: 6px; flex-shrink: 0; }
@@ -109,7 +108,7 @@
         </div>
     </div>
 
-    <!-- Intro Welcome Text matching your design -->
+    <!-- Intro Welcome Text -->
     <div class="intro-section">
         <h1>Welcome to Global AI 🌍 — Your AI for Learning, Creating, Researching & Getting Things Done.</h1>
         <p>Ask questions, understand difficult topics, analyze documents and images, improve your writing, explore ideas, and get help with everyday problems — all in one place.</p>
@@ -269,8 +268,6 @@
     </div>
 
     <script>
-        const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
-
         let selectedFileBase64 = null;
         let chatHistory = [];
         let savedChatsList = [];
@@ -336,7 +333,6 @@
                     audioChunks = [];
                     mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
                     mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                         indicator.innerText = "Attached: Voice Note (Ready)";
                     };
                     mediaRecorder.start();
@@ -350,4 +346,12 @@
                 mediaRecorder.stop();
                 isRecording = false;
                 recordBtn.classList.remove('recording');
-   
+            }
+        }
+
+        function startNewChat() {
+            chatHistory = [];
+            const chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML = `
+                <div class="message ai">
+                
