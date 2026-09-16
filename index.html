@@ -1,538 +1,937 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Global AI Mahlet 🌍</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #121212; color: #fff; display: flex; flex-direction: column; align-items: center; height: 100vh; margin: 0; }
-        .header-bar { width: 90%; max-width: 600px; display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
-        .menu-btn { background: #333; color: #fff; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 18px; }
-        .chat-container { width: 90%; max-width: 600px; background: #1e1e1e; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 8px; margin-top: 10px; flex: 1; max-height: 80vh; position: relative; }
-        .controls { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; font-size: 13px; background: #252525; padding: 10px; border-radius: 8px; }
-        .control-row { display: flex; justify-content: space-between; align-items: center; gap: 5px; margin-bottom: 5px; }
-        select { background: #333; color: #fff; border: 1px solid #444; padding: 6px; border-radius: 5px; width: 60%; }
-        #chat-box { flex: 1; overflow-y: auto; border: 1px solid #333; padding: 12px; margin-bottom: 10px; border-radius: 8px; background: #181818; display: flex; flex-direction: column; gap: 10px; }
-        .input-area { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-        input[type="text"] { flex: 1; padding: 10px; border: 1px solid #444; background: #333; color: #fff; border-radius: 5px; outline: none; min-width: 150px; }
-        .action-btn { background: #444; color: white; border: none; border-radius: 5px; padding: 10px; cursor: pointer; font-size: 12px; }
-        .action-btn:hover { background: #555; }
-        .send-btn { background: #007bff; color: white; border: none; border-radius: 5px; padding: 10px 15px; cursor: pointer; font-size: 13px; }
-        .send-btn:hover { background: #0056b3; }
-        
-        /* Drawer Menu Styles */
-        .drawer { position: fixed; left: -300px; top: 0; width: 300px; height: 100%; background: #1a1a1a; box-shadow: 2px 0 10px rgba(0,0,0,0.7); transition: 0.3s; z-index: 1000; padding: 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 15px; }
-        .drawer.open { left: 0; }
-        .drawer h3 { margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .drawer input[type="text"] { width: 100%; padding: 8px; box-sizing: border-box; }
-        .recent-chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-        .recent-item { background: #252525; padding: 8px; border-radius: 4px; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-        .recent-item span { cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 150px; }
-        .recent-actions button { background: none; border: none; color: #aaa; cursor: pointer; font-size: 11px; margin-left: 4px; }
-        .recent-actions button:hover { color: #fff; }
-        .close-drawer { background: #d9534f; color: #fff; border: none; padding: 8px; border-radius: 4px; cursor: pointer; }
-        
-        input[type="file"] { display: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Global AI Mahlet 🌍</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #101114;
+  color: white;
+  height: 100vh;
+  overflow: hidden;
+}
+
+header {
+  height: 60px;
+  background: #181a20;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  border-bottom: 1px solid #292c34;
+}
+
+.menu-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 26px;
+  cursor: pointer;
+  margin-right: 12px;
+}
+
+.logo {
+  font-size: 19px;
+  font-weight: bold;
+}
+
+.container {
+  height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+}
+
+.settings {
+  padding: 10px;
+  background: #15171c;
+  border-bottom: 1px solid #292c34;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+select,
+input[type="text"] {
+  background: #242730;
+  color: white;
+  border: 1px solid #363a45;
+  border-radius: 10px;
+  padding: 10px;
+  outline: none;
+}
+
+select {
+  flex: 1;
+  min-width: 145px;
+}
+
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  padding: 15px;
+}
+
+.welcome {
+  text-align: center;
+  margin-top: 50px;
+  color: #c9ccd4;
+}
+
+.message {
+  max-width: 88%;
+  padding: 12px 14px;
+  margin: 10px 0;
+  border-radius: 15px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.user {
+  background: #2457d6;
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+}
+
+.ai {
+  background: #252830;
+  margin-right: auto;
+  border-bottom-left-radius: 4px;
+}
+
+.system {
+  color: #aaa;
+  font-size: 13px;
+  text-align: center;
+  margin: 8px;
+}
+
+.bottom {
+  background: #15171c;
+  border-top: 1px solid #292c34;
+  padding: 10px;
+}
+
+.tools {
+  display: flex;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.tool {
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: #292c34;
+  color: white;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.tool:hover {
+  background: #3a3e49;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+}
+
+#messageInput {
+  flex: 1;
+  min-width: 0;
+  font-size: 16px;
+}
+
+.send {
+  width: 48px;
+  border: none;
+  border-radius: 12px;
+  background: #2563eb;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.send:disabled {
+  opacity: 0.5;
+}
+
+.drawer {
+  position: fixed;
+  left: -310px;
+  top: 0;
+  width: 300px;
+  height: 100vh;
+  background: #181a20;
+  z-index: 100;
+  transition: 0.25s;
+  padding: 15px;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+}
+
+.drawer.open {
+  left: 0;
+}
+
+.drawer h2 {
+  margin-top: 5px;
+}
+
+.drawer button {
+  width: 100%;
+  padding: 11px;
+  margin: 5px 0;
+  background: #292c34;
+  color: white;
+  border: none;
+  border-radius: 9px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.55);
+  z-index: 90;
+}
+
+.overlay.show {
+  display: block;
+}
+
+.hidden {
+  display: none;
+}
+
+.typing {
+  color: #aaa;
+  font-style: italic;
+}
+
+.voice-active {
+  background: #d93025 !important;
+}
+
+.stop-voice {
+  background: #8b1e1e !important;
+}
+
+.checkbox-row {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #bbb;
+}
+
+#fileName {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 5px;
+}
+</style>
 </head>
+
 <body>
 
-    <div class="header-bar">
-        <button class="menu-btn" id="menu-toggle">☰</button>
-        <h2>Global AI Mahlet 🌍</h2>
-        <div style="width: 35px;"></div>
+<header>
+  <button class="menu-btn" id="menuBtn">☰</button>
+  <div class="logo">Global AI Mahlet 🌍</div>
+</header>
+
+<div class="drawer" id="drawer">
+  <h2>Global AI 🌍</h2>
+
+  <button onclick="newChat()">＋ New Chat</button>
+
+  <input
+    id="searchChats"
+    type="text"
+    placeholder="Search chats..."
+    style="width:100%; margin:7px 0;"
+  >
+
+  <button onclick="clearChats()">🗑️ Clear Chat History</button>
+
+  <h3>Recent Chats</h3>
+  <div id="recentChats"></div>
+
+  <button onclick="closeDrawer()">✕ Close</button>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="container">
+
+  <div class="settings">
+
+    <div class="row">
+
+      <select id="mode">
+        <option value="friend">🤝 Friendly AI</option>
+        <option value="learning">📚 Learning / Study</option>
+        <option value="b2b">🏢 B2B Business</option>
+        <option value="b2c">🌍 B2C / General</option>
+        <option value="languages">🌐 Language Assistant</option>
+      </select>
+
+      <select id="language">
+        <option value="en-US">English</option>
+        <option value="am-ET">አማርኛ</option>
+        <option value="ti-ET">ትግርኛ</option>
+        <option value="fr-FR">Français</option>
+        <option value="es-ES">Español</option>
+        <option value="de-DE">Deutsch</option>
+        <option value="it-IT">Italiano</option>
+        <option value="pt-PT">Português</option>
+        <option value="ar-SA">العربية</option>
+        <option value="tr-TR">Türkçe</option>
+        <option value="ru-RU">Русский</option>
+        <option value="zh-CN">中文</option>
+        <option value="ja-JP">日本語</option>
+        <option value="ko-KR">한국어</option>
+        <option value="hi-IN">हिन्दी</option>
+        <option value="sw-KE">Kiswahili</option>
+      </select>
+
     </div>
 
-    <!-- Slide-out Drawer Menu -->
-    <div class="drawer" id="app-drawer">
-        <h3>Menu</h3>
-        <div>
-            <label style="font-size: 12px; color: #aaa;">Search Recent Chats:</label>
-            <input type="text" id="search-chats" placeholder="Search chats...">
-        </div>
-        <div>
-            <label style="font-size: 12px; color: #aaa;">Recent Chats:</label>
-            <div class="recent-chat-list" id="recent-list">
-                <div class="recent-item"><span>Welcome Chat</span><div class="recent-actions"><button onclick="renameChat(this)">Rename</button><button onclick="deleteChat(this)">Delete</button></div></div>
-            </div>
-        </div>
-        <div>
-            <button class="action-btn" id="settings-btn" style="width: 100%; margin-bottom: 10px;">⚙️ Settings</button>
-            <button class="close-drawer" id="close-menu">Close Menu</button>
-        </div>
+    <div class="checkbox-row">
+      <label>
+        <input type="checkbox" id="temporaryChat">
+        Temporary Chat
+      </label>
     </div>
 
-    <div class="chat-container">
-        <div class="controls">
-            <div class="control-row">
-                <label for="node-select">AI Mode:</label>
-                <select id="node-select">
-                    <option value="friend">❤️ Best Friend (Human-like)</option>
-                    <option value="b2b">💼 B2B (Business-to-Business)</option>
-                    <option value="b2c">🛒 B2C (Business-to-Consumer)</option>
-                    <option value="learning">📚 Learning & Education</option>
-                    <option value="languages">🗣️ Languages to Learn</option>
-                </select>
-            </div>
-            <div class="control-row">
-                <label for="lang-select">Language (80):</label>
-                <select id="lang-select">
-                    <option value="en">English</option>
-                    <option value="am">Amharic (አማርኛ)</option>
-                    <option value="es">Spanish (Español)</option>
-                    <option value="fr">French (Français)</option>
-                    <option value="de">German (Deutsch)</option>
-                    <option value="zh">Chinese (中文)</option>
-                    <option value="ar">Arabic (العربية)</option>
-                    <option value="hi">Hindi (हिन्दी)</option>
-                    <option value="pt">Portuguese (Português)</option>
-                    <option value="ru">Russian (Русский)</option>
-                    <option value="ja">Japanese (日本語)</option>
-                    <option value="ko">Korean (한국어)</option>
-                    <option value="it">Italian (Italiano)</option>
-                    <option value="tr">Turkish (Türkçe)</option>
-                    <option value="vi">Vietnamese (Tiếng Việt)</option>
-                    <option value="pl">Polish (Polski)</option>
-                    <option value="uk">Ukrainian (Українська)</option>
-                    <option value="nl">Dutch (Nederlands)</option>
-                    <option value="el">Greek (Ελληνικά)</option>
-                    <option value="he">Hebrew (עברית)</option>
-                    <option value="id">Indonesian (Bahasa Indonesia)</option>
-                    <option value="ms">Malay (Bahasa Melayu)</option>
-                    <option value="fa">Persian (فارسی)</option>
-                    <option value="sw">Swahili (Kiswahili)</option>
-                    <option value="yo">Yoruba (Yorùbá)</option>
-                    <option value="zu">Zulu (isiZulu)</option>
-                    <option value="af">Afrikaans</option>
-                    <option value="sq">Albanian (Shqip)</option>
-                    <option value="am">Amharic (አማርኛ)</option>
-                    <option value="hy">Armenian (Հայերեն)</option>
-                    <option value="az">Azerbaijani (Azərbaycan)</option>
-                    <option value="eu">Basque (Euskara)</option>
-                    <option value="be">Belarusian (Беларуская)</option>
-                    <option value="bn">Bengali (বাংলা)</option>
-                    <option value="bs">Bosnian (Bosanski)</option>
-                    <option value="bg">Bulgarian (Български)</option>
-                    <option value="ca">Catalan (Català)</option>
-                    <option value="ceb">Cebuano</option>
-                    <option value="ny">Chichewa</option>
-                    <option value="co">Corsican</option>
-                    <option value="hr">Croatian (Hrvatski)</option>
-                    <option value="cs">Czech (Čeština)</option>
-                    <option value="da">Danish (Dansk)</option>
-                    <option value="eo">Esperanto</option>
-                    <option value="et">Estonian (Eesti)</option>
-                    <option value="fi">Finnish (Suomi)</option>
-                    <option value="gl">Galician (Galego)</option>
-                    <option value="ka">Georgian (ქართული)</option>
-                    <option value="gu">Gujarati (ગુજરાતી)</option>
-                    <option value="ht">Haitian Creole</option>
-                    <option value="ha">Hausa</option>
-                    <option value="haw">Hawaiian</option>
-                    <option value="hmn">Hmong</option>
-                    <option value="hu">Hungarian (Magyar)</option>
-                    <option value="is">Icelandic (Íslenska)</option>
-                    <option value="ig">Igbo</option>
-                    <option value="ga">Irish (Gaeilge)</option>
-                    <option value="jw">Javanese</option>
-                    <option value="kn">Kannada (ಕನ್ನಡ)</option>
-                    <option value="kk">Kazakh (Қазақ)</option>
-                    <option value="km">Khmer (ខ្មែរ)</option>
-                    <option value="ku">Kurdish (Kurdî)</option>
-                    <option value="ky">Kyrgyz (Кыргыз)</option>
-                    <option value="lo">Lao (ລາວ)</option>
-                    <option value="la">Latin</option>
-                    <option value="lv">Latvian (Latviešu)</option>
-                    <option value="lt">Lithuanian (Lietuvių)</option>
-                    <option value="lb">Luxembourgish</option>
-                    <option value="mk">Macedonian (Македонски)</option>
-                    <option value="mg">Malagasy</option>
-                    <option value="ml">Malayalam (മലയാളം)</option>
-                    <option value="mt">Maltese (Malti)</option>
-                    <option value="mi">Maori</option>
-                    <option value="mr">Marathi (मराठी)</option>
-                    <option value="mn">Mongolian (Монгол)</option>
-                    <option value="my">Myanmar (Burmese)</option>
-                    <option value="ne">Nepali (नेपाली)</option>
-                    <option value="no">Norwegian (Norsk)</option>
-                    <option value="ps">Pashto (پښتو)</option>
-                    <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
-                </select>
-            </div>
-            <div class="control-row">
-                <label for="temp-chat-toggle">Temporary Chat:</label>
-                <input type="checkbox" id="temp-chat-toggle">
-            </div>
-        </div>
+  </div>
 
-        <div id="chat-box">
-            <div>Hey bestie! Choose Learning or Languages mode to study something new today!</div>
-        </div>
+  <div class="chat" id="chatBox">
 
-        <input type="file" id="camera-input" accept="image/*" capture="environment">
-        <input type="file" id="photo-input" accept="image/*">
-        <input type="file" id="file-input">
-
-        <div class="input-area">
-            <button class="action-btn" id="camera-btn" title="Camera">📷</button>
-            <button class="action-btn" id="photo-btn" title="Photo">🖼️</button>
-            <button class="action-btn" id="file-btn" title="File">📁</button>
-            <button class="action-btn" id="record-btn" title="Record Voice">🎙️</button>
-            <input type="text" id="user-input" placeholder="Ask a question or practice a language...">
-            <button class="send-btn" id="send-btn">Send</button>
-        </div>
+    <div class="welcome" id="welcome">
+      <h2>Welcome to Global AI 🌍</h2>
+      <p>
+        Your AI for learning, creating, researching,
+        business and getting things done.
+      </p>
+      <p>Ask me anything.</p>
     </div>
 
-    <script>
-        const chatBox = document.getElementById('chat-box');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        const nodeSelect = document.getElementById('node-select');
-        const langSelect = document.getElementById('lang-select');
-        
-        const menuToggle = document.getElementById('menu-toggle');
-        const appDrawer = document.getElementById('app-drawer');
-        const closeMenu = document.getElementById('close-menu');
-        const searchChats = document.getElementById('search-chats');
-        const recentList = document.getElementById('recent-list');
-        const settingsBtn = document.getElementById('settings-btn');
-        const tempChatToggle = document.getElementById('temp-chat-toggle');
+  </div>
 
-        const cameraBtn = document.getElementById('camera-btn');
-        const photoBtn = document.getElementById('photo-btn');
-        const fileBtn = document.getElementById('file-btn');
-        const recordBtn = document.getElementById('record-btn');
-        const cameraInput = document.getElementById('camera-input');
-        const photoInput = document.getElementById('photo-input');
-        const fileInput = document.getElementById('file-input');
+  <div class="bottom">
 
-        let recentChatsData = ["Welcome Chat"];
+    <div class="tools">
 
-        menuToggle.addEventListener('click', () => appDrawer.classList.toggle('open'));
-        closeMenu.addEventListener('click', () => appDrawer.classList.remove('open'));
+      <button class="tool" id="cameraBtn" title="Camera">📷</button>
 
-        settingsBtn.addEventListener('click', () => {
-            alert("Settings panel: Customization and preference options.");
-        });
+      <button class="tool" id="photoBtn" title="Photo">🖼️</button>
 
-        function renderRecentList(filter = '') {
-            recentList.innerHTML = '';
-            recentChatsData.filter(c => c.toLowerCase().includes(filter)).forEach((c, index) => {
-                recentList.innerHTML += `
-                    <div class="recent-item">
-                        <span>${c}</span>
-                        <div class="recent-actions">
-                            <button onclick="window.renameItem(${index})">Rename</button>
-                            <button onclick="window.deleteItem(${index})">Delete</button>
-                        </div>
-                    </div>`;
-            });
-        }
+      <button class="tool" id="fileBtn" title="File">📁</button>
 
-        window.deleteItem = function(index) {
-            recentChatsData.splice(index, 1);
-            renderRecentList(searchChats.value.toLowerCase());
-        }
+      <button class="tool" id="micBtn" title="Voice">🎙️</button>
 
-        window.renameItem = function(index) {
-            const newName = prompt("Rename chat:", recentChatsData[index]);
-            if(newName) {
-                recentChatsData[index] = newName;
-                renderRecentList(searchChats.value.toLowerCase());
-            }
-        }
+      <button class="tool" id="stopVoiceBtn" title="Stop AI voice">
+        🔇
+      </button>
 
-        searchChats.addEventListener('input', (e) => {
-            renderRecentList(e.target.value.toLowerCase());
-        });
+    </div>
 
-        cameraBtn.addEventListener('click', () => cameraInput.click());
-        photoBtn.addEventListener('click', () => photoInput.click());
-        fileBtn.addEventListener('click', () => fileInput.click());
+    <div id="fileName"></div>
 
-        cameraInput.addEventListener('change', (e) => {
-            if(e.target.files[0]) chatBox.innerHTML += `<div><b>You:</b> [Captured Photo from Camera]</div>`;
-        });
-        photoInput.addEventListener('change', (e) => {
-            if(e.target.files[0]) chatBox.innerHTML += `<div><b>You:</b> [Uploaded Photo: ${e.target.files[0].name}]</div>`;
-        });
-        fileInput.addEventListener('change', (e) => {
-            if(e.target.files[0]) chatBox.innerHTML += `<div><b>You:</b> [Uploaded File: ${e.target.files[0].name}]</div>`;
-        });
+    <div class="input-row">
 
-        let isRecording = false;
-        recordBtn.addEventListener('click', () => {
-            isRecording = !isRecording;
-            if(isRecording) {
-                recordBtn.style.background = '#d9534f';
-                chatBox.innerHTML += `<div><b>System:</b> Recording audio... Click mic again to stop.</div>`;
-            } else {
-                recordBtn.style.background = '#444';
-                chatBox.innerHTML += `<div><b>You:</b> [Voice Recording Sent]</div>`;
-            }
-        });
+      <input
+        id="messageInput"
+        type="text"
+        placeholder="Message Global AI..."
+        autocomplete="off"
+      >
 
-        async function handleSend() {
-            let rawText = userInput.value.trim();
-            if (!rawText) return;
+      <button class="send" id="sendBtn">➤</button>
 
-            chatBox.innerHTML += `<div><b>You:</b> ${rawText}</div>`;
-            
-            if(!tempChatToggle.checked && !recentChatsData.includes(rawText)) {
-                recentChatsData.unshift(rawText);
-                renderRecentList(searchChats.value.toLowerCase());
-            }
+    </div>
 
-            userInput.value = '';
+  </div>
 
-            let text = rawText.toLowerCase();
-            text = text.replace(/\bfad\b/g, 'bad');
-            text = text.replace(/\bteh\b/g, 'the');
-            text = text.replace(/\bhav\b/g, 'have');
+</div>
 
-            const mode = nodeSelect.value;
-            const currentLang = langSelect.value;
-            let reply = "";
+<input
+  id="cameraInput"
+  class="hidden"
+  type="file"
+  accept="image/*"
+  capture="environment"
+>
 
-            if (text.startsWith('search ') || text.startsWith('what is ') || text.startsWith('who is ') || text.startsWith('tell me about ')) {
-                const query = text.replace('search ', '').replace('what is ', '').replace('who is ', '').replace('tell me about ', '');
-                try {
-                    const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*`);
-                    const data = await response.json();
-                    if (data.query && data.query.search.length > 0) {
-                        const snippet = data.query.search[0].snippet.replace(/(<([^>]+)>)/gi, "");
-                        reply = `🌐 Online Search Result for "${query}": ${snippet}... (Source: Wikipedia)`;
-                    } else {
-                        reply = `I searched online for "${query}", but couldn't find a direct match.`;
-                    }
-                } catch (e) {
-                    reply = "I tried searching online, but encountered a network issue.";
-                }
-            } else {
-                if (mode === 'friend') {
-                    if (text.includes('hi') || text.includes('hey') || text.includes('hello')) {
-                        reply = "Hey bestie! So good to hear from you. How are you feeling right now?";
-                    } else if (text.includes('bad') || text.includes('sad') || text.includes('hard') || text.includes('problem')) {
-                        reply = "Oh no, I'm so sorry you're having a rough time. I'm right here with you—do you want to talk through it?";
-                    } else {
-                        const friendReplies = [
-                            "Aww I totally get what you mean! Tell me more about that, I'm listening.",
-                            "For real? That's so interesting! What happened next?",
-                            "I'm always here for you, bestie. You've got this!"
-                        ];
-                        reply = friendReplies[Math.floor(Math.random() * friendReplies.length)];
-                    }
-                } else if (mode === 'b2b') {
-                    reply = "For B2B growth, focusing on high-value client acquisition and long-term contracts is key.";
-                } else if (mode === 'b2c') {
-                    reply = "For B2C success, ensuring smooth user checkout and responsive support are vital.";
-                } else if (mode === 'learning') {
-                    reply = "📚 Learning mode active: Let's break down this topic step by step! What subject or concept would you like to master today?";
-                } else if (mode === 'languages') {
-                    reply = "🗣️ Languages mode active: Let's practice! Type a sentence or phrase you want to learn, and I will help you translate, pronounce, and understand it.";
-                }
-            }
+<input
+  id="photoInput"
+  class="hidden"
+  type="file"
+  accept="image/*"
+>
 
-            chatBox.innerHTML += `<div><b>AI (${mode.toUpperCase()} [${currentLang.toUpperCase()}]) :</b> ${reply}</div>`;
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
+<input
+  id="fileInput"
+  class="hidden"
+  type="file"
+>
 
-        sendBtn.addEventListener('click', handleSend);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSend();
-        });
-    </script>
-</body>
-</html>
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const chatBox = document.getElementById('chat-box');
-    const userInput = document.getElementById('user-input');
-    const sendBtn = document.getElementById('send-btn');
-    const nodeSelect = document.getElementById('node-select');
-    const langSelect = document.getElementById('lang-select');
-    const menuToggle = document.getElementById('menu-toggle');
-    const appDrawer = document.getElementById('app-drawer');
-    const closeMenu = document.getElementById('close-menu');
-    const searchChats = document.getElementById('search-chats');
-    const recentList = document.getElementById('recent-list');
-    const settingsBtn = document.getElementById('settings-btn');
-    const tempChatToggle = document.getElementById('temp-chat-toggle');
 
-    const cameraBtn = document.getElementById('camera-btn');
-    const photoBtn = document.getElementById('photo-btn');
-    const fileBtn = document.getElementById('file-btn');
-    const recordBtn = document.getElementById('record-btn');
-    const cameraInput = document.getElementById('camera-input');
-    const photoInput = document.getElementById('photo-input');
-    const fileInput = document.getElementById('file-input');
+const chatBox = document.getElementById("chatBox");
+const input = document.getElementById("messageInput");
+const sendBtn = document.getElementById("sendBtn");
+const mode = document.getElementById("mode");
+const language = document.getElementById("language");
 
-    // Inject New Chat button dynamically into the drawer menu safely
-    if (appDrawer) {
-        const drawerContainer = appDrawer.querySelector('div') || appDrawer;
-        const newChatBtn = document.createElement('button');
-        newChatBtn.className = 'new-chat-btn action-btn';
-        newChatBtn.style.cssText = 'width: 100%; margin-bottom: 10px; background: #28a745; font-weight: bold; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;';
-        newChatBtn.innerText = '+ New Chat';
-        drawerContainer.insertBefore(newChatBtn, drawerContainer.firstChild);
+const menuBtn = document.getElementById("menuBtn");
+const drawer = document.getElementById("drawer");
+const overlay = document.getElementById("overlay");
 
-        let chatSessions = [{ title: "Welcome Chat", history: [] }];
-        let activeIndex = 0;
+const micBtn = document.getElementById("micBtn");
+const stopVoiceBtn = document.getElementById("stopVoiceBtn");
 
-        if (menuToggle) menuToggle.addEventListener('click', () => appDrawer.classList.toggle('open'));
-        if (closeMenu) closeMenu.addEventListener('click', () => appDrawer.classList.remove('open'));
-        if (settingsBtn) settingsBtn.addEventListener('click', () => alert("Settings panel: Customization and preference options."));
+const cameraBtn = document.getElementById("cameraBtn");
+const photoBtn = document.getElementById("photoBtn");
+const fileBtn = document.getElementById("fileBtn");
 
-        function renderList(filter = '') {
-            if (!recentList) return;
-            recentList.innerHTML = '';
-            chatSessions.filter(c => c.title.toLowerCase().includes(filter)).forEach((c, idx) => {
-                recentList.innerHTML += `
-                    <div class="recent-item" style="display: flex; justify-content: space-between; margin-bottom: 5px; align-items: center;">
-                        <span onclick="window.switchChat(${idx})" style="cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 120px;">${c.title}</span>
-                        <div>
-                            <button onclick="window.renameChat(${idx})" style="font-size: 10px; padding: 2px 5px;">Rename</button>
-                            <button onclick="window.deleteChat(${idx})" style="font-size: 10px; padding: 2px 5px; background: #d9534f; color: white;">Delete</button>
-                        </div>
-                    </div>`;
-            });
-        }
+const cameraInput = document.getElementById("cameraInput");
+const photoInput = document.getElementById("photoInput");
+const fileInput = document.getElementById("fileInput");
 
-        window.switchChat = function(idx) {
-            activeIndex = idx;
-            chatBox.innerHTML = '';
-            chatSessions[idx].history.forEach(m => {
-                chatBox.innerHTML += `<div><b>${m.sender}:</b> ${m.text}</div>`;
-            });
-            appDrawer.classList.remove('open');
-        };
+const fileName = document.getElementById("fileName");
 
-        window.deleteChat = function(idx) {
-            chatSessions.splice(idx, 1);
-            if (chatSessions.length === 0) {
-                chatSessions.push({ title: "Welcome Chat", history: [] });
-            }
-            activeIndex = 0;
-            window.switchChat(0);
-            renderList(searchChats ? searchChats.value.toLowerCase() : '');
-        };
+let messages = [];
+let recognition = null;
+let listening = false;
+let selectedFile = null;
 
-        window.renameChat = function(idx) {
-            let n = prompt("Rename chat:", chatSessions[idx].title);
-            if (n) {
-                chatSessions[idx].title = n;
-                renderList(searchChats ? searchChats.value.toLowerCase() : '');
-            }
-        };
 
-        newChatBtn.addEventListener('click', () => {
-            chatSessions.unshift({ title: "New Conversation", history: [] });
-            activeIndex = 0;
-            chatBox.innerHTML = `<div>Welcome. Please choose a mode or type your question below.</div>`;
-            renderList();
-            appDrawer.classList.remove('open');
-        });
+/* ---------------- MENU ---------------- */
 
-        if (searchChats) {
-            searchChats.addEventListener('input', (e) => renderList(e.target.value.toLowerCase()));
-        }
-        renderList();
+menuBtn.onclick = () => {
+  drawer.classList.add("open");
+  overlay.classList.add("show");
+};
 
-        function pushMessage(sender, text) {
-            chatBox.innerHTML += `<div><b>${sender}:</b> ${text}</div>`;
-            if (tempChatToggle && !tempChatToggle.checked) {
-                chatSessions[activeIndex].history.push({ sender, text });
-                if (chatSessions[activeIndex].title === "Welcome Chat" || chatSessions[activeIndex].title === "New Conversation") {
-                    chatSessions[activeIndex].title = text.length > 25 ? text.substring(0, 25) + '...' : text;
-                }
-                renderList(searchChats ? searchChats.value.toLowerCase() : '');
-            }
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
+overlay.onclick = closeDrawer;
 
-        async function getAIResponse(inputPrompt) {
-            let text = inputPrompt.toLowerCase();
-            let mode = nodeSelect ? nodeSelect.value : 'friend';
-            let lang = langSelect ? langSelect.value : 'English';
-            let reply = "";
+function closeDrawer() {
+  drawer.classList.remove("open");
+  overlay.classList.remove("show");
+}
 
-            if (text.startsWith('search ') || text.startsWith('what is ') || text.startsWith('who is ') || text.startsWith('tell me about ')) {
-                let q = text.replace('search ', '').replace('what is ', '').replace('who is ', '').replace('tell me about ', '');
-                try {
-                    let res = await fetch(`https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(q)}&format=json&origin=*`);
-                    let data = await res.json();
-                    reply = (data.query && data.query.search.length > 0) ? `🌐 Online Search Result for "${q}": ${data.query.search[0].snippet.replace(/(<([^>]+)>)/gi, "")}... (Source: Wikipedia)` : `I searched online for "${q}", but could not find a direct match.`;
-                } catch (e) {
-                    reply = "I tried searching online, but encountered a network issue.";
-                }
-            } else {
-                // Professional, slang-free responses
-                if (mode === 'friend') {
-                    if (text.includes('hi') || text.includes('hello') || text.includes('greetings')) {
-                        reply = "Hello. I am here to support you. How are you feeling today?";
-                    } else if (text.includes('stress') || text.includes('bad') || text.includes('sad') || text.includes('hard') || text.includes('problem')) {
-                        reply = "I understand that you are going through a difficult moment. Take a deep breath. Would you like to talk about what is causing this stress so we can address it step by step?";
-                    } else {
-                        const professionalFriendReplies = [
-                            "I understand your perspective. Please share more details so I can assist you effectively.",
-                            "That is an interesting point. How would you like to proceed with this?",
-                            "I am listening and ready to help you analyze this situation thoroughly."
-                        ];
-                        reply = professionalFriendReplies[Math.floor(Math.random() * professionalFriendReplies.length)];
-                    }
-                } else if (mode === 'b2b') {
-                    reply = "For business-to-business growth, focusing on high-value client acquisition, robust relationship management, and secure long-term contracts is essential.";
-                } else if (mode === 'b2c') {
-                    reply = "For business-to-consumer success, ensuring a seamless user checkout experience, transparent pricing, and responsive customer support are vital.";
-                } else if (mode === 'learning') {
-                    reply = "📚 Learning mode active: Let us analyze this topic methodically. Which academic subject or concept would you like to focus on today?";
-                } else if (mode === 'languages') {
-                    reply = "🗣️ Languages mode active: Let us practice. Please provide a sentence or phrase you wish to study, and I will assist you with translation, correct pronunciation rules, and grammar analysis.";
-                }
-            }
 
-            let aiLbl = `AI (${mode.toUpperCase()} [${lang.toUpperCase()}])`;
-            pushMessage(aiLbl, reply);
-        }
+/* ---------------- CHAT STORAGE ---------------- */
 
-        if (cameraBtn && cameraInput) cameraBtn.addEventListener('click', () => cameraInput.click());
-        if (photoBtn && photoInput) photoBtn.addEventListener('click', () => photoInput.click());
-        if (fileBtn && fileInput) fileBtn.addEventListener('click', () => fileInput.click());
+function saveCurrentChat() {
 
-        if (cameraInput) cameraInput.addEventListener('change', (e) => { if (e.target.files[0]) pushMessage("You", "[Captured Photo from Camera]"); });
-        if (photoInput) photoInput.addEventListener('change', (e) => { if (e.target.files[0]) pushMessage("You", `[Uploaded Photo: ${e.target.files[0].name}]`); });
-        if (fileInput) fileInput.addEventListener('change', (e) => { if (e.target.files[0]) pushMessage("You", `[Uploaded File: ${e.target.files[0].name}]`); });
+  if (document.getElementById("temporaryChat").checked) {
+    return;
+  }
 
-        let isRec = false;
-        if (recordBtn) {
-            recordBtn.addEventListener('click', async () => {
-                isRec = !isRec;
-                if (isRec) {
-                    recordBtn.style.background = '#d9534f';
-                    chatBox.innerHTML += `<div><b>System:</b> Recording audio... Click microphone again to stop.</div>`;
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                } else {
-                    recordBtn.style.background = '#444';
-                    pushMessage("You", "[Voice Recording Sent]");
-                    await getAIResponse("I have recorded a voice message regarding my situation and require assistance.");
-                }
-            });
-        }
+  localStorage.setItem(
+    "global_ai_current_chat",
+    JSON.stringify(messages)
+  );
 
-        async function handleSend() {
-            if (!userInput) return;
-            let raw = userInput.value.trim();
-            if (!raw) return;
-            pushMessage("You", raw);
-            userInput.value = '';
-            await getAIResponse(raw);
-        }
+  updateRecentChats();
+}
 
-        if (sendBtn) sendBtn.addEventListener('click', handleSend);
-        if (userInput) {
-            userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
-        }
+function loadCurrentChat() {
+
+  const saved = localStorage.getItem(
+    "global_ai_current_chat"
+  );
+
+  if (!saved) return;
+
+  try {
+    messages = JSON.parse(saved);
+
+    messages.forEach(m => {
+
+      if (m.role === "user") {
+        addMessage(m.content, "user", false);
+      }
+
+      if (m.role === "assistant") {
+        addMessage(m.content, "ai", false);
+      }
+
+    });
+
+  } catch(e) {
+    messages = [];
+  }
+}
+
+function updateRecentChats() {
+
+  const recent = document.getElementById("recentChats");
+
+  recent.innerHTML = "";
+
+  if (!messages.length) {
+    recent.innerHTML =
+      "<div style='color:#888;padding:8px'>No recent chats</div>";
+    return;
+  }
+
+  const firstUser = messages.find(x => x.role === "user");
+
+  const title = firstUser
+    ? firstUser.content.substring(0, 35)
+    : "New Chat";
+
+  const btn = document.createElement("button");
+
+  btn.textContent = "💬 " + title;
+
+  btn.onclick = () => closeDrawer();
+
+  recent.appendChild(btn);
+}
+
+document.getElementById("searchChats").addEventListener(
+  "input",
+  function() {
+
+    const term = this.value.toLowerCase();
+
+    const buttons =
+      document.querySelectorAll("#recentChats button");
+
+    buttons.forEach(btn => {
+
+      btn.style.display =
+        btn.textContent.toLowerCase().includes(term)
+        ? "block"
+        : "none";
+
+    });
+
+  }
+);
+
+function clearChats() {
+
+  if (!confirm("Delete your saved chat history?")) {
+    return;
+  }
+
+  localStorage.removeItem("global_ai_current_chat");
+
+  messages = [];
+
+  chatBox.innerHTML = `
+    <div class="welcome" id="welcome">
+      <h2>Welcome to Global AI 🌍</h2>
+      <p>Start a new conversation.</p>
+    </div>
+  `;
+
+  updateRecentChats();
+}
+
+function newChat() {
+
+  messages = [];
+
+  chatBox.innerHTML = `
+    <div class="welcome" id="welcome">
+      <h2>Welcome to Global AI 🌍</h2>
+      <p>Your new conversation is ready.</p>
+    </div>
+  `;
+
+  if (!document.getElementById("temporaryChat").checked) {
+    localStorage.removeItem("global_ai_current_chat");
+  }
+
+  closeDrawer();
+  updateRecentChats();
+}
+
+
+/* ---------------- DISPLAY MESSAGE ---------------- */
+
+function addMessage(text, type, save = true) {
+
+  const welcome = document.getElementById("welcome");
+
+  if (welcome) {
+    welcome.remove();
+  }
+
+  const div = document.createElement("div");
+
+  div.className = "message " + type;
+
+  div.textContent = text;
+
+  chatBox.appendChild(div);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  if (save) {
+
+    messages.push({
+      role: type === "user"
+        ? "user"
+        : "assistant",
+      content: text
+    });
+
+    saveCurrentChat();
+  }
+
+  return div;
+}
+
+
+/* ---------------- SEND MESSAGE ---------------- */
+
+async function sendMessage() {
+
+  const text = input.value.trim();
+
+  if (!text || sendBtn.disabled) {
+    return;
+  }
+
+  addMessage(text, "user");
+
+  input.value = "";
+
+  const typing = document.createElement("div");
+
+  typing.className = "message ai typing";
+
+  typing.textContent = "Global AI is thinking...";
+
+  chatBox.appendChild(typing);
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  sendBtn.disabled = true;
+
+  try {
+
+    const response = await fetch("/api/chat", {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+
+        message: text,
+
+        mode: mode.value,
+
+        language: language.value,
+
+        history: messages.slice(-12)
+
+      })
+
+    });
+
+    const data = await response.json();
+
+    typing.remove();
+
+    if (!response.ok) {
+
+      throw new Error(
+        data.error || "The AI server returned an error."
+      );
+
     }
-});
-                    </script>
 
+    const answer =
+      data.response ||
+      data.answer ||
+      data.text ||
+      "I received your message but no answer was returned.";
+
+    addMessage(answer, "ai");
+
+    /*
+      Speak the AI answer when voice mode was used.
+    */
+    if (window._speakNextAnswer) {
+
+      window._speakNextAnswer = false;
+
+      speakText(answer);
+
+    }
+
+  } catch(error) {
+
+    typing.remove();
+
+    addMessage(
+      "⚠️ I could not connect to the AI server.\n\n" +
+      "The website is working, but the Cloudflare /api/chat " +
+      "AI backend still needs to be connected.",
+      "ai"
+    );
+
+    console.error(error);
+
+  } finally {
+
+    sendBtn.disabled = false;
+
+    input.focus();
+
+  }
+}
+
+sendBtn.onclick = sendMessage;
+
+input.addEventListener("keydown", function(e) {
+
+  if (e.key === "Enter") {
+    e.preventDefault();
+    sendMessage();
+  }
+
+});
+
+
+/* ---------------- VOICE INPUT ---------------- */
+
+const SpeechRecognition =
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+if (SpeechRecognition) {
+
+  recognition = new SpeechRecognition();
+
+  recognition.continuous = false;
+
+  recognition.interimResults = false;
+
+  recognition.lang = language.value;
+
+  recognition.onstart = function() {
+
+    listening = true;
+
+    micBtn.classList.add("voice-active");
+
+    micBtn.textContent = "⏹️";
+
+  };
+
+  recognition.onresult = function(event) {
+
+    const transcript =
+      event.results[0][0].transcript;
+
+    input.value = transcript;
+
+    window._speakNextAnswer = true;
+
+    sendMessage();
+
+  };
+
+  recognition.onerror = function(event) {
+
+    console.log("Speech recognition error:", event.error);
+
+    listening = false;
+
+    micBtn.classList.remove("voice-active");
+
+    micBtn.textContent = "🎙️";
+
+  };
+
+  recognition.onend = function() {
+
+    listening = false;
+
+    micBtn.classList.remove("voice-active");
+
+    micBtn.textContent = "🎙️";
+
+  };
+
+  micBtn.onclick = function() {
+
+    if (listening) {
+
+      recognition.stop();
+
+      return;
+
+    }
+
+    recognition.lang = language.value;
+
+    recognition.start();
+
+  };
+
+} else {
+
+  micBtn.onclick = function() {
+
+    alert(
+      "Voice input is not supported by this browser. " +
+      "Try Chrome on Android."
+    );
+
+  };
+
+}
+
+
+/* ---------------- AI VOICE OUTPUT ---------------- */
+
+function speakText(text) {
+
+  if (!("speechSynthesis" in window)) {
+
+    alert(
+      "Voice output is not supported by this browser."
+    );
+
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+
+  const utterance =
+    new SpeechSynthesisUtterance(text);
+
+  utterance.lang = language.value;
+
+  utterance.rate = 1;
+
+  utterance.pitch = 1;
+
+  window.speechSynthesis.speak(utterance);
+
+}
+
+stopVoiceBtn.onclick = function() {
+
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+
+};
+
+
+/* ---------------- CAMERA ---------------- */
+
+cameraBtn.onclick = function() {
+  cameraInput.click();
+};
+
+cameraInput.onchange = function() {
+
+  if (!this.files.length) return;
+
+  selectedFile = this.files[0];
+
+  fileName.textContent =
+    "📷 Camera image selected: " +
+    selectedFile.name;
+
+  input.value =
+    "I selected a camera image. Please analyze it.";
+
+};
+
+
+/* ---------------- PHOTO ---------------- */
+
+photoBtn.onclick = function() {
+  photoInput.click();
+};
+
+photoInput.onchange = function() {
+
+  if (!this.files.length) return;
+
+  selectedFile = this.files[0];
+
+  fileName.textContent =
+    "🖼️ Image selected: " +
+    selectedFile.name;
+
+  input.value =
+    "I selected an image. Please analyze it.";
+
+};
+
+
+/* ---------------- FILE ---------------- */
+
+fileBtn.onclick = function() {
+  fileInput.click();
+};
+
+fileInput.onchange = function() {
+
+  if (!this.files.length) return;
+
+  selectedFile = this.files[0];
+
+  fileName.textContent =
+    "📁 File selected: " +
+    selectedFile.name;
+
+  input.value =
+    "I selected a file. Please help me analyze it.";
+
+};
+
+
+/* ---------------- LANGUAGE ---------------- */
+
+language.addEventListener("change", function() {
+
+  if (recognition) {
+    recognition.lang = language.value;
+  }
+
+});
+
+
+/* ---------------- START ---------------- */
+
+loadCurrentChat();
+
+updateRecentChats();
+
+input.focus();
+
+</script>
+
+</body>
+    </html>
