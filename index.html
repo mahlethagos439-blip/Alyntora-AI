@@ -70,6 +70,8 @@
                     <option value="friend">❤️ Best Friend (Human-like)</option>
                     <option value="b2b">💼 B2B (Business-to-Business)</option>
                     <option value="b2c">🛒 B2C (Business-to-Consumer)</option>
+                    <option value="learning">📚 Learning & Education</option>
+                    <option value="languages">🗣️ Languages to Learn</option>
                 </select>
             </div>
             <div class="control-row">
@@ -103,6 +105,7 @@
                     <option value="zu">Zulu (isiZulu)</option>
                     <option value="af">Afrikaans</option>
                     <option value="sq">Albanian (Shqip)</option>
+                    <option value="am">Amharic (አማርኛ)</option>
                     <option value="hy">Armenian (Հայերեն)</option>
                     <option value="az">Azerbaijani (Azərbaycan)</option>
                     <option value="eu">Basque (Euskara)</option>
@@ -163,7 +166,7 @@
         </div>
 
         <div id="chat-box">
-            <div>Hey bestie! Use the menu for recent chats, or upload/record/snap below!</div>
+            <div>Hey bestie! Choose Learning or Languages mode to study something new today!</div>
         </div>
 
         <input type="file" id="camera-input" accept="image/*" capture="environment">
@@ -175,7 +178,7 @@
             <button class="action-btn" id="photo-btn" title="Photo">🖼️</button>
             <button class="action-btn" id="file-btn" title="File">📁</button>
             <button class="action-btn" id="record-btn" title="Record Voice">🎙️</button>
-            <input type="text" id="user-input" placeholder="Type message or search online...">
+            <input type="text" id="user-input" placeholder="Ask a question or practice a language...">
             <button class="send-btn" id="send-btn">Send</button>
         </div>
     </div>
@@ -323,6 +326,10 @@
                     reply = "For B2B growth, focusing on high-value client acquisition and long-term contracts is key.";
                 } else if (mode === 'b2c') {
                     reply = "For B2C success, ensuring smooth user checkout and responsive support are vital.";
+                } else if (mode === 'learning') {
+                    reply = "📚 Learning mode active: Let's break down this topic step by step! What subject or concept would you like to master today?";
+                } else if (mode === 'languages') {
+                    reply = "🗣️ Languages mode active: Let's practice! Type a sentence or phrase you want to learn, and I will help you translate, pronounce, and understand it.";
                 }
             }
 
@@ -336,5 +343,5 @@
         });
     </script>
 </body>
-        </html>
-        
+    </html>
+    
