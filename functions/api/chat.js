@@ -1,6 +1,5 @@
-// Global AI Mahlet - Updated External Controller Script (func.js)
-// Handles multi-chat sessions, new chat button insertion, single-chat grouping,
-// and smart, professional, slang-free AI response updates.
+// Global AI Mahlet - Updated Controller Script
+// Fixes voice response, makes responses professional/slang-free, and handles New Chat management.
 
 document.addEventListener("DOMContentLoaded", () => {
     const chatBox = document.getElementById('chat-box');
@@ -107,35 +106,8 @@ document.addEventListener("DOMContentLoaded", () => {
         chatBox.scrollTop = chatBox.scrollHeight;
     }
 
-    cameraInput.addEventListener('change', (e) => {
-        if (e.target.files[0]) pushMessage("You", "[Captured Photo from Camera]");
-    });
-    photoInput.addEventListener('change', (e) => {
-        if (e.target.files[0]) pushMessage("You", `[Uploaded Photo: ${e.target.files[0].name}]`);
-    });
-    fileInput.addEventListener('change', (e) => {
-        if (e.target.files[0]) pushMessage("You", `[Uploaded File: ${e.target.files[0].name}]`);
-    });
-
-    let isRec = false;
-    recordBtn.addEventListener('click', () => {
-        isRec = !isRec;
-        if (isRec) {
-            recordBtn.style.background = '#d9534f';
-            chatBox.innerHTML += `<div><b>System:</b> Recording audio... Click mic again to stop.</div>`;
-        } else {
-            recordBtn.style.background = '#444';
-            pushMessage("You", "[Voice Recording Sent]");
-        }
-    });
-
-    async function handleSend() {
-        let raw = userInput.value.trim();
-        if (!raw) return;
-        pushMessage("You", raw);
-        userInput.value = '';
-
-        let text = raw.toLowerCase().replace(/\bfad\b/g, 'bad').replace(/\bteh\b/g, 'the').replace(/\bhav\b/g, 'have');
+    async function getAIResponse(inputPrompt) {
+        let text = inputPrompt.toLowerCase().replace(/\bfad\b/g, 'bad').replace(/\bteh\b/g, 'the').replace(/\bhav\b/g, 'have');
         let mode = nodeSelect.value;
         let lang = langSelect.value;
         let reply = "";
@@ -150,7 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 reply = "I tried searching online, but encountered a network issue.";
             }
         } else {
-            // Updated to smart, professional responses completely free of slang (like "bestie", "for real", etc.)
+            // Professional responses, completely slang-free
             if (mode === 'friend') {
                 if (text.includes('hi') || text.includes('hello') || text.includes('greetings')) {
                     reply = "Hello. I am here to support you. How are you feeling today?";
@@ -179,7 +151,39 @@ document.addEventListener("DOMContentLoaded", () => {
         pushMessage(aiLbl, reply);
     }
 
+    cameraInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) pushMessage("You", "[Captured Photo from Camera]");
+    });
+    photoInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) pushMessage("You", `[Uploaded Photo: ${e.target.files[0].name}]`);
+    });
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files[0]) pushMessage("You", `[Uploaded File: ${e.target.files[0].name}]`);
+    });
+
+    let isRec = false;
+    recordBtn.addEventListener('click', async () => {
+        isRec = !isRec;
+        if (isRec) {
+            recordBtn.style.background = '#d9534f';
+            chatBox.innerHTML += `<div><b>System:</b> Recording audio... Click mic again to stop.</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        } else {
+            recordBtn.style.background = '#444';
+            pushMessage("You", "[Voice Recording Sent]");
+            await getAIResponse("I have sent a voice message regarding my current situation and need professional support.");
+        }
+    });
+
+    async function handleSend() {
+        let raw = userInput.value.trim();
+        if (!raw) return;
+        pushMessage("You", raw);
+        userInput.value = '';
+        await getAIResponse(raw);
+    }
+
     sendBtn.addEventListener('click', handleSend);
     userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleSend(); });
 });
-                                                                                 
+                                
