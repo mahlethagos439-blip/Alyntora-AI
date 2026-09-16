@@ -16,6 +16,7 @@
         .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .close-sidebar { background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
         
+        .temp-chat-toggle { display: flex; align-items: center; gap: 8px; font-size: 12px; background: #222; padding: 8px; border-radius: 6px; margin-bottom: 10px; cursor: pointer; }
         .search-chats { width: 100%; padding: 7px; background: #252525; border: 1px solid #444; color: #fff; border-radius: 5px; font-size: 12px; margin-bottom: 10px; outline: none; }
         .chat-history-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 5px; }
         .history-item { background: #222; padding: 8px; border-radius: 5px; font-size: 12px; cursor: pointer; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -48,14 +49,19 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar with Search & Recent Chats -->
+    <!-- Sidebar with Search, Temporary Chat Checkbox & Recent Chats -->
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <span><b>Global AI Menu</b></span>
             <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
         </div>
-        <button style="background:#222; color:#fff; padding:8px; border:none; border-radius:6px; cursor:pointer; margin-bottom:10px;" onclick="startNewChat(); toggleSidebar();">＋ New Chat</button>
+        <button style="background:#222; color:#fff; padding:8px; border:none; border-radius:6px; cursor:pointer; margin-bottom:8px;" onclick="startNewChat(); toggleSidebar();">＋ New Chat</button>
         
+        <div class="temp-chat-toggle">
+            <input type="checkbox" id="temp-chat-checkbox" />
+            <label for="temp-chat-checkbox">Temporary Chat (No History)</label>
+        </div>
+
         <input type="text" id="search-history" class="search-chats" placeholder="Search recent chats..." oninput="filterChatHistory()" />
         
         <div id="history-list" class="chat-history-list">
@@ -174,15 +180,24 @@
             recognition.start();
         }
 
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel(); // Stop previous speech
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
+
         function speakLastMessage() {
             const messages = document.querySelectorAll('.message.ai');
             if (messages.length === 0) return;
             const lastText = messages[messages.length - 1].innerText.replace('GLOBAL AI', '').trim();
-            const utterance = new SpeechSynthesisUtterance(lastText);
-            window.speechSynthesis.speak(utterance);
+            speakText(lastText);
         }
 
         function addChatToHistory(title) {
+            const isTempChecked = document.getElementById('temp-chat-checkbox').checked;
+            if (isTempChecked) return; // Do not save history if temporary chat is active
+
             if (!chatHistoryData.includes(title)) {
                 chatHistoryData.unshift(title);
                 renderHistoryList(chatHistoryData);
@@ -244,7 +259,6 @@
             chatBox.scrollTop = chatBox.scrollHeight;
 
             try {
-                // Connects to your backend API route (/api/chat) for smart ChatGPT responses
                 const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -256,13 +270,18 @@
                 });
 
                 const data = await response.json();
-                aiDiv.innerHTML = `<div class="message-header">Global AI</div>${data.reply || data.error || "Done!"}`;
+                const replyText = data.reply || data.error || "Done!";
+                aiDiv.innerHTML = `<div class="message-header">Global AI</div>${replyText}`;
+                
+                // Automatically speak the response aloud
+                speakText(replyText);
             } catch (err) {
-                aiDiv.innerHTML = `<div class="message-header">Global AI</div>I received your message: "${prompt}". (API connection active)`;
+                const fallbackText = `I received your message: "${prompt}". (API connection active)`;
+                aiDiv.innerHTML = `<div class="message-header">Global AI</div>${fallbackText}`;
+                speakText(fallbackText);
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         }
     </script>
 </body>
-    </html>
-
+</html>
