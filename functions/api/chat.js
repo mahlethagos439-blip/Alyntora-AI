@@ -2,11 +2,12 @@ export async function onRequestPost(context) {
   try {
     const { request, env } = context;
 
-    if (!env.AI) {
+    const token = env.CF_API_TOKEN;
+    const accountId = env.CF_ACCOUNT_ID;
+
+    if (!token || !accountId) {
       return Response.json(
-        {
-          error: "Workers AI binding is not available. Check that your binding is named AI and redeploy."
-        },
+        { error: "Cloudflare AI settings are missing." },
         { status: 500 }
       );
     }
@@ -51,17 +52,34 @@ export async function onRequestPost(context) {
       content: message
     });
 
-    const result = await env.AI.run(
-      "@cf/meta/llama-3.1-8b-instruct",
+    const response = await fetch(
+      `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/meta/llama-3.1-8b-instruct`,
       {
-        messages
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ messages })
       }
     );
 
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      return Response.json(
+        {
+          error:
+            result?.errors?.[0]?.message ||
+            "Cloudflare AI request failed."
+        },
+        { status: 500 }
+      );
+    }
+
     return Response.json({
       response:
-        result.response ||
-        result.text ||
+        result.result?.response ||
         "The AI returned an empty response."
     });
 
