@@ -1,87 +1,56 @@
 export async function onRequestPost(context) {
-  try {
-    const { request, env } = context;
+    try {
+        const body = await context.request.json();
+        const userMessage = body.message || "Hello";
+        
+        const ACCOUNT_ID = "2e79e1ab85d38eac759b687611c40e2b";
+        const API_TOKEN = "cfut_qy1p7yAsJjNrUPoevLDNLd3fNNxMR6FDgs1vFKb554f872df";
 
-    const token = env.CF_API_TOKEN;
-    const accountId = env.CF_ACCOUNT_ID;
-
-    if (!token) {
-      return Response.json(
-        { error: "CF_API_TOKEN is missing." },
-        { status: 500 }
-      );
-    }
-
-    if (!accountId) {
-      return Response.json(
-        { error: "CF_ACCOUNT_ID is missing." },
-        { status: 500 }
-      );
-    }
-
-    const body = await request.json();
-
-    const message = String(body.message || "").trim();
-
-    if (!message) {
-      return Response.json(
-        { error: "Message is empty." },
-        { status: 400 }
-      );
-    }
-
-    const response = await fetch(
-      `https://api.cloudflare.com/client/v4/accounts/${accountId}/ai/run/@cf/meta/llama-3.1-8b-instruct`,
-      {
-        method: "POST",
-
-        headers: {
-          "Authorization": `Bearer ${token}`,
-          "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-          messages: [
+        const aiResponse = await fetch(
+            `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/ai/run/@cf/meta/llama-3-8b-instruct`,
             {
-              role: "system",
-              content:
-                "You are Global AI Mahlet, a helpful AI assistant. " +
-                "Answer clearly, accurately and naturally."
-            },
-            {
-              role: "user",
-              content: message
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${API_TOKEN}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    messages: [
+                        { role: "system", content: "You are a helpful assistant." },
+                        { role: "user", content: userMessage }
+                    ]
+                })
             }
-          ]
-        })
-      }
-    );
+        );
 
-    const result = await response.json();
+        const textResponse = await aiResponse.text();
+        let data;
+        try {
+            data = JSON.parse(textResponse);
+        } catch (e) {
+            return new Response(JSON.stringify({ reply: "Cloudflare returned a non-JSON response: " + textResponse }), {
+                headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+            });
+        }
+        
+        let reply = "I am here to assist you.";
+        if (data.result && data.result.response) {
+            reply = data.result.response;
+        } else if (data.errors && data.errors.length > 0) {
+            reply = "API Error: " + data.errors[0].message;
+        }
 
-    if (!response.ok || !result.success) {
-      return Response.json(
-        {
-          error:
-            result?.errors?.[0]?.message ||
-            "Cloudflare AI request failed."
-        },
-        { status: 500 }
-      );
+        return new Response(JSON.stringify({ reply: reply }), {
+            headers: { 
+                "Content-Type": "application/json",
+                "Access-Control-Allow-Origin": "*"
+            }
+        });
+    } catch (err) {
+        return new Response(JSON.stringify({ reply: "Connection exception occurred: " + err.message }), {
+            status: 200,
+            headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" }
+        });
     }
-
-    return Response.json({
-      response: result.result?.response || "No AI response."
-    });
-
-  } catch (error) {
-
-    return Response.json(
-      {
-        error: error?.message || "Server error."
-      },
-      { status: 500 }
-    );
-
-  }
 }
+
