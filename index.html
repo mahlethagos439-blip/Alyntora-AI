@@ -1,937 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Global AI Mahlet 🌍</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global AI Mahlet 🌍</title>
 
-<style>
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #101114;
-  color: white;
-  height: 100vh;
-  overflow: hidden;
-}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f7fb;
+      color: #111827;
+    }
 
-header {
-  height: 60px;
-  background: #181a20;
-  display: flex;
-  align-items: center;
-  padding: 0 15px;
-  border-bottom: 1px solid #292c34;
-}
+    .app {
+      max-width: 900px;
+      margin: auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-.menu-btn {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 26px;
-  cursor: pointer;
-  margin-right: 12px;
-}
+    header {
+      padding: 20px;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
 
-.logo {
-  font-size: 19px;
-  font-weight: bold;
-}
+    header h1 {
+      margin: 0;
+      font-size: 25px;
+    }
 
-.container {
-  height: calc(100vh - 60px);
-  display: flex;
-  flex-direction: column;
-}
+    header p {
+      margin: 7px 0 0;
+      color: #6b7280;
+    }
 
-.settings {
-  padding: 10px;
-  background: #15171c;
-  border-bottom: 1px solid #292c34;
-}
+    #chat {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
 
-.row {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
+    .message {
+      margin-bottom: 15px;
+      padding: 13px 16px;
+      border-radius: 15px;
+      max-width: 80%;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
 
-select,
-input[type="text"] {
-  background: #242730;
-  color: white;
-  border: 1px solid #363a45;
-  border-radius: 10px;
-  padding: 10px;
-  outline: none;
-}
+    .user {
+      margin-left: auto;
+      background: #2563eb;
+      color: white;
+    }
 
-select {
-  flex: 1;
-  min-width: 145px;
-}
+    .assistant {
+      margin-right: auto;
+      background: white;
+      border: 1px solid #e5e7eb;
+    }
 
-.chat {
-  flex: 1;
-  overflow-y: auto;
-  padding: 15px;
-}
+    .input-area {
+      padding: 15px;
+      background: white;
+      border-top: 1px solid #ddd;
+      display: flex;
+      gap: 10px;
+    }
 
-.welcome {
-  text-align: center;
-  margin-top: 50px;
-  color: #c9ccd4;
-}
+    #message {
+      flex: 1;
+      padding: 13px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+    }
 
-.message {
-  max-width: 88%;
-  padding: 12px 14px;
-  margin: 10px 0;
-  border-radius: 15px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
+    #send {
+      border: none;
+      background: #2563eb;
+      color: white;
+      padding: 0 20px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-.user {
-  background: #2457d6;
-  margin-left: auto;
-  border-bottom-right-radius: 4px;
-}
+    #send:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-.ai {
-  background: #252830;
-  margin-right: auto;
-  border-bottom-left-radius: 4px;
-}
-
-.system {
-  color: #aaa;
-  font-size: 13px;
-  text-align: center;
-  margin: 8px;
-}
-
-.bottom {
-  background: #15171c;
-  border-top: 1px solid #292c34;
-  padding: 10px;
-}
-
-.tools {
-  display: flex;
-  gap: 7px;
-  margin-bottom: 8px;
-}
-
-.tool {
-  width: 42px;
-  height: 42px;
-  border: none;
-  border-radius: 50%;
-  background: #292c34;
-  color: white;
-  font-size: 19px;
-  cursor: pointer;
-}
-
-.tool:hover {
-  background: #3a3e49;
-}
-
-.input-row {
-  display: flex;
-  gap: 8px;
-}
-
-#messageInput {
-  flex: 1;
-  min-width: 0;
-  font-size: 16px;
-}
-
-.send {
-  width: 48px;
-  border: none;
-  border-radius: 12px;
-  background: #2563eb;
-  color: white;
-  font-size: 20px;
-  cursor: pointer;
-}
-
-.send:disabled {
-  opacity: 0.5;
-}
-
-.drawer {
-  position: fixed;
-  left: -310px;
-  top: 0;
-  width: 300px;
-  height: 100vh;
-  background: #181a20;
-  z-index: 100;
-  transition: 0.25s;
-  padding: 15px;
-  border-right: 1px solid #333;
-  overflow-y: auto;
-}
-
-.drawer.open {
-  left: 0;
-}
-
-.drawer h2 {
-  margin-top: 5px;
-}
-
-.drawer button {
-  width: 100%;
-  padding: 11px;
-  margin: 5px 0;
-  background: #292c34;
-  color: white;
-  border: none;
-  border-radius: 9px;
-  text-align: left;
-  cursor: pointer;
-}
-
-.overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.55);
-  z-index: 90;
-}
-
-.overlay.show {
-  display: block;
-}
-
-.hidden {
-  display: none;
-}
-
-.typing {
-  color: #aaa;
-  font-style: italic;
-}
-
-.voice-active {
-  background: #d93025 !important;
-}
-
-.stop-voice {
-  background: #8b1e1e !important;
-}
-
-.checkbox-row {
-  margin-top: 8px;
-  font-size: 13px;
-  color: #bbb;
-}
-
-#fileName {
-  font-size: 12px;
-  color: #aaa;
-  margin-top: 5px;
-}
-</style>
+    .status {
+      text-align: center;
+      color: #6b7280;
+      font-size: 14px;
+      padding: 5px;
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <button class="menu-btn" id="menuBtn">☰</button>
-  <div class="logo">Global AI Mahlet 🌍</div>
-</header>
+<div class="app">
 
-<div class="drawer" id="drawer">
-  <h2>Global AI 🌍</h2>
+  <header>
+    <h1>Global AI Mahlet 🌍</h1>
+    <p>Your AI assistant</p>
+  </header>
 
-  <button onclick="newChat()">＋ New Chat</button>
-
-  <input
-    id="searchChats"
-    type="text"
-    placeholder="Search chats..."
-    style="width:100%; margin:7px 0;"
-  >
-
-  <button onclick="clearChats()">🗑️ Clear Chat History</button>
-
-  <h3>Recent Chats</h3>
-  <div id="recentChats"></div>
-
-  <button onclick="closeDrawer()">✕ Close</button>
-</div>
-
-<div class="overlay" id="overlay"></div>
-
-<div class="container">
-
-  <div class="settings">
-
-    <div class="row">
-
-      <select id="mode">
-        <option value="friend">🤝 Friendly AI</option>
-        <option value="learning">📚 Learning / Study</option>
-        <option value="b2b">🏢 B2B Business</option>
-        <option value="b2c">🌍 B2C / General</option>
-        <option value="languages">🌐 Language Assistant</option>
-      </select>
-
-      <select id="language">
-        <option value="en-US">English</option>
-        <option value="am-ET">አማርኛ</option>
-        <option value="ti-ET">ትግርኛ</option>
-        <option value="fr-FR">Français</option>
-        <option value="es-ES">Español</option>
-        <option value="de-DE">Deutsch</option>
-        <option value="it-IT">Italiano</option>
-        <option value="pt-PT">Português</option>
-        <option value="ar-SA">العربية</option>
-        <option value="tr-TR">Türkçe</option>
-        <option value="ru-RU">Русский</option>
-        <option value="zh-CN">中文</option>
-        <option value="ja-JP">日本語</option>
-        <option value="ko-KR">한국어</option>
-        <option value="hi-IN">हिन्दी</option>
-        <option value="sw-KE">Kiswahili</option>
-      </select>
-
+  <div id="chat">
+    <div class="message assistant">
+      Hello! 👋 I am Global AI Mahlet. How can I help you today?
     </div>
-
-    <div class="checkbox-row">
-      <label>
-        <input type="checkbox" id="temporaryChat">
-        Temporary Chat
-      </label>
-    </div>
-
   </div>
 
-  <div class="chat" id="chatBox">
+  <div id="status" class="status"></div>
 
-    <div class="welcome" id="welcome">
-      <h2>Welcome to Global AI 🌍</h2>
-      <p>
-        Your AI for learning, creating, researching,
-        business and getting things done.
-      </p>
-      <p>Ask me anything.</p>
-    </div>
+  <div class="input-area">
+    <input
+      id="message"
+      type="text"
+      placeholder="Ask me anything..."
+      autocomplete="off"
+    >
 
-  </div>
-
-  <div class="bottom">
-
-    <div class="tools">
-
-      <button class="tool" id="cameraBtn" title="Camera">📷</button>
-
-      <button class="tool" id="photoBtn" title="Photo">🖼️</button>
-
-      <button class="tool" id="fileBtn" title="File">📁</button>
-
-      <button class="tool" id="micBtn" title="Voice">🎙️</button>
-
-      <button class="tool" id="stopVoiceBtn" title="Stop AI voice">
-        🔇
-      </button>
-
-    </div>
-
-    <div id="fileName"></div>
-
-    <div class="input-row">
-
-      <input
-        id="messageInput"
-        type="text"
-        placeholder="Message Global AI..."
-        autocomplete="off"
-      >
-
-      <button class="send" id="sendBtn">➤</button>
-
-    </div>
-
+    <button id="send">Send</button>
   </div>
 
 </div>
-
-<input
-  id="cameraInput"
-  class="hidden"
-  type="file"
-  accept="image/*"
-  capture="environment"
->
-
-<input
-  id="photoInput"
-  class="hidden"
-  type="file"
-  accept="image/*"
->
-
-<input
-  id="fileInput"
-  class="hidden"
-  type="file"
->
 
 <script>
+  const chat = document.getElementById("chat");
+  const input = document.getElementById("message");
+  const sendButton = document.getElementById("send");
+  const status = document.getElementById("status");
 
-const chatBox = document.getElementById("chatBox");
-const input = document.getElementById("messageInput");
-const sendBtn = document.getElementById("sendBtn");
-const mode = document.getElementById("mode");
-const language = document.getElementById("language");
+  const history = [];
 
-const menuBtn = document.getElementById("menuBtn");
-const drawer = document.getElementById("drawer");
-const overlay = document.getElementById("overlay");
+  function addMessage(text, type) {
+    const div = document.createElement("div");
+    div.className = "message " + type;
+    div.textContent = text;
 
-const micBtn = document.getElementById("micBtn");
-const stopVoiceBtn = document.getElementById("stopVoiceBtn");
-
-const cameraBtn = document.getElementById("cameraBtn");
-const photoBtn = document.getElementById("photoBtn");
-const fileBtn = document.getElementById("fileBtn");
-
-const cameraInput = document.getElementById("cameraInput");
-const photoInput = document.getElementById("photoInput");
-const fileInput = document.getElementById("fileInput");
-
-const fileName = document.getElementById("fileName");
-
-let messages = [];
-let recognition = null;
-let listening = false;
-let selectedFile = null;
-
-
-/* ---------------- MENU ---------------- */
-
-menuBtn.onclick = () => {
-  drawer.classList.add("open");
-  overlay.classList.add("show");
-};
-
-overlay.onclick = closeDrawer;
-
-function closeDrawer() {
-  drawer.classList.remove("open");
-  overlay.classList.remove("show");
-}
-
-
-/* ---------------- CHAT STORAGE ---------------- */
-
-function saveCurrentChat() {
-
-  if (document.getElementById("temporaryChat").checked) {
-    return;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
   }
 
-  localStorage.setItem(
-    "global_ai_current_chat",
-    JSON.stringify(messages)
-  );
+  async function sendMessage() {
+    const message = input.value.trim();
 
-  updateRecentChats();
-}
+    if (!message) return;
 
-function loadCurrentChat() {
+    addMessage(message, "user");
 
-  const saved = localStorage.getItem(
-    "global_ai_current_chat"
-  );
+    history.push({
+      role: "user",
+      content: message
+    });
 
-  if (!saved) return;
+    input.value = "";
+    sendButton.disabled = true;
+    status.textContent = "Thinking...";
 
-  try {
-    messages = JSON.parse(saved);
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          message: message,
+          history: history.slice(-10)
+        })
+      });
 
-    messages.forEach(m => {
+      const data = await response.json();
 
-      if (m.role === "user") {
-        addMessage(m.content, "user", false);
+      if (!response.ok) {
+        throw new Error(data.error || "AI server error");
       }
 
-      if (m.role === "assistant") {
-        addMessage(m.content, "ai", false);
-      }
+      const answer = data.response || "I didn't receive a response.";
 
-    });
+      addMessage(answer, "assistant");
 
-  } catch(e) {
-    messages = [];
-  }
-}
+      history.push({
+        role: "assistant",
+        content: answer
+      });
 
-function updateRecentChats() {
+      status.textContent = "";
 
-  const recent = document.getElementById("recentChats");
+    } catch (error) {
 
-  recent.innerHTML = "";
+      console.error(error);
 
-  if (!messages.length) {
-    recent.innerHTML =
-      "<div style='color:#888;padding:8px'>No recent chats</div>";
-    return;
-  }
-
-  const firstUser = messages.find(x => x.role === "user");
-
-  const title = firstUser
-    ? firstUser.content.substring(0, 35)
-    : "New Chat";
-
-  const btn = document.createElement("button");
-
-  btn.textContent = "💬 " + title;
-
-  btn.onclick = () => closeDrawer();
-
-  recent.appendChild(btn);
-}
-
-document.getElementById("searchChats").addEventListener(
-  "input",
-  function() {
-
-    const term = this.value.toLowerCase();
-
-    const buttons =
-      document.querySelectorAll("#recentChats button");
-
-    buttons.forEach(btn => {
-
-      btn.style.display =
-        btn.textContent.toLowerCase().includes(term)
-        ? "block"
-        : "none";
-
-    });
-
-  }
-);
-
-function clearChats() {
-
-  if (!confirm("Delete your saved chat history?")) {
-    return;
-  }
-
-  localStorage.removeItem("global_ai_current_chat");
-
-  messages = [];
-
-  chatBox.innerHTML = `
-    <div class="welcome" id="welcome">
-      <h2>Welcome to Global AI 🌍</h2>
-      <p>Start a new conversation.</p>
-    </div>
-  `;
-
-  updateRecentChats();
-}
-
-function newChat() {
-
-  messages = [];
-
-  chatBox.innerHTML = `
-    <div class="welcome" id="welcome">
-      <h2>Welcome to Global AI 🌍</h2>
-      <p>Your new conversation is ready.</p>
-    </div>
-  `;
-
-  if (!document.getElementById("temporaryChat").checked) {
-    localStorage.removeItem("global_ai_current_chat");
-  }
-
-  closeDrawer();
-  updateRecentChats();
-}
-
-
-/* ---------------- DISPLAY MESSAGE ---------------- */
-
-function addMessage(text, type, save = true) {
-
-  const welcome = document.getElementById("welcome");
-
-  if (welcome) {
-    welcome.remove();
-  }
-
-  const div = document.createElement("div");
-
-  div.className = "message " + type;
-
-  div.textContent = text;
-
-  chatBox.appendChild(div);
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  if (save) {
-
-    messages.push({
-      role: type === "user"
-        ? "user"
-        : "assistant",
-      content: text
-    });
-
-    saveCurrentChat();
-  }
-
-  return div;
-}
-
-
-/* ---------------- SEND MESSAGE ---------------- */
-
-async function sendMessage() {
-
-  const text = input.value.trim();
-
-  if (!text || sendBtn.disabled) {
-    return;
-  }
-
-  addMessage(text, "user");
-
-  input.value = "";
-
-  const typing = document.createElement("div");
-
-  typing.className = "message ai typing";
-
-  typing.textContent = "Global AI is thinking...";
-
-  chatBox.appendChild(typing);
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  sendBtn.disabled = true;
-
-  try {
-
-    const response = await fetch("/api/chat", {
-
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-
-        message: text,
-
-        mode: mode.value,
-
-        language: language.value,
-
-        history: messages.slice(-12)
-
-      })
-
-    });
-
-    const data = await response.json();
-
-    typing.remove();
-
-    if (!response.ok) {
-
-      throw new Error(
-        data.error || "The AI server returned an error."
+      addMessage(
+        "⚠️ AI connection error: " + error.message,
+        "assistant"
       );
 
+      status.textContent = "";
+
+    } finally {
+      sendButton.disabled = false;
+      input.focus();
     }
+  }
 
-    const answer =
-      data.response ||
-      data.answer ||
-      data.text ||
-      "I received your message but no answer was returned.";
+  sendButton.addEventListener("click", sendMessage);
 
-    addMessage(answer, "ai");
-
-    /*
-      Speak the AI answer when voice mode was used.
-    */
-    if (window._speakNextAnswer) {
-
-      window._speakNextAnswer = false;
-
-      speakText(answer);
-
+  input.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+      sendMessage();
     }
-
-  } catch(error) {
-
-    typing.remove();
-
-    addMessage(
-      "⚠️ I could not connect to the AI server.\n\n" +
-      "The website is working, but the Cloudflare /api/chat " +
-      "AI backend still needs to be connected.",
-      "ai"
-    );
-
-    console.error(error);
-
-  } finally {
-
-    sendBtn.disabled = false;
-
-    input.focus();
-
-  }
-}
-
-sendBtn.onclick = sendMessage;
-
-input.addEventListener("keydown", function(e) {
-
-  if (e.key === "Enter") {
-    e.preventDefault();
-    sendMessage();
-  }
-
-});
-
-
-/* ---------------- VOICE INPUT ---------------- */
-
-const SpeechRecognition =
-  window.SpeechRecognition ||
-  window.webkitSpeechRecognition;
-
-if (SpeechRecognition) {
-
-  recognition = new SpeechRecognition();
-
-  recognition.continuous = false;
-
-  recognition.interimResults = false;
-
-  recognition.lang = language.value;
-
-  recognition.onstart = function() {
-
-    listening = true;
-
-    micBtn.classList.add("voice-active");
-
-    micBtn.textContent = "⏹️";
-
-  };
-
-  recognition.onresult = function(event) {
-
-    const transcript =
-      event.results[0][0].transcript;
-
-    input.value = transcript;
-
-    window._speakNextAnswer = true;
-
-    sendMessage();
-
-  };
-
-  recognition.onerror = function(event) {
-
-    console.log("Speech recognition error:", event.error);
-
-    listening = false;
-
-    micBtn.classList.remove("voice-active");
-
-    micBtn.textContent = "🎙️";
-
-  };
-
-  recognition.onend = function() {
-
-    listening = false;
-
-    micBtn.classList.remove("voice-active");
-
-    micBtn.textContent = "🎙️";
-
-  };
-
-  micBtn.onclick = function() {
-
-    if (listening) {
-
-      recognition.stop();
-
-      return;
-
-    }
-
-    recognition.lang = language.value;
-
-    recognition.start();
-
-  };
-
-} else {
-
-  micBtn.onclick = function() {
-
-    alert(
-      "Voice input is not supported by this browser. " +
-      "Try Chrome on Android."
-    );
-
-  };
-
-}
-
-
-/* ---------------- AI VOICE OUTPUT ---------------- */
-
-function speakText(text) {
-
-  if (!("speechSynthesis" in window)) {
-
-    alert(
-      "Voice output is not supported by this browser."
-    );
-
-    return;
-  }
-
-  window.speechSynthesis.cancel();
-
-  const utterance =
-    new SpeechSynthesisUtterance(text);
-
-  utterance.lang = language.value;
-
-  utterance.rate = 1;
-
-  utterance.pitch = 1;
-
-  window.speechSynthesis.speak(utterance);
-
-}
-
-stopVoiceBtn.onclick = function() {
-
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
-
-};
-
-
-/* ---------------- CAMERA ---------------- */
-
-cameraBtn.onclick = function() {
-  cameraInput.click();
-};
-
-cameraInput.onchange = function() {
-
-  if (!this.files.length) return;
-
-  selectedFile = this.files[0];
-
-  fileName.textContent =
-    "📷 Camera image selected: " +
-    selectedFile.name;
-
-  input.value =
-    "I selected a camera image. Please analyze it.";
-
-};
-
-
-/* ---------------- PHOTO ---------------- */
-
-photoBtn.onclick = function() {
-  photoInput.click();
-};
-
-photoInput.onchange = function() {
-
-  if (!this.files.length) return;
-
-  selectedFile = this.files[0];
-
-  fileName.textContent =
-    "🖼️ Image selected: " +
-    selectedFile.name;
-
-  input.value =
-    "I selected an image. Please analyze it.";
-
-};
-
-
-/* ---------------- FILE ---------------- */
-
-fileBtn.onclick = function() {
-  fileInput.click();
-};
-
-fileInput.onchange = function() {
-
-  if (!this.files.length) return;
-
-  selectedFile = this.files[0];
-
-  fileName.textContent =
-    "📁 File selected: " +
-    selectedFile.name;
-
-  input.value =
-    "I selected a file. Please help me analyze it.";
-
-};
-
-
-/* ---------------- LANGUAGE ---------------- */
-
-language.addEventListener("change", function() {
-
-  if (recognition) {
-    recognition.lang = language.value;
-  }
-
-});
-
-
-/* ---------------- START ---------------- */
-
-loadCurrentChat();
-
-updateRecentChats();
-
-input.focus();
-
+  });
 </script>
 
 </body>
-    </html>
+</html>
